@@ -573,7 +573,7 @@
         // Initialize EmailJS with your public key
         // Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
         (function(){
-            emailjs.init('YOUR_PUBLIC_KEY'); // You'll need to replace this
+            emailjs.init('G56MGzauq9Ld23k-K'); // You'll need to replace this
         })();
     </script>
 
@@ -647,7 +647,7 @@
             const emailContent = formatIntakeDataForEmail(allIntakeData, responses);
 
             // Send email via EmailJS
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+            emailjs.send('service_hycm9y6', 'template_lr9pufm', {
                 to_email: 'nazkorch@gmail.com',
                 client_name: responses.full_name,
                 client_email: responses.email,
