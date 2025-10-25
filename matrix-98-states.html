@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 98 States Matrix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 100vw;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .matrix-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .toggle-btn:not(.active) {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .matrix-container {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        th.voice-header {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            width: 12%;
+            text-align: left;
+            padding-left: 8px;
+        }
+
+        th:not(.voice-header) {
+            width: 12.5%;
+        }
+
+        td {
+            padding: 6px 3px;
+            border: 1px solid #e0e0e0;
+            font-size: 0.6rem;
+            line-height: 1.2;
+            vertical-align: top;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        td:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.01);
+        }
+
+        .voice-cell {
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.1), rgba(102, 126, 234, 0.1));
+            font-weight: 600;
+            color: #764ba2;
+            font-size: 0.65rem;
+            width: 12%;
+        }
+
+        .observer-row {
+            background: linear-gradient(135deg, rgba(61, 193, 211, 0.1), rgba(46, 213, 115, 0.1));
+        }
+
+        .observer-row td {
+            color: #2d5a5a;
+            font-weight: 500;
+        }
+
+        .ego-row {
+            background: linear-gradient(135deg, rgba(247, 143, 179, 0.1), rgba(255, 107, 107, 0.1));
+        }
+
+        .four-corners {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .corner {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+            font-size: 0.8rem;
+        }
+
+        .center-freedom {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(61, 193, 211, 0.2), rgba(46, 213, 115, 0.2));
+            border: 2px solid #3dc1d3;
+            font-weight: 600;
+            color: #2d5a5a;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 250, 0.9));
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+            font-size: 0.85rem;
+        }
+
+        .instructions h3 {
+            color: #764ba2;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .instructions ul {
+            margin: 8px 0 0 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 4px 2px;
+                font-size: 0.55rem;
+            }
+            
+            .voice-cell {
+                font-size: 0.6rem;
+            }
+            
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .corner {
+                font-size: 0.7rem;
+                padding: 8px;
+            }
+            
+            .instructions {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                font-size: 0.5rem;
+                padding: 3px 1px;
+            }
+            
+            .voice-cell {
+                font-size: 0.55rem;
+            }
+            
+            h1 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The 98 States Matrix</h1>
+        <p class="subtitle">Two Sides of the Same Coin - Click any cell to explore</p>
+        
+        <div class="matrix-toggle">
+            <button class="toggle-btn active" onclick="showMatrix('virtues')">
+                HEADS: 7 Virtues × 7 Voices (49)
+            </button>
+            <button class="toggle-btn" onclick="showMatrix('sins')">
+                TAILS: 7 Sins × 7 Voices (49)
+            </button>
+        </div>
+
+        <!-- VIRTUES MATRIX -->
+        <div id="virtues-matrix" class="matrix-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="voice-header">VOICE</th>
+                        <th>HUMILITY</th>
+                        <th>CHARITY</th>
+                        <th>CHASTITY</th>
+                        <th>KINDNESS</th>
+                        <th>TEMPERANCE</th>
+                        <th>PATIENCE</th>
+                        <th>DILIGENCE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="voice-cell">CONSCIOUS</td>
+                        <td onclick="showDetail('Practicing modesty in public')">Practicing modesty in public</td>
+                        <td onclick="showDetail('Donating with expectations')">Donating with expectations</td>
+                        <td onclick="showDetail('Boundaries for self-respect')">Boundaries for self-respect</td>
+                        <td onclick="showDetail('Nice for social approval')">Nice for social approval</td>
+                        <td onclick="showDetail('Willpower control')">Willpower control</td>
+                        <td onclick="showDetail('Frustration for reward')">Frustration for reward</td>
+                        <td onclick="showDetail('Hard work proves worth')">Hard work proves worth</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">CON MAN</td>
+                        <td onclick="showDetail('Humility to manipulate')">Humility to manipulate</td>
+                        <td onclick="showDetail('Strategic giving')">Strategic giving</td>
+                        <td onclick="showDetail('Selective purity')">Selective purity</td>
+                        <td onclick="showDetail('Targeted kindness')">Targeted kindness</td>
+                        <td onclick="showDetail('Calculated restraint')">Calculated restraint</td>
+                        <td onclick="showDetail('Wait for advantage')">Wait for advantage</td>
+                        <td onclick="showDetail('Work smart not hard')">Work smart not hard</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">FEAR</td>
+                        <td onclick="showDetail('Self-deprecation avoids criticism')">Self-deprecation avoids criticism</td>
+                        <td onclick="showDetail('Give to avoid guilt')">Give to avoid guilt</td>
+                        <td onclick="showDetail('Avoid intimacy fear')">Avoid intimacy fear</td>
+                        <td onclick="showDetail('Kind to avoid conflict')">Kind to avoid conflict</td>
+                        <td onclick="showDetail('Restraint from fear')">Restraint from fear</td>
+                        <td onclick="showDetail('Passive avoid confrontation')">Passive avoid confrontation</td>
+                        <td onclick="showDetail('Busy avoid fears')">Busy avoid fears</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">EGO DEF</td>
+                        <td onclick="showDetail('False humility protection')">False humility protection</td>
+                        <td onclick="showDetail('Give for moral image')">Give for moral image</td>
+                        <td onclick="showDetail('Judge others impurity')">Judge others impurity</td>
+                        <td onclick="showDetail('Kindness as superiority')">Kindness as superiority</td>
+                        <td onclick="showDetail('Restraint judges excess')">Restraint judges excess</td>
+                        <td onclick="showDetail('Suppress then explode')">Suppress then explode</td>
+                        <td onclick="showDetail('Perfectionism avoid criticism')">Perfectionism avoid criticism</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">SABOTEUR</td>
+                        <td onclick="showDetail('Excessive self-effacement')">Excessive self-effacement</td>
+                        <td onclick="showDetail('Give too much sabotage')">Give too much sabotage</td>
+                        <td onclick="showDetail('Sever before intimacy')">Sever before intimacy</td>
+                        <td onclick="showDetail('People-please detriment')">People-please detriment</td>
+                        <td onclick="showDetail('Extreme restriction breakdown')">Extreme restriction breakdown</td>
+                        <td onclick="showDetail('Suppress causes depression')">Suppress causes depression</td>
+                        <td onclick="showDetail('Exhaustion unsustainable')">Exhaustion unsustainable</td>
+                    </tr>
+                    <tr class="ego-row">
+                        <td class="voice-cell">EGO</td>
+                        <td onclick="showDetail('My humility makes me better')">My humility makes me better</td>
+                        <td onclick="showDetail('My generosity proves worth')">My generosity proves worth</td>
+                        <td onclick="showDetail('My purity superior')">My purity superior</td>
+                        <td onclick="showDetail('My kindness deserves love')">My kindness deserves love</td>
+                        <td onclick="showDetail('My control proves superiority')">My control proves superiority</td>
+                        <td onclick="showDetail('My patience spiritually advanced')">My patience spiritually advanced</td>
+                        <td onclick="showDetail('My work makes me valuable')">My work makes me valuable</td>
+                    </tr>
+                    <tr class="observer-row">
+                        <td class="voice-cell">OBSERVER</td>
+                        <td onclick="showDetail('Authentic humility no self-focus')">Authentic humility no self-focus</td>
+                        <td onclick="showDetail('Give from abundance')">Give from abundance</td>
+                        <td onclick="showDetail('Honor genuine connection')">Honor genuine connection</td>
+                        <td onclick="showDetail('Compassion without conditions')">Compassion without conditions</td>
+                        <td onclick="showDetail('Natural balance no strain')">Natural balance no strain</td>
+                        <td onclick="showDetail('Embrace flow equanimity')">Embrace flow equanimity</td>
+                        <td onclick="showDetail('Action without attachment')">Action without attachment</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SINS MATRIX -->
+        <div id="sins-matrix" class="matrix-container hidden">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="voice-header">VOICE</th>
+                        <th>PRIDE</th>
+                        <th>GREED</th>
+                        <th>LUST</th>
+                        <th>ENVY</th>
+                        <th>GLUTTONY</th>
+                        <th>WRATH</th>
+                        <th>SLOTH</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="voice-cell">CONSCIOUS</td>
+                        <td onclick="showDetail('Status obsession reputation')">Status obsession reputation</td>
+                        <td onclick="showDetail('Pursue money power')">Pursue money power</td>
+                        <td onclick="showDetail('Control dominate desire')">Control dominate desire</td>
+                        <td onclick="showDetail('Constantly comparing')">Constantly comparing</td>
+                        <td onclick="showDetail('Excess as distraction')">Excess as distraction</td>
+                        <td onclick="showDetail('Seek revenge above all')">Seek revenge above all</td>
+                        <td onclick="showDetail('Avoid uncomfortable truths')">Avoid uncomfortable truths</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">CON MAN</td>
+                        <td onclick="showDetail('Smarter than everyone')">Smarter than everyone</td>
+                        <td onclick="showDetail('Manipulate for gain')">Manipulate for gain</td>
+                        <td onclick="showDetail('Use people as objects')">Use people as objects</td>
+                        <td onclick="showDetail('Take what others have')">Take what others have</td>
+                        <td onclick="showDetail('Take more than fair')">Take more than fair</td>
+                        <td onclick="showDetail('Violence as business')">Violence as business</td>
+                        <td onclick="showDetail('Always easy way')">Always easy way</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">FEAR</td>
+                        <td onclick="showDetail('Terror appearing weak')">Terror appearing weak</td>
+                        <td onclick="showDetail('Panic not enough')">Panic not enough</td>
+                        <td onclick="showDetail('Fear vulnerability')">Fear vulnerability</td>
+                        <td onclick="showDetail('Anxiety others success')">Anxiety others success</td>
+                        <td onclick="showDetail('Dread deprivation')">Dread deprivation</td>
+                        <td onclick="showDetail('Fear powerless')">Fear powerless</td>
+                        <td onclick="showDetail('Fear effort failure')">Fear effort failure</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">EGO DEF</td>
+                        <td onclick="showDetail('Never admit mistakes')">Never admit mistakes</td>
+                        <td onclick="showDetail('Hoard just in case')">Hoard just in case</td>
+                        <td onclick="showDetail('Objectify relationships')">Objectify relationships</td>
+                        <td onclick="showDetail('Diminish others achievements')">Diminish others achievements</td>
+                        <td onclick="showDetail('Consume fill emptiness')">Consume fill emptiness</td>
+                        <td onclick="showDetail('Justify violence necessary')">Justify violence necessary</td>
+                        <td onclick="showDetail('Excuses for inaction')">Excuses for inaction</td>
+                    </tr>
+                    <tr>
+                        <td class="voice-cell">SABOTEUR</td>
+                        <td onclick="showDetail('Self-destruct before humiliation')">Self-destruct before humiliation</td>
+                        <td onclick="showDetail('Risk everything more')">Risk everything more</td>
+                        <td onclick="showDetail('Pursue destructive relationships')">Pursue destructive relationships</td>
+                        <td onclick="showDetail('Undermine self comparisons')">Undermine self comparisons</td>
+                        <td onclick="showDetail('Self-medicate excess')">Self-medicate excess</td>
+                        <td onclick="showDetail('Harm self through anger')">Harm self through anger</td>
+                        <td onclick="showDetail('Fail act when necessary')">Fail act when necessary</td>
+                    </tr>
+                    <tr class="ego-row">
+                        <td class="voice-cell">EGO</td>
+                        <td onclick="showDetail('I am special separate')">I am special separate</td>
+                        <td onclick="showDetail('Nothing ever enough')">Nothing ever enough</td>
+                        <td onclick="showDetail('Others exist my pleasure')">Others exist my pleasure</td>
+                        <td onclick="showDetail('Others have should be mine')">Others have should be mine</td>
+                        <td onclick="showDetail('Never be satisfied')">Never be satisfied</td>
+                        <td onclick="showDetail('My anger always justified')">My anger always justified</td>
+                        <td onclick="showDetail('Change not worth effort')">Change not worth effort</td>
+                    </tr>
+                    <tr class="observer-row">
+                        <td class="voice-cell">OBSERVER</td>
+                        <td onclick="showDetail('See pride as illusion')">See pride as illusion</td>
+                        <td onclick="showDetail('Wealth temporary')">Wealth temporary</td>
+                        <td onclick="showDetail('Authentic connection')">Authentic connection</td>
+                        <td onclick="showDetail('Appreciate own journey')">Appreciate own journey</td>
+                        <td onclick="showDetail('Contentment in enough')">Contentment in enough</td>
+                        <td onclick="showDetail('Compassion over revenge')">Compassion over revenge</td>
+                        <td onclick="showDetail('Meaningful action')">Meaningful action</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="four-corners">
+            <div class="corner">
+                <h4>"Some want to use you"</h4>
+                <p>Con Man Voice</p>
+            </div>
+            <div class="corner">
+                <h4>"Some want to be used"</h4>
+                <p>Self-Saboteur Voice</p>
+            </div>
+            <div class="corner">
+                <h4>"Some want to abuse you"</h4>
+                <p>Ego Defense Voice</p>
+            </div>
+            <div class="corner">
+                <h4>"Some want to be abused"</h4>
+                <p>Fear-Driven Voice</p>
+            </div>
+            <div class="center-freedom">
+                <h4>🎯 FREEDOM</h4>
+                <p>Perpendicular perspective transcends all corners</p>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>🎯 Recognition Practice</h3>
+            <p><strong>When you notice a thought/behavior:</strong></p>
+            <ul>
+                <li>Which Voice is operating?</li>
+                <li>Which Virtue or Sin is being expressed?</li>
+                <li>Click the cell to explore that combination</li>
+            </ul>
+            <p style="margin-top: 10px;"><strong>Goal:</strong> Recognition = Choice = Freedom</p>
+        </div>
+    </div>
+
+    <script>
+        function showMatrix(type) {
+            const virtuesMatrix = document.getElementById('virtues-matrix');
+            const sinsMatrix = document.getElementById('sins-matrix');
+            const buttons = document.querySelectorAll('.toggle-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (type === 'virtues') {
+                virtuesMatrix.classList.remove('hidden');
+                sinsMatrix.classList.add('hidden');
+                buttons[0].classList.add('active');
+            } else {
+                virtuesMatrix.classList.add('hidden');
+                sinsMatrix.classList.remove('hidden');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        function showDetail(text) {
+            const triggers = [
+                "What situation triggered this?",
+                "How does this feel in your body?",
+                "What would the Observer see here?",
+                "Can you notice this without becoming it?",
+                "What fear is driving this pattern?",
+                "How does this serve the ego?",
+                "What's the authentic expression underneath?"
+            ];
+            
+            const randomTrigger = triggers[Math.floor(Math.random() * triggers.length)];
+            
+            alert(`🎯 RECOGNITION PRACTICE\n\n"${text}"\n\nReflection:\n${randomTrigger}\n\nRemember: You are the awareness witnessing this pattern, not the pattern itself.`);
+        }
+    </script>
+</body>
+</html>
