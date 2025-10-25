@@ -567,6 +567,16 @@
         </div>
     </div>
 
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Initialize EmailJS with your public key
+        // Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
+        (function(){
+            emailjs.init('YOUR_PUBLIC_KEY'); // You'll need to replace this
+        })();
+    </script>
+
     <script>
         function goBack() {
             // Navigate back to page 2
@@ -593,17 +603,17 @@
 
         document.getElementById('preferencesForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(this);
             const responses = {};
-            
+
             // Handle multiple checkbox values
             const checkboxGroups = ['preferred_days', 'preferred_times'];
             checkboxGroups.forEach(group => {
                 responses[group] = [];
             });
-            
+
             for (let [key, value] of formData.entries()) {
                 if (checkboxGroups.includes(key)) {
                     responses[key].push(value);
@@ -611,42 +621,153 @@
                     responses[key] = value.trim();
                 }
             }
-            
+
             // Validate required fields
             if (!responses.full_name || !responses.email || !responses.phone || !responses.session_type) {
                 alert('Please fill in all required fields before submitting.');
                 return;
             }
-            
+
             // Store all intake data
             const allIntakeData = JSON.parse(localStorage.getItem('intakeResponses') || '{}');
+            const magicWandData = JSON.parse(localStorage.getItem('magicWandResponses') || '{}');
+
+            allIntakeData.magicWand = magicWandData;
             allIntakeData.preferences = responses;
             allIntakeData.completed_at = new Date().toISOString();
             localStorage.setItem('intakeResponses', JSON.stringify(allIntakeData));
-            
+
             // Show success animation
             const button = this.querySelector('.btn-primary');
             const originalText = button.textContent;
             button.textContent = 'Submitting intake form...';
             button.style.background = '#10b981';
-            
-            setTimeout(() => {
+
+            // Format the email content
+            const emailContent = formatIntakeDataForEmail(allIntakeData, responses);
+
+            // Send email via EmailJS
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+                to_email: 'nazkorch@gmail.com',
+                client_name: responses.full_name,
+                client_email: responses.email,
+                client_phone: responses.phone,
+                form_content: emailContent,
+                submission_date: new Date().toLocaleString()
+            })
+            .then(function(response) {
+                console.log('Email sent successfully!', response.status, response.text);
                 button.textContent = 'Intake Complete! ✓';
+
                 setTimeout(() => {
-                    // Show completion message
-                    alert('Intake form completed successfully! You will receive a confirmation email shortly with next steps for scheduling your session.');
-                    
-                    // In a real implementation, this would:
-                    // 1. Send data to backend
-                    // 2. Send confirmation email
-                    // 3. Redirect to thank you page or calendar booking
-                    console.log('Complete intake data:', allIntakeData);
-                    
+                    alert('Intake form submitted successfully! You will receive a confirmation email shortly with next steps for scheduling your session.');
+
+                    // Clear the stored form data
+                    localStorage.removeItem('intakeResponses');
+                    localStorage.removeItem('magicWandResponses');
+                    localStorage.removeItem('magicWandDraft');
+                    localStorage.removeItem('backgroundDraft');
+                    localStorage.removeItem('preferencesDraft');
+
+                    // Reset form
+                    document.getElementById('preferencesForm').reset();
+                    button.textContent = originalText;
+                    button.style.background = '';
+
+                    // Optionally redirect back to page 1 or a thank you page
+                    // window.location.href = 'hypnotherapy_intake_page1.html';
+                }, 2000);
+            }, function(error) {
+                console.error('Failed to send email:', error);
+                button.textContent = 'Error - Please Try Again';
+                button.style.background = '#ef4444';
+
+                setTimeout(() => {
+                    alert('There was an error submitting your form. Please check your internet connection and try again, or contact us directly at nazkorch@gmail.com');
                     button.textContent = originalText;
                     button.style.background = '';
                 }, 2000);
-            }, 1000);
+            });
         });
+
+        // Format intake data into readable email content
+        function formatIntakeDataForEmail(allData, currentPageData) {
+            let content = '';
+
+            // Page 1: Magic Wand Questions
+            content += '═══════════════════════════════════════\n';
+            content += 'PAGE 1: MAGIC WAND QUESTIONS\n';
+            content += '═══════════════════════════════════════\n\n';
+
+            if (allData.magicWand) {
+                content += 'Q1: If I had a magic wand and could give you anything you want, what would you like to get from having a session with me?\n';
+                content += (allData.magicWand.question1 || 'Not answered') + '\n\n';
+
+                content += 'Q2: If you could leave here today with the absolute outcome that you really, really want - the best outcome I could possibly give you - what would be that very best outcome?\n';
+                content += (allData.magicWand.question2 || 'Not answered') + '\n\n';
+
+                content += 'Q3: If you had one wish and I could only make it come true, what would it be?\n';
+                content += (allData.magicWand.question3 || 'Not answered') + '\n\n';
+
+                content += 'Most Important Priority: ' + (allData.magicWand.priority || 'Not specified') + '\n\n';
+            }
+
+            // Page 2: Background Questions
+            content += '═══════════════════════════════════════\n';
+            content += 'PAGE 2: BACKGROUND QUESTIONS\n';
+            content += '═══════════════════════════════════════\n\n';
+
+            if (allData.background) {
+                content += 'Issue Description:\n';
+                content += (allData.background.issue_description || 'Not provided') + '\n\n';
+
+                content += 'Duration of Problem: ';
+                if (allData.background.duration_number && allData.background.duration_unit) {
+                    content += allData.background.duration_number + ' ' + allData.background.duration_unit + '\n\n';
+                } else if (allData.background.duration_life_stage) {
+                    content += allData.background.duration_life_stage + '\n\n';
+                } else {
+                    content += 'Not specified\n\n';
+                }
+
+                content += 'Additional Context:\n';
+                content += (allData.background.additional_context || 'Not provided') + '\n\n';
+            }
+
+            // Page 3: Contact & Preferences
+            content += '═══════════════════════════════════════\n';
+            content += 'PAGE 3: CONTACT & PREFERENCES\n';
+            content += '═══════════════════════════════════════\n\n';
+
+            content += 'CONTACT INFORMATION:\n';
+            content += 'Name: ' + (currentPageData.full_name || '') + '\n';
+            content += 'Email: ' + (currentPageData.email || '') + '\n';
+            content += 'Phone: ' + (currentPageData.phone || '') + '\n';
+            content += 'Location/Timezone: ' + (currentPageData.location || 'Not provided') + '\n\n';
+
+            content += 'SESSION PREFERENCES:\n';
+            content += 'Preferred Call Type: ' + (currentPageData.session_type || 'Not specified') + '\n';
+            content += 'Preferred Days: ' + (currentPageData.preferred_days ? currentPageData.preferred_days.join(', ') : 'None selected') + '\n';
+            content += 'Preferred Times: ' + (currentPageData.preferred_times ? currentPageData.preferred_times.join(', ') : 'None selected') + '\n\n';
+
+            content += 'PREVIOUS THERAPY EXPERIENCE:\n';
+            content += 'Previous Therapy: ' + (currentPageData.previous_therapy || 'Not specified') + '\n';
+            if (currentPageData.therapy_details) {
+                content += 'Details: ' + currentPageData.therapy_details + '\n';
+            }
+            content += '\n';
+
+            if (currentPageData.additional_notes) {
+                content += 'ADDITIONAL NOTES:\n';
+                content += currentPageData.additional_notes + '\n\n';
+            }
+
+            content += '═══════════════════════════════════════\n';
+            content += 'Submitted: ' + new Date().toLocaleString() + '\n';
+            content += '═══════════════════════════════════════\n';
+
+            return content;
+        }
 
         // Auto-save functionality
         const formFields = document.querySelectorAll('input, select, textarea');
