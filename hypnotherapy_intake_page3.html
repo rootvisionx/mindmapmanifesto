@@ -660,8 +660,6 @@
                 button.textContent = 'Intake Complete! ✓';
 
                 setTimeout(() => {
-                    alert('Intake form submitted successfully! You will receive a confirmation email shortly with next steps for scheduling your session.');
-
                     // Clear the stored form data
                     localStorage.removeItem('intakeResponses');
                     localStorage.removeItem('magicWandResponses');
@@ -669,14 +667,9 @@
                     localStorage.removeItem('backgroundDraft');
                     localStorage.removeItem('preferencesDraft');
 
-                    // Reset form
-                    document.getElementById('preferencesForm').reset();
-                    button.textContent = originalText;
-                    button.style.background = '';
-
-                    // Optionally redirect back to page 1 or a thank you page
-                    // window.location.href = 'hypnotherapy_intake_page1.html';
-                }, 2000);
+                    // Redirect to bonus surprise page
+                    window.location.href = 'bonus-surprise.html';
+                }, 1500);
             }, function(error) {
                 console.error('Failed to send email:', error);
                 button.textContent = 'Error - Please Try Again';
