@@ -365,10 +365,8 @@
             setTimeout(() => {
                 button.textContent = 'Proceeding to next page...';
                 setTimeout(() => {
-                    // In a real implementation, redirect to page 2
-                    alert('Great! Your responses have been saved. This would normally redirect to the Background Questions page.');
-                    button.textContent = originalText;
-                    button.style.background = '';
+                    // Redirect to page 2
+                    window.location.href = 'hypnotherapy_intake_page2.html';
                 }, 1000);
             }, 1000);
         });

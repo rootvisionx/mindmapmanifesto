@@ -412,8 +412,8 @@
 
     <script>
         function goBack() {
-            // In a real implementation, this would navigate to page 1
-            alert('This would navigate back to the Magic Wand questions page.');
+            // Navigate back to page 1
+            window.location.href = 'hypnotherapy_intake_page1.html';
         }
 
         document.getElementById('backgroundForm').addEventListener('submit', function(e) {
@@ -454,10 +454,8 @@
             setTimeout(() => {
                 button.textContent = 'Proceeding to final page...';
                 setTimeout(() => {
-                    // In a real implementation, redirect to page 3
-                    alert('Background information saved! This would normally redirect to the Session Details page.');
-                    button.textContent = originalText;
-                    button.style.background = '';
+                    // Redirect to page 3
+                    window.location.href = 'hypnotherapy_intake_page3.html';
                 }, 1000);
             }, 1000);
         });
