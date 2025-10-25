@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Preferences - MindMapManifesto.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4c63d2 0%, #6b46c1 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .website {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
+            border-radius: 15px;
+            border-left: 5px solid #6b46c1;
+        }
+
+        .intro-section h2 {
+            color: #4c63d2;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .intro-section p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1em;
+        }
+
+        .section-group {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: #4c63d2;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: 500;
+            border-bottom: 2px solid #e5e5e5;
+            padding-bottom: 10px;
+        }
+
+        .question-group {
+            margin-bottom: 25px;
+            padding: 25px;
+            background: #fafafa;
+            border-radius: 15px;
+            border: 1px solid #e5e5e5;
+            transition: all 0.3s ease;
+        }
+
+        .question-group:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .question-label {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .required {
+            color: #e53e3e;
+            font-size: 0.9em;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e5e5;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #6b46c1;
+            box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            display: grid;
+            gap: 15px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            border-color: #6b46c1;
+            background: #f8faff;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-item.selected {
+            border-color: #6b46c1;
+            background: #f8faff;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .time-group {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e5e5e5;
+        }
+
+        .time-group h4 {
+            color: #4c63d2;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .time-slots {
+            display: grid;
+            gap: 8px;
+        }
+
+        .time-slot {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .therapy-experience {
+            background: #f0f9ff;
+            border: 2px solid #e0f2fe;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e5e5;
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #6b46c1 0%, #4c63d2 100%);
+            width: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .progress-text {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .time-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Let's Schedule Your Session</h1>
+            <p>Contact & Preferences</p>
+            <div class="website">mindmapmanifesto.com</div>
+        </div>
+
+        <div class="form-container">
+            <div class="intro-section">
+                <h2>Session Preferences & Contact Information</h2>
+                <p>Help us schedule your session in the way that works best for you. This information ensures we can provide the most comfortable and effective experience.</p>
+            </div>
+
+            <form id="preferencesForm">
+                <!-- Contact Information -->
+                <div class="section-group">
+                    <h3 class="section-title">Contact Information</h3>
+                    
+                    <div class="question-group">
+                        <label class="question-label">
+                            Full Name <span class="required">*</span>
+                        </label>
+                        <input type="text" name="full_name" required>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="input-row">
+                            <div>
+                                <label class="question-label">
+                                    Email Address <span class="required">*</span>
+                                </label>
+                                <input type="email" name="email" required>
+                            </div>
+                            <div>
+                                <label class="question-label">
+                                    Phone Number <span class="required">*</span>
+                                </label>
+                                <input type="tel" name="phone" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <label class="question-label">
+                            Country (Time Zone)
+                        </label>
+                        <input type="text" name="location" placeholder="e.g. United Kingdom (GMT) or United States (EST)">
+                    </div>
+                </div>
+
+                <!-- Introductory Call Preferences -->
+                <div class="section-group">
+                    <h3 class="section-title">Introductory Call Preferences</h3>
+                    
+                    <div class="question-group">
+                        <label class="question-label">
+                            Preferred Call Type <span class="required">*</span>
+                        </label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="radio" name="session_type" value="phone" required>
+                                <span>Phone Call - Audio only introductory call</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="radio" name="session_type" value="video" required>
+                                <span>Video Call - Online introductory call via Zoom/video platform</span>
+                            </label>
+                        </div>
+                        <div class="help-text">
+                            This is for our initial consultation to discuss your needs and answer any questions.
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <label class="question-label">
+                            Preferred Days of the Week
+                        </label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="preferred_days" value="monday">
+                                <span>Monday</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="preferred_days" value="tuesday">
+                                <span>Tuesday</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="preferred_days" value="wednesday">
+                                <span>Wednesday</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="preferred_days" value="thursday">
+                                <span>Thursday</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="preferred_days" value="friday">
+                                <span>Friday</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="preferred_days" value="saturday">
+                                <span>Saturday</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="preferred_days" value="sunday">
+                                <span>Sunday</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <label class="question-label">
+                            Preferred Times
+                        </label>
+                        <div class="time-grid">
+                            <div class="time-group">
+                                <h4>Morning</h4>
+                                <div class="time-slots">
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="9am">
+                                        <span>9:00 AM</span>
+                                    </label>
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="10am">
+                                        <span>10:00 AM</span>
+                                    </label>
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="11am">
+                                        <span>11:00 AM</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-group">
+                                <h4>Afternoon</h4>
+                                <div class="time-slots">
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="12pm">
+                                        <span>12:00 PM</span>
+                                    </label>
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="1pm">
+                                        <span>1:00 PM</span>
+                                    </label>
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="2pm">
+                                        <span>2:00 PM</span>
+                                    </label>
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="3pm">
+                                        <span>3:00 PM</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="time-group">
+                                <h4>Evening</h4>
+                                <div class="time-slots">
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="6pm">
+                                        <span>6:00 PM</span>
+                                    </label>
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="7pm">
+                                        <span>7:00 PM</span>
+                                    </label>
+                                    <label class="time-slot">
+                                        <input type="checkbox" name="preferred_times" value="8pm">
+                                        <span>8:00 PM</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="help-text">
+                            Select all times that work for you for an introductory call. Calls typically last 15-30 minutes.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Previous Therapy Experience -->
+                <div class="section-group">
+                    <h3 class="section-title">Previous Therapy Experiences</h3>
+                    
+                    <div class="question-group therapy-experience">
+                        <label class="question-label">
+                            Have you worked with a therapist, counselor, or hypnotherapist before?
+                        </label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="radio" name="previous_therapy" value="no">
+                                <span>No, this is my first time</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="radio" name="previous_therapy" value="therapy">
+                                <span>Yes, traditional therapy/counseling</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="radio" name="previous_therapy" value="hypnotherapy">
+                                <span>Yes, hypnotherapy specifically</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="radio" name="previous_therapy" value="both">
+                                <span>Yes, both traditional therapy and hypnotherapy</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <label class="question-label">
+                            If yes, please tell me about your experience
+                        </label>
+                        <textarea name="therapy_details" placeholder="What type of therapy? How long? What worked well? What didn't work? Any concerns or preferences based on past experiences?"></textarea>
+                        <div class="help-text">
+                            This helps me understand what approaches have been helpful for you and what to avoid.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Notes -->
+                <div class="section-group">
+                    <div class="question-group">
+                        <label class="question-label">
+                            Additional Notes or Special Requests
+                        </label>
+                        <textarea name="additional_notes" placeholder="Any other information, questions, or special accommodations you'd like me to know about..."></textarea>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">← Back to Background</button>
+                    <div class="progress-text">Page 3 of 3</div>
+                    <button type="submit" class="btn btn-primary">Complete Intake Form ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            alert('This would navigate back to the Background Questions page.');
+        }
+
+        // Handle checkbox group interactions
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.type === 'checkbox' || e.target.type === 'radio') {
+                    if (e.target.type === 'checkbox') {
+                        this.classList.toggle('selected', e.target.checked);
+                    } else {
+                        // For radio buttons, clear all others in the group first
+                        const groupName = e.target.name;
+                        document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                            radio.closest('.checkbox-item').classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                    }
+                }
+            });
+        });
+
+        document.getElementById('preferencesForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const responses = {};
+            
+            // Handle multiple checkbox values
+            const checkboxGroups = ['preferred_days', 'preferred_times'];
+            checkboxGroups.forEach(group => {
+                responses[group] = [];
+            });
+            
+            for (let [key, value] of formData.entries()) {
+                if (checkboxGroups.includes(key)) {
+                    responses[key].push(value);
+                } else {
+                    responses[key] = value.trim();
+                }
+            }
+            
+            // Validate required fields
+            if (!responses.full_name || !responses.email || !responses.phone || !responses.session_type) {
+                alert('Please fill in all required fields before submitting.');
+                return;
+            }
+            
+            // Store all intake data
+            const allIntakeData = JSON.parse(localStorage.getItem('intakeResponses') || '{}');
+            allIntakeData.preferences = responses;
+            allIntakeData.completed_at = new Date().toISOString();
+            localStorage.setItem('intakeResponses', JSON.stringify(allIntakeData));
+            
+            // Show success animation
+            const button = this.querySelector('.btn-primary');
+            const originalText = button.textContent;
+            button.textContent = 'Submitting intake form...';
+            button.style.background = '#10b981';
+            
+            setTimeout(() => {
+                button.textContent = 'Intake Complete! ✓';
+                setTimeout(() => {
+                    // Show completion message
+                    alert('Intake form completed successfully! You will receive a confirmation email shortly with next steps for scheduling your session.');
+                    
+                    // In a real implementation, this would:
+                    // 1. Send data to backend
+                    // 2. Send confirmation email
+                    // 3. Redirect to thank you page or calendar booking
+                    console.log('Complete intake data:', allIntakeData);
+                    
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            }, 1000);
+        });
+
+        // Auto-save functionality
+        const formFields = document.querySelectorAll('input, select, textarea');
+        formFields.forEach(field => {
+            field.addEventListener('change', function() {
+                const existingData = JSON.parse(localStorage.getItem('preferencesDraft') || '{}');
+                
+                if (this.type === 'checkbox') {
+                    if (!existingData[this.name]) existingData[this.name] = [];
+                    if (this.checked) {
+                        if (!existingData[this.name].includes(this.value)) {
+                            existingData[this.name].push(this.value);
+                        }
+                    } else {
+                        existingData[this.name] = existingData[this.name].filter(val => val !== this.value);
+                    }
+                } else {
+                    existingData[this.name] = this.value;
+                }
+                
+                localStorage.setItem('preferencesDraft', JSON.stringify(existingData));
+            });
+        });
+
+        // Load draft data on page load
+        window.addEventListener('load', function() {
+            const draftData = JSON.parse(localStorage.getItem('preferencesDraft') || '{}');
+            
+            Object.keys(draftData).forEach(key => {
+                if (Array.isArray(draftData[key])) {
+                    // Handle checkbox arrays
+                    draftData[key].forEach(value => {
+                        const checkbox = document.querySelector(`input[name="${key}"][value="${value}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            checkbox.closest('.checkbox-item').classList.add('selected');
+                        }
+                    });
+                } else {
+                    // Handle single values
+                    const field = document.querySelector(`[name="${key}"]`);
+                    if (field) {
+                        field.value = draftData[key];
+                        if (field.type === 'radio' && field.checked) {
+                            field.closest('.checkbox-item').classList.add('selected');
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
