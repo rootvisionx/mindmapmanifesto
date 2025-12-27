@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transform Your Mind</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Hero Background Image */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('6dde72c1-d4c9-4fbc-9d7e-cf54a9917f84.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            /* Ensure the image is fully opaque and bright */
+            filter: brightness(100%); 
+        }
+
+        /* Overlay removed to keep image bright */
+        .overlay {
+            display: none; 
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            
+            /* Position text 25% from the top */
+            justify-content: flex-start; 
+            padding-top: 25vh; 
+            
+            align-items: center;
+            text-align: center;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        p {
+            font-size: 2rem; 
+            max-width: 800px;
+            margin-bottom: 40px;
+            line-height: 1.5;
+            font-weight: 800; /* Extra bold for better visibility */
+            
+            /* Strong Outline/Shadow for visibility on bright backgrounds */
+            text-shadow: 
+                3px 3px 0 #000, 
+                -1px -1px 0 #000, 
+                1px -1px 0 #000, 
+                -1px 1px 0 #000, 
+                1px 1px 0 #000,
+                3px 3px 5px rgba(0,0,0,0.8); /* Drop shadow behind the outline */
+                
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* BUTTON POSITION: Absolute 25% from bottom */
+        .cta-button {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            
+            padding: 18px 45px;
+            background: rgba(255, 255, 255, 1); /* Solid white */
+            color: #000;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            /* Stronger shadow for the button to separate it from background */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6); 
+            border: 2px solid white; 
+            
+            animation: fadeInUpCentered 1s ease-out 0.5s backwards;
+        }
+
+        .cta-button:hover {
+            background: #000; /* Turns black on hover */
+            color: white;
+            border-color: #000;
+            transform: translate(-50%, -3px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUpCentered {
+            from { opacity: 0; transform: translate(-50%, 30px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            p { font-size: 1.5rem; }
+            .content-wrapper { padding-top: 20vh; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-bg"></div>
+    <div class="content-wrapper">
+        <p>Unlock the potential of your mind. Begin your journey to transformation today.</p>
+        
+        <a href="hypnotherapy_intake_page1.html" class="cta-button">Start Intake Process</a>
+    </div>
+</body>
+</html>
