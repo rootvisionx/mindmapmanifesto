@@ -611,8 +611,6 @@
                 button.textContent = 'Intake Complete! ✓';
 
                 setTimeout(() => {
-                    alert('Thank you! Your intake form has been submitted successfully. We will be in touch soon to schedule your session.');
-
                     // Clear the stored form data
                     localStorage.removeItem('intakeResponses');
                     localStorage.removeItem('magicWandResponses');
@@ -620,10 +618,8 @@
                     localStorage.removeItem('backgroundDraft');
                     localStorage.removeItem('preferencesDraft');
 
-                    // Reset form
-                    document.getElementById('preferencesForm').reset();
-                    button.textContent = originalText;
-                    button.style.background = '';
+                    // Redirect to success page
+                    window.location.href = 'success.html';
                 }, 1500);
             }, function(error) {
                 console.error('Failed to send email:', error);
