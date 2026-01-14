@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success! - MindMapManifesto.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Success Text */
+        .success-container {
+            text-align: center;
+            z-index: 100;
+            position: relative;
+        }
+
+        .success-text {
+            font-size: 120px;
+            font-weight: 900;
+            color: #10b981;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.8),
+                         0 0 60px rgba(16, 185, 129, 0.6),
+                         0 0 90px rgba(16, 185, 129, 0.4);
+            animation: successPulse 2s ease-in-out infinite;
+            letter-spacing: 10px;
+        }
+
+        @keyframes successPulse {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 30px rgba(16, 185, 129, 0.8),
+                             0 0 60px rgba(16, 185, 129, 0.6),
+                             0 0 90px rgba(16, 185, 129, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                text-shadow: 0 0 40px rgba(16, 185, 129, 1),
+                             0 0 80px rgba(16, 185, 129, 0.8),
+                             0 0 120px rgba(16, 185, 129, 0.6);
+            }
+        }
+
+        /* Fireworks */
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: fireworkExplode 1s ease-out forwards;
+        }
+
+        @keyframes fireworkExplode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Dollar Bills */
+        .dollar {
+            position: absolute;
+            font-size: 40px;
+            color: #10b981;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.8),
+                         0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: dollarFall 3s linear forwards;
+            z-index: 50;
+            opacity: 0;
+        }
+
+        @keyframes dollarFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* Final Message */
+        .final-message {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 48px;
+            color: #60efff;
+            text-align: center;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(96, 239, 255, 0.8),
+                         0 0 40px rgba(96, 239, 255, 0.5);
+            opacity: 0;
+            z-index: 150;
+            animation: fadeInMessage 2s ease-in forwards;
+            animation-delay: 8s;
+            padding: 0 20px;
+            line-height: 1.4;
+        }
+
+        @keyframes fadeInMessage {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .success-text {
+                font-size: 60px;
+            }
+
+            .final-message {
+                font-size: 28px;
+                bottom: 15%;
+            }
+
+            .dollar {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-text">SUCCESS</div>
+    </div>
+
+    <div class="final-message">
+        Now you are ready for your new life
+    </div>
+
+    <script>
+        // Fireworks colors
+        const fireworkColors = [
+            '#10b981', // green
+            '#60efff', // cyan
+            '#fbbf24', // yellow
+            '#f59e0b', // orange
+            '#ef4444', // red
+            '#a78bfa', // purple
+        ];
+
+        // Create fireworks around the success text
+        function createFirework(x, y) {
+            const particleCount = 30;
+            const container = document.body;
+
+            for (let i = 0; i < particleCount; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+                firework.style.backgroundColor = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+
+                // Random direction
+                const angle = (Math.PI * 2 * i) / particleCount;
+                const velocity = 100 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                firework.style.setProperty('--tx', tx + 'px');
+                firework.style.setProperty('--ty', ty + 'px');
+
+                container.appendChild(firework);
+
+                // Remove after animation
+                setTimeout(() => {
+                    firework.remove();
+                }, 1000);
+            }
+        }
+
+        // Launch multiple fireworks
+        function launchFireworks() {
+            const positions = [
+                { x: window.innerWidth * 0.2, y: window.innerHeight * 0.3 },
+                { x: window.innerWidth * 0.8, y: window.innerHeight * 0.3 },
+                { x: window.innerWidth * 0.5, y: window.innerHeight * 0.2 },
+                { x: window.innerWidth * 0.3, y: window.innerHeight * 0.6 },
+                { x: window.innerWidth * 0.7, y: window.innerHeight * 0.6 },
+                { x: window.innerWidth * 0.15, y: window.innerHeight * 0.5 },
+                { x: window.innerWidth * 0.85, y: window.innerHeight * 0.5 },
+            ];
+
+            positions.forEach((pos, index) => {
+                setTimeout(() => {
+                    createFirework(pos.x, pos.y);
+                }, index * 200);
+            });
+
+            // Second wave
+            setTimeout(() => {
+                positions.forEach((pos, index) => {
+                    setTimeout(() => {
+                        createFirework(pos.x, pos.y);
+                    }, index * 150);
+                });
+            }, 1500);
+        }
+
+        // Create dollar rain
+        function createDollar() {
+            const dollar = document.createElement('div');
+            dollar.className = 'dollar';
+            dollar.textContent = '$';
+            dollar.style.left = Math.random() * window.innerWidth + 'px';
+            dollar.style.top = '-100px';
+
+            // Random animation duration between 2.5s and 4s
+            const duration = 2.5 + Math.random() * 1.5;
+            dollar.style.animationDuration = duration + 's';
+
+            document.body.appendChild(dollar);
+
+            // Remove after animation
+            setTimeout(() => {
+                dollar.remove();
+            }, duration * 1000);
+        }
+
+        // Rain dollars one after another (thunder after thunder)
+        function startDollarRain() {
+            let dollarCount = 0;
+            const maxDollars = 50;
+            const interval = 100; // Time between each dollar (100ms = thunder after thunder effect)
+
+            const rainInterval = setInterval(() => {
+                createDollar();
+                dollarCount++;
+
+                if (dollarCount >= maxDollars) {
+                    clearInterval(rainInterval);
+                }
+            }, interval);
+        }
+
+        // Animation sequence
+        window.addEventListener('load', () => {
+            // Start fireworks immediately
+            launchFireworks();
+
+            // Start dollar rain after 3 seconds (after fireworks)
+            setTimeout(() => {
+                startDollarRain();
+            }, 3000);
+
+            // Final message appears at 8 seconds (defined in CSS animation-delay)
+        });
+    </script>
+</body>
+</html>
