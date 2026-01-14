@@ -75,7 +75,7 @@
             }
         }
 
-        /* Dollar Bills */
+        /* Dollar Bills - Tornado Effect */
         .dollar {
             position: absolute;
             font-size: 40px;
@@ -83,19 +83,76 @@
             font-weight: bold;
             text-shadow: 0 0 10px rgba(16, 185, 129, 0.8),
                          0 2px 4px rgba(0, 0, 0, 0.5);
-            animation: dollarFall 3s linear forwards;
             z-index: 50;
             opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Falling from top */
+        .dollar-fall {
+            animation: dollarFall linear forwards;
+        }
+
+        /* Flying from left */
+        .dollar-fly-left {
+            animation: dollarFlyLeft linear forwards;
+        }
+
+        /* Flying from right */
+        .dollar-fly-right {
+            animation: dollarFlyRight linear forwards;
+        }
+
+        /* Spinning tornado */
+        .dollar-spin {
+            animation: dollarSpin linear forwards;
         }
 
         @keyframes dollarFall {
             0% {
-                transform: translateY(-100px) rotate(0deg);
+                transform: translateY(-100px) translateX(var(--start-x)) rotate(0deg);
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh) rotate(360deg);
+                transform: translateY(120vh) translateX(var(--end-x)) rotate(var(--rotation));
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes dollarFlyLeft {
+            0% {
+                transform: translateX(-100px) translateY(var(--start-y)) rotate(0deg) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(120vw) translateY(var(--end-y)) rotate(var(--rotation)) scale(1);
                 opacity: 0.7;
+            }
+        }
+
+        @keyframes dollarFlyRight {
+            0% {
+                transform: translateX(120vw) translateY(var(--start-y)) rotate(0deg) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-100px) translateY(var(--end-y)) rotate(var(--rotation)) scale(1);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes dollarSpin {
+            0% {
+                transform: translate(var(--start-x), var(--start-y)) rotate(0deg) scale(0.3);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(var(--mid-x), var(--mid-y)) rotate(var(--mid-rotation)) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--end-x), var(--end-y)) rotate(var(--rotation)) scale(0.5);
+                opacity: 0.6;
             }
         }
 
@@ -224,17 +281,72 @@
             }, 1500);
         }
 
-        // Create dollar rain
-        function createDollar() {
-            const dollar = document.createElement('div');
-            dollar.className = 'dollar';
-            dollar.textContent = '$';
-            dollar.style.left = Math.random() * window.innerWidth + 'px';
-            dollar.style.top = '-100px';
+        // Dollar symbols variety
+        const dollarSymbols = ['$', '💵', '💰', '💸', '$$', '$$$'];
+        const dollarColors = ['#10b981', '#34d399', '#6ee7b7', '#fbbf24', '#f59e0b'];
 
-            // Random animation duration between 2.5s and 4s
-            const duration = 2.5 + Math.random() * 1.5;
+        // Create dollar with different animation types
+        function createDollar(animationType) {
+            const dollar = document.createElement('div');
+            dollar.className = 'dollar dollar-' + animationType;
+            dollar.textContent = dollarSymbols[Math.floor(Math.random() * dollarSymbols.length)];
+            dollar.style.color = dollarColors[Math.floor(Math.random() * dollarColors.length)];
+
+            // Random font size
+            const fontSize = 25 + Math.random() * 40;
+            dollar.style.fontSize = fontSize + 'px';
+
+            // Random animation duration
+            const duration = 2 + Math.random() * 3;
             dollar.style.animationDuration = duration + 's';
+
+            // Random rotation
+            const rotation = Math.random() * 720 - 360;
+            dollar.style.setProperty('--rotation', rotation + 'deg');
+
+            if (animationType === 'fall') {
+                // Falling from top with diagonal movement
+                dollar.style.left = Math.random() * window.innerWidth + 'px';
+                dollar.style.top = '-100px';
+                const startX = 0;
+                const endX = (Math.random() - 0.5) * 300;
+                dollar.style.setProperty('--start-x', startX + 'px');
+                dollar.style.setProperty('--end-x', endX + 'px');
+            } else if (animationType === 'fly-left') {
+                // Flying from left to right
+                dollar.style.left = '-100px';
+                const startY = Math.random() * window.innerHeight;
+                const endY = Math.random() * window.innerHeight;
+                dollar.style.top = startY + 'px';
+                dollar.style.setProperty('--start-y', '0px');
+                dollar.style.setProperty('--end-y', (endY - startY) + 'px');
+            } else if (animationType === 'fly-right') {
+                // Flying from right to left
+                dollar.style.left = window.innerWidth + 'px';
+                const startY = Math.random() * window.innerHeight;
+                const endY = Math.random() * window.innerHeight;
+                dollar.style.top = startY + 'px';
+                dollar.style.setProperty('--start-y', '0px');
+                dollar.style.setProperty('--end-y', (endY - startY) + 'px');
+            } else if (animationType === 'spin') {
+                // Spinning tornado effect
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * window.innerHeight;
+                const midX = Math.random() * window.innerWidth - startX;
+                const midY = Math.random() * window.innerHeight - startY;
+                const endX = Math.random() * window.innerWidth - startX;
+                const endY = window.innerHeight - startY;
+
+                dollar.style.left = startX + 'px';
+                dollar.style.top = startY + 'px';
+                dollar.style.setProperty('--start-x', '0px');
+                dollar.style.setProperty('--start-y', '0px');
+                dollar.style.setProperty('--mid-x', midX + 'px');
+                dollar.style.setProperty('--mid-y', midY + 'px');
+                dollar.style.setProperty('--end-x', endX + 'px');
+                dollar.style.setProperty('--end-y', endY + 'px');
+                dollar.style.setProperty('--mid-rotation', (rotation / 2) + 'deg');
+            }
 
             document.body.appendChild(dollar);
 
@@ -244,20 +356,43 @@
             }, duration * 1000);
         }
 
-        // Rain dollars one after another (thunder after thunder)
-        function startDollarRain() {
+        // MASSIVE dollar tornado - raining like crazy!
+        function startDollarTornado() {
             let dollarCount = 0;
-            const maxDollars = 50;
-            const interval = 100; // Time between each dollar (100ms = thunder after thunder effect)
+            const maxDollars = 300; // Tons of dollars!
+            const interval = 30; // Super fast spawning (30ms = CRAZY rain!)
 
-            const rainInterval = setInterval(() => {
-                createDollar();
-                dollarCount++;
+            const animationTypes = ['fall', 'fly-left', 'fly-right', 'spin'];
+
+            const tornadoInterval = setInterval(() => {
+                // Spawn multiple dollars at once for intensity
+                const spawnCount = Math.floor(Math.random() * 3) + 1; // 1-3 dollars at a time
+
+                for (let i = 0; i < spawnCount; i++) {
+                    const randomType = animationTypes[Math.floor(Math.random() * animationTypes.length)];
+                    createDollar(randomType);
+                    dollarCount++;
+                }
 
                 if (dollarCount >= maxDollars) {
-                    clearInterval(rainInterval);
+                    clearInterval(tornadoInterval);
                 }
             }, interval);
+
+            // Continue spawning some dollars even after the main tornado
+            setTimeout(() => {
+                const continuousInterval = setInterval(() => {
+                    if (Math.random() > 0.5) {
+                        const randomType = animationTypes[Math.floor(Math.random() * animationTypes.length)];
+                        createDollar(randomType);
+                    }
+                }, 150);
+
+                // Stop continuous rain after 15 seconds total
+                setTimeout(() => {
+                    clearInterval(continuousInterval);
+                }, 12000);
+            }, maxDollars * interval);
         }
 
         // Animation sequence
@@ -265,9 +400,9 @@
             // Start fireworks immediately
             launchFireworks();
 
-            // Start dollar rain after 3 seconds (after fireworks)
+            // Start MASSIVE dollar tornado after 3 seconds (after fireworks)
             setTimeout(() => {
-                startDollarRain();
+                startDollarTornado();
             }, 3000);
 
             // Final message appears at 8 seconds (defined in CSS animation-delay)
