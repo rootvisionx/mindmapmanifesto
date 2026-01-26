@@ -1,5 +1,8 @@
 # Project Overview: MindMap Manifesto
 
+**Version**: 2026-01-26  
+**Last Updated**: 2026-01-26
+
 A collection of interactive tools and high-conversion landing pages for the MindMap Manifesto ecosystem.
 
 ## Core Components
