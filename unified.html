@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Therapeutic Script</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const {
+            Wand2,
+            Search,
+            MessageSquare,
+            History,
+            CheckCircle2,
+            ShieldAlert,
+            Mic,
+            BookOpen,
+            ArrowRight,
+            ArrowLeft,
+            Heart,
+            User
+        } = LucideReact;
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('intake');
+            const [clientName, setClientName] = useState('');
+            const [symptom, setSymptom] = useState('');
+            const [personification, setPersonification] = useState('');
+            const [functionType, setFunctionType] = useState(null); // protect, punish, connect
+
+            // Navigation Phases
+            const phases = [
+                { id: 'intake', label: '1. Magic Wand & Intake', icon: Wand2 },
+                { id: 'personify', label: '2. Personify & Function', icon: MessageSquare },
+                { id: 'origin', label: '3. Origin & Regression', icon: History },
+                { id: 'transformation', label: '4. Reframe & Update', icon: Heart },
+                { id: 'recording', label: '5. Recording Prep', icon: Mic },
+            ];
+
+            const symptomAnalogies = {
+                "Protect": [
+                    { symptom: "Thyroid issues", analogy: "Invisibility protection" },
+                    { symptom: "Excess weight", analogy: "Sexual safety barrier" },
+                    { symptom: "Insomnia", analogy: "Night watch guard" },
+                    { symptom: "Chest tightness", analogy: "Heart protection cage" }
+                ],
+                "Punish": [
+                    { symptom: "Depression", analogy: "Judge/Jailer (Survivor's guilt)" },
+                    { symptom: "Headaches", analogy: "Punishment for 'crimes'" },
+                    { symptom: "Nail-biting", analogy: "Preemptive self-harm" },
+                    { symptom: "Perfectionism", analogy: "Quality control vs. criticism" }
+                ],
+                "Connect": [
+                    { symptom: "Sweating", analogy: "Voice for the silenced" },
+                    { symptom: "Psoriasis", analogy: "Tears the child couldn't shed" },
+                    { symptom: "Emotional eating", analogy: "Love substitute" },
+                    { symptom: "Shoplifting", analogy: "Balancing emotional deficit" }
+                ]
+            };
+
+            const QuestionCard = ({ title, questions, note }) => (
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6">
+                    <h3 className="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                        <Search className="w-5 h-5" /> {title}
+                    </h3>
+                    <ul className="space-y-3">
+                        {questions.map((q, idx) => (
+                            <li key={idx} className="flex gap-3 group">
+                                <span className="text-slate-400 font-mono text-sm mt-1">{idx + 1}.</span>
+                                <p className="text-slate-700 dark:text-slate-300 group-hover:text-indigo-600 transition-colors cursor-pointer">
+                                    "{q}"
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                    {note && (
+                        <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg text-sm italic text-slate-500 border-l-4 border-indigo-500">
+                            Note: {note}
+                        </div>
+                    )}
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
+                    {/* Header */}
+                    <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+                        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-indigo-600 p-2 rounded-lg">
+                                    <BookOpen className="text-white w-6 h-6" />
+                                </div>
+                                <h1 className="text-xl font-extrabold tracking-tight">Unified Therapeutic Script</h1>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="relative">
+                                    <User className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="Client Name..."
+                                        className="pl-9 pr-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        value={clientName}
+                                        onChange={(e) => setClientName(e.target.value)}
+                                    />
+                                </div>
+                                <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Active Session
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-6xl mx-auto px-4 py-8">
+                        {/* Navigation Tabs */}
+                        <div className="flex overflow-x-auto pb-4 gap-2 mb-8 no-scrollbar">
+                            {phases.map((phase) => {
+                                const Icon = phase.icon;
+                                return (
+                                    <button
+                                        key={phase.id}
+                                        onClick={() => setActiveTab(phase.id)}
+                                        className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${activeTab === phase.id
+                                            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none scale-105'
+                                            : 'bg-white dark:bg-slate-900 text-slate-500 border border-slate-200 dark:border-slate-800 hover:border-indigo-300'
+                                            }`}
+                                    >
+                                        <Icon className="w-4 h-4" />
+                                        {phase.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Phase Content */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                            {/* Main Work Area */}
+                            <div className="lg:col-span-2 space-y-6">
+
+                                {activeTab === 'intake' && (
+                                    <section className="animate-in fade-in slide-in-from-bottom-4">
+                                        <QuestionCard
+                                            title="The Magic Wand (Mandatory First)"
+                                            questions={[
+                                                "If I had a magic wand and could give you anything you want, what would you like to get from this session?",
+                                                "If you could leave here today with the absolute best outcome, what would that be?",
+                                                "If you had one wish and I could make it come true, what would it be?"
+                                            ]}
+                                            note="Asking this in multiple ways helps uncover what the client really, really wants."
+                                        />
+                                        <QuestionCard
+                                            title="The Essential Intake"
+                                            questions={[
+                                                "What is the main thing you're struggling with right now?",
+                                                "How long have you had this problem?",
+                                                "What does this issue mean to you personally?"
+                                            ]}
+                                            note="Set expectations: 'X years? I think 1-2 sessions to undo that is very good.'"
+                                        />
+                                        <div className="bg-indigo-50 dark:bg-indigo-950/30 p-6 rounded-xl border border-indigo-100 dark:border-indigo-900">
+                                            <label className="block text-sm font-bold text-indigo-900 dark:text-indigo-300 mb-2 uppercase tracking-wide">Primary Symptom Identified:</label>
+                                            <input
+                                                className="w-full p-4 rounded-lg border-2 border-indigo-200 dark:border-indigo-800 bg-white dark:bg-slate-900 text-lg font-medium focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                placeholder="e.g., Social Anxiety, Chronic Back Pain..."
+                                                value={symptom}
+                                                onChange={(e) => setSymptom(e.target.value)}
+                                            />
+                                        </div>
+                                    </section>
+                                )}
+
+                                {activeTab === 'personify' && (
+                                    <section className="animate-in fade-in slide-in-from-bottom-4">
+                                        <QuestionCard
+                                            title="Giving Agency & Voice"
+                                            questions={[
+                                                `If this ${symptom || 'symptom'} could speak, what would it say?`,
+                                                `If this ${symptom || 'symptom'} had a personality, what would it be like?`,
+                                                `What is this ${symptom || 'symptom'} trying to tell you right now?`,
+                                                `If it were an animal or a character, who would it be?`
+                                            ]}
+                                        />
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                            {['Protect', 'Punish', 'Connect'].map(type => (
+                                                <button
+                                                    key={type}
+                                                    onClick={() => setFunctionType(type.toLowerCase())}
+                                                    className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${functionType === type.toLowerCase()
+                                                        ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30'
+                                                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 opacity-60 hover:opacity-100'
+                                                        }`}
+                                                >
+                                                    <ShieldAlert className={`w-6 h-6 ${functionType === type.toLowerCase() ? 'text-indigo-600' : 'text-slate-400'}`} />
+                                                    <span className="font-bold">{type}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <QuestionCard
+                                            title={`Function Detection: ${functionType ? functionType.toUpperCase() : 'Select a Type'}`}
+                                            questions={
+                                                functionType === 'protect' ? ["What is this protecting you from?", "How does it act as your bodyguard?", "What danger is it preventing?"] :
+                                                    functionType === 'punish' ? ["What is it punishing you for?", "What does it think you did wrong?", "What mistake is it making sure you never make again?"] :
+                                                        functionType === 'connect' ? ["What is it trying to get for you?", "How does it get people to pay attention?", "What need is it trying to meet?"] :
+                                                            ["Select a function type above to see specific diagnostic questions."]
+                                            }
+                                        />
+                                    </section>
+                                )}
+
+                                {activeTab === 'origin' && (
+                                    <section className="animate-in fade-in slide-in-from-bottom-4">
+                                        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/30 border-l-4 border-amber-500 rounded-r-xl">
+                                            <h4 className="font-bold text-amber-800 dark:text-amber-400 mb-1 flex items-center gap-2">
+                                                <History className="w-4 h-4" /> Regression Protocol
+                                            </h4>
+                                            <p className="text-sm text-amber-700 dark:text-amber-500">
+                                                "I am going to take you back to a scene that is the cause, the root of your issue."
+                                            </p>
+                                        </div>
+                                        <QuestionCard
+                                            title="The Regression Sequence"
+                                            questions={[
+                                                "Is it daytime or nighttime?",
+                                                "Are you inside or outside?",
+                                                "Are you on your own or is someone with you?",
+                                                "How old are you? (Less than 5 or more than 5?)",
+                                                "What are you doing, seeing, feeling, and experiencing?"
+                                            ]}
+                                            note="Never ask questions they can say 'No' to. Use the choice method (A or B)."
+                                        />
+                                        <QuestionCard
+                                            title="The 'Because' Pattern (The Magic)"
+                                            questions={[
+                                                "I am [emotion] because...",
+                                                "And that makes me feel...",
+                                                "It makes me feel that because...",
+                                                "What did you decide about yourself in that moment?",
+                                                "What did you make that mean?"
+                                            ]}
+                                        />
+                                    </section>
+                                )}
+
+                                {activeTab === 'transformation' && (
+                                    <section className="animate-in fade-in slide-in-from-bottom-4">
+                                        <QuestionCard
+                                            title="Validation & Logic (The Bridge)"
+                                            questions={[
+                                                "Given what was happening then, does this [symptom] make sense?",
+                                                "How was this actually a brilliant solution for that child?",
+                                                "How did this help you survive that impossible situation?",
+                                                "What do you want to thank this part for?"
+                                            ]}
+                                        />
+                                        <QuestionCard
+                                            title="Context Update (The Adult)"
+                                            questions={[
+                                                "How is your life different now than it was then?",
+                                                "What resources do you have now that the child didn't?",
+                                                "How are you more powerful now?",
+                                                "Is this protection still needed, or has it done its job?"
+                                            ]}
+                                        />
+                                        <div className="p-6 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900 rounded-xl">
+                                            <h3 className="font-bold text-emerald-800 dark:text-emerald-400 mb-2">Permission to Release</h3>
+                                            <p className="text-emerald-700 dark:text-emerald-500 italic">
+                                                "How can you thank this part and let it know it can rest now? What new tools would you like to use instead?"
+                                            </p>
+                                        </div>
+                                    </section>
+                                )}
+
+                                {activeTab === 'recording' && (
+                                    <section className="animate-in fade-in slide-in-from-bottom-4">
+                                        <QuestionCard
+                                            title="Recording Preparation"
+                                            questions={[
+                                                "How would you like to be now?",
+                                                "What words do you most want to hear?",
+                                                "What becomes possible when you're free from this?",
+                                                "What would your life look like if you felt completely free?"
+                                            ]}
+                                            note="Use their exact words in the recording. 15-30 minutes max."
+                                        />
+                                        <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-xl flex flex-col items-center text-center">
+                                            <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center animate-pulse mb-4">
+                                                <Mic className="w-8 h-8" />
+                                            </div>
+                                            <h3 className="text-xl font-bold mb-2">Ready to Record Transformation</h3>
+                                            <p className="text-slate-400 mb-6 text-sm max-w-sm">
+                                                Incorporate the root cause discovered, the appreciation of the old protection, and the new adult capability.
+                                            </p>
+                                            <button className="bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-slate-100 transition-colors">
+                                                Start Recording Protocol
+                                            </button>
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Navigation buttons */}
+                                <div className="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800">
+                                    <button
+                                        disabled={activeTab === 'intake'}
+                                        onClick={() => {
+                                            const idx = phases.findIndex(p => p.id === activeTab);
+                                            setActiveTab(phases[idx - 1].id);
+                                        }}
+                                        className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                                    >
+                                        <ArrowLeft className="w-4 h-4" /> Previous Phase
+                                    </button>
+                                    <button
+                                        disabled={activeTab === 'recording'}
+                                        onClick={() => {
+                                            const idx = phases.findIndex(p => p.id === activeTab);
+                                            setActiveTab(phases[idx + 1].id);
+                                        }}
+                                        className="flex items-center gap-2 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-6 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition-all"
+                                    >
+                                        Next Phase <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            {/* Sidebar Reference */}
+                            <div className="space-y-6">
+                                <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl">
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-4">Diagnostic Cheat Sheet</h3>
+
+                                    <div className="space-y-6">
+                                        <div>
+                                            <h4 className="text-xs font-black uppercase text-slate-500 mb-2">Protect (Bodyguard)</h4>
+                                            <ul className="text-xs space-y-2">
+                                                {symptomAnalogies.Protect.map((item, i) => (
+                                                    <li key={i} className="flex justify-between border-b border-slate-800 pb-1">
+                                                        <span className="text-slate-300">{item.symptom}</span>
+                                                        <span className="text-indigo-300">{item.analogy}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        <div>
+                                            <h4 className="text-xs font-black uppercase text-slate-500 mb-2">Punish (The Judge)</h4>
+                                            <ul className="text-xs space-y-2">
+                                                {symptomAnalogies.Punish.map((item, i) => (
+                                                    <li key={i} className="flex justify-between border-b border-slate-800 pb-1">
+                                                        <span className="text-slate-300">{item.symptom}</span>
+                                                        <span className="text-red-300">{item.analogy}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        <div>
+                                            <h4 className="text-xs font-black uppercase text-slate-500 mb-2">Connect (The Signal)</h4>
+                                            <ul className="text-xs space-y-2">
+                                                {symptomAnalogies.Connect.map((item, i) => (
+                                                    <li key={i} className="flex justify-between border-b border-slate-800 pb-1">
+                                                        <span className="text-slate-300">{item.symptom}</span>
+                                                        <span className="text-emerald-300">{item.analogy}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 pt-6 border-t border-slate-800">
+                                        <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Success Criteria
+                                        </h3>
+                                        <ul className="text-xs space-y-2 text-slate-400 italic">
+                                            <li>• Client has "Aha!" moment</li>
+                                            <li>• Shame transforms to understanding</li>
+                                            <li>• Symptom moves from enemy to ally</li>
+                                            <li>• Past trauma transforms to wisdom</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div className="p-5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                                    <h4 className="font-bold text-sm mb-3">Key Principles</h4>
+                                    <ul className="text-xs space-y-2 text-slate-600 dark:text-slate-400">
+                                        <li className="flex gap-2"><span>1.</span> <span>Personify the symptom first.</span></li>
+                                        <li className="flex gap-2"><span>2.</span> <span>Stay curious, not judgmental.</span></li>
+                                        <li className="flex gap-2"><span>3.</span> <span>Validate the child's logic.</span></li>
+                                        <li className="flex gap-2"><span>4.</span> <span>Emphasize THEN vs NOW.</span></li>
+                                        <li className="flex gap-2"><span>5.</span> <span>End with gratitude and choice.</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

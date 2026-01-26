@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAZAR GEO | Page 3: The System</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #050508;
+            --bg-surface: #0a0a0f;
+            --bg-elevated: #12121a;
+            --accent-primary: #00ffc8;
+            --accent-secondary: #ff3366;
+            --accent-tertiary: #7b61ff;
+            --accent-gold: #ffc800;
+            --text-primary: #ffffff;
+            --text-secondary: #8a8a9a;
+            --text-muted: #4a4a5a;
+            --border: rgba(255, 255, 255, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Noise Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--bg-deep), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            background: conic-gradient(from 180deg, var(--accent-primary), var(--accent-tertiary), var(--accent-secondary), var(--accent-primary));
+            border-radius: 50%;
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .page-indicator {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .page-indicator .current {
+            color: var(--accent-primary);
+        }
+
+        /* Mini Hero */
+        .mini-hero {
+            padding: 10rem 4rem 4rem;
+            text-align: center;
+            background: var(--bg-deep);
+        }
+
+        .mini-hero .section-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-hero p {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Matrix Section */
+        .matrix-section {
+            padding: 6rem 4rem;
+            background: var(--bg-surface);
+        }
+
+        .matrix-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .matrix-cell {
+            aspect-ratio: 1;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            text-align: center;
+            padding: 0.5rem;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .matrix-cell:hover {
+            background: var(--bg-deep);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 20px 40px -10px rgba(0, 255, 200, 0.2);
+        }
+
+        .matrix-cell.header-cell {
+            background: transparent;
+            border: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        .matrix-cell.row-header {
+            color: var(--accent-secondary);
+        }
+
+        .matrix-note {
+            text-align: center;
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* RFIP Section */
+        .rfip-section {
+            padding: 8rem 4rem;
+            background: var(--bg-deep);
+        }
+
+        .rfip-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .section-header {
+            text-align: left;
+        }
+
+        .section-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .rfip-list {
+            list-style: none;
+        }
+
+        .rfip-list li {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .rfip-list-letter {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+        }
+
+        .rfip-list-letter.r-letter {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .rfip-list-letter.f-letter {
+            color: var(--accent-tertiary);
+            border-color: var(--accent-tertiary);
+        }
+
+        .rfip-list-letter.i-letter {
+            color: var(--accent-secondary);
+            border-color: var(--accent-secondary);
+        }
+
+        .rfip-list-letter.p-letter {
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+        }
+
+        .rfip-list-content strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .rfip-list-content span {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .rfip-visual {
+            position: relative;
+        }
+
+        .rfip-ring {
+            width: 400px;
+            height: 400px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .rfip-ring::before {
+            content: '';
+            position: absolute;
+            inset: 30px;
+            border: 1px dashed var(--border);
+            border-radius: 50%;
+        }
+
+        .rfip-ring::after {
+            content: '';
+            position: absolute;
+            inset: 60px;
+            border: 1px dashed var(--border);
+            border-radius: 50%;
+        }
+
+        .rfip-letter {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--bg-elevated);
+            border: 2px solid;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .rfip-letter.r {
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .rfip-letter.f {
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-color: var(--accent-tertiary);
+            color: var(--accent-tertiary);
+        }
+
+        .rfip-letter.i {
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-color: var(--accent-secondary);
+            color: var(--accent-secondary);
+        }
+
+        .rfip-letter.p {
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .rfip-center {
+            position: absolute;
+            inset: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 10rem 4rem;
+            background: var(--bg-surface);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-desc {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .btn-cta-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 3rem;
+            background: var(--accent-primary);
+            color: var(--bg-deep);
+            border: none;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-cta-large:hover {
+            background: var(--text-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(0, 255, 200, 0.3);
+        }
+
+        .btn-cta-large svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s;
+        }
+
+        .btn-cta-large:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            background: var(--bg-deep);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Page Navigation */
+        .page-nav {
+            position: fixed;
+            bottom: 3rem;
+            left: 4rem;
+            z-index: 200;
+        }
+
+        .btn-nav {
+            padding: 1.25rem 3rem;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-nav:hover {
+            background: var(--accent-primary);
+            color: var(--bg-deep);
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 255, 200, 0.3);
+        }
+
+        .btn-nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .mini-hero {
+                padding: 6rem 2rem 3rem;
+            }
+
+            .matrix-section {
+                padding: 4rem 2rem;
+            }
+
+            .matrix-grid {
+                grid-template-columns: repeat(5, 1fr);
+                font-size: 0.6rem;
+            }
+
+            .rfip-section {
+                padding: 6rem 2rem;
+            }
+
+            .rfip-container {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .rfip-ring {
+                width: 300px;
+                height: 300px;
+            }
+
+            .cta-section {
+                padding: 6rem 2rem;
+            }
+
+            .page-nav {
+                left: 2rem;
+                bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .matrix-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-mark"></div>
+            <span class="logo-text">NAZAR GEO</span>
+        </div>
+        <div class="page-indicator">
+            PAGE <span class="current">3</span> / 3
+        </div>
+    </nav>
+
+    <!-- Mini Hero -->
+    <section class="mini-hero">
+        <div class="section-eyebrow">// The Complete System</div>
+        <h1>The 98-Question Matrix</h1>
+        <p>Map every psychological state. Decode every question. Achieve complete AI visibility.</p>
+    </section>
+
+    <!-- Matrix Section -->
+    <section class="matrix-section">
+        <div class="matrix-visual">
+            <div class="matrix-grid">
+                <!-- Header Row -->
+                <div class="matrix-cell header-cell">Pride</div>
+                <div class="matrix-cell header-cell">Greed</div>
+                <div class="matrix-cell header-cell">Lust</div>
+                <div class="matrix-cell header-cell">Envy</div>
+                <div class="matrix-cell header-cell">Gluttony</div>
+                <div class="matrix-cell header-cell">Wrath</div>
+                <div class="matrix-cell header-cell">Sloth</div>
+
+                <!-- Layer 1: Subtle -->
+                <div class="matrix-cell">False Modesty</div>
+                <div class="matrix-cell">Strategic Generosity</div>
+                <div class="matrix-cell">Romantic Idealism</div>
+                <div class="matrix-cell">Comparison</div>
+                <div class="matrix-cell">Consumption</div>
+                <div class="matrix-cell">Passive Aggression</div>
+                <div class="matrix-cell">Procrastination</div>
+
+                <!-- Layer 2: Overt -->
+                <div class="matrix-cell">Status Signaling</div>
+                <div class="matrix-cell">Resource Hoarding</div>
+                <div class="matrix-cell">Seduction</div>
+                <div class="matrix-cell">Sabotage</div>
+                <div class="matrix-cell">Bingeing</div>
+                <div class="matrix-cell">Explosive Outbursts</div>
+                <div class="matrix-cell">Avoidance</div>
+
+                <!-- Layer 3: Anxious -->
+                <div class="matrix-cell">Anxious Pride</div>
+                <div class="matrix-cell">Scarcity Panic</div>
+                <div class="matrix-cell">Desperate Need</div>
+                <div class="matrix-cell">Jealous Panic</div>
+                <div class="matrix-cell">Emotional Eating</div>
+                <div class="matrix-cell">Panic Attacks</div>
+                <div class="matrix-cell">Paralysis</div>
+
+                <!-- Layer 4: Rationalized -->
+                <div class="matrix-cell">Intellectual Superiority</div>
+                <div class="matrix-cell">Justified Taking</div>
+                <div class="matrix-cell">Sexual Power</div>
+                <div class="matrix-cell">Fairness Trap</div>
+                <div class="matrix-cell">Deserved Reward</div>
+                <div class="matrix-cell">Righteous Anger</div>
+                <div class="matrix-cell">Rebellion</div>
+
+                <!-- Layer 5: Destructive -->
+                <div class="matrix-cell">Isolation</div>
+                <div class="matrix-cell">Financial Ruin</div>
+                <div class="matrix-cell">Toxic Affairs</div>
+                <div class="matrix-cell">Self-Deprecation</div>
+                <div class="matrix-cell">Addiction</div>
+                <div class="matrix-cell">Bridge Burning</div>
+                <div class="matrix-cell">Apathy</div>
+
+                <!-- Layer 6: Core Identity -->
+                <div class="matrix-cell">I AM Special</div>
+                <div class="matrix-cell">I AM Mine</div>
+                <div class="matrix-cell">I AM Desire</div>
+                <div class="matrix-cell">I AM Lack</div>
+                <div class="matrix-cell">I AM Hunger</div>
+                <div class="matrix-cell">I AM Fire</div>
+                <div class="matrix-cell">I AM Stuck</div>
+
+                <!-- Layer 7: Witnessing -->
+                <div class="matrix-cell">Witnessing Pride</div>
+                <div class="matrix-cell">Witnessing Greed</div>
+                <div class="matrix-cell">Witnessing Lust</div>
+                <div class="matrix-cell">Witnessing Envy</div>
+                <div class="matrix-cell">Witnessing Hunger</div>
+                <div class="matrix-cell">Witnessing Anger</div>
+                <div class="matrix-cell">Witnessing Inertia</div>
+            </div>
+
+            <p class="matrix-note">
+                7 Core Drives × 7 Psychological Layers × 2 Opposing Forces = 98 Distinct States. Each state generates
+                unique questions. We map them all.
+            </p>
+        </div>
+    </section>
+
+    <!-- RFIP Section -->
+    <section class="rfip-section">
+        <div class="rfip-container">
+            <div>
+                <div class="section-eyebrow">// Question Decoding</div>
+                <h2 class="section-title">The RFIP Algorithm</h2>
+
+                <ul class="rfip-list">
+                    <li>
+                        <div class="rfip-list-letter r-letter">R</div>
+                        <div class="rfip-list-content">
+                            <strong>Relevance</strong>
+                            <span>Who is asking this question? What role do they occupy?</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="rfip-list-letter f-letter">F</div>
+                        <div class="rfip-list-content">
+                            <strong>Freshness</strong>
+                            <span>What current context makes this question urgent now?</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="rfip-list-letter i-letter">I</div>
+                        <div class="rfip-list-content">
+                            <strong>Immediacy</strong>
+                            <span>What specific pain point needs immediate resolution?</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="rfip-list-letter p-letter">P</div>
+                        <div class="rfip-list-content">
+                            <strong>Precision</strong>
+                            <span>What exact outcome would satisfy this question completely?</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="rfip-visual">
+                <div class="rfip-ring">
+                    <div class="rfip-letter r">R</div>
+                    <div class="rfip-letter f">F</div>
+                    <div class="rfip-letter i">I</div>
+                    <div class="rfip-letter p">P</div>
+                    <div class="rfip-center">
+                        Decode the question.<br>
+                        Become the answer.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Achieve 98?</h2>
+            <p class="cta-desc">
+                Let's map your audience psychology, decode their questions, and position you as the answer AI citations
+                authority in your niche.
+            </p>
+            <a href="#contact" class="btn-cta-large">
+                Get Started
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Page Navigation -->
+    <div class="page-nav">
+        <a href="geo-agencythree-page2.html" class="btn-nav">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Previous
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">© 2026 NAZAR GEO. Generative Engine Optimization Agency.</p>
+    </footer>
+
+</body>
+
+</html>

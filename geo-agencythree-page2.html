@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAZAR GEO | Page 2: The Solution</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #050508;
+            --bg-surface: #0a0a0f;
+            --bg-elevated: #12121a;
+            --accent-primary: #00ffc8;
+            --accent-secondary: #ff3366;
+            --accent-tertiary: #7b61ff;
+            --accent-gold: #ffc800;
+            --text-primary: #ffffff;
+            --text-secondary: #8a8a9a;
+            --text-muted: #4a4a5a;
+            --border: rgba(255, 255, 255, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Noise Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, var(--bg-deep), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+            background: conic-gradient(from 180deg, var(--accent-primary), var(--accent-tertiary), var(--accent-secondary), var(--accent-primary));
+            border-radius: 50%;
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .page-indicator {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .page-indicator .current {
+            color: var(--accent-primary);
+        }
+
+        /* Mini Hero */
+        .mini-hero {
+            padding: 10rem 4rem 6rem;
+            text-align: center;
+            background: var(--bg-deep);
+        }
+
+        .mini-hero .section-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-hero p {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Four Pillars Section */
+        .pillars-section {
+            padding: 6rem 4rem;
+            background: var(--bg-surface);
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .pillar-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            padding: 2.5rem 2rem;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .pillar-card:nth-child(1)::before {
+            background: var(--accent-primary);
+        }
+
+        .pillar-card:nth-child(2)::before {
+            background: var(--accent-tertiary);
+        }
+
+        .pillar-card:nth-child(3)::before {
+            background: var(--accent-secondary);
+        }
+
+        .pillar-card:nth-child(4)::before {
+            background: var(--accent-gold);
+        }
+
+        .pillar-card:nth-child(1):hover {
+            border-color: var(--accent-primary);
+        }
+
+        .pillar-card:nth-child(2):hover {
+            border-color: var(--accent-tertiary);
+        }
+
+        .pillar-card:nth-child(3):hover {
+            border-color: var(--accent-secondary);
+        }
+
+        .pillar-card:nth-child(4):hover {
+            border-color: var(--accent-gold);
+        }
+
+        .pillar-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .pillar-card:nth-child(1) .pillar-number {
+            color: var(--accent-primary);
+        }
+
+        .pillar-card:nth-child(2) .pillar-number {
+            color: var(--accent-tertiary);
+        }
+
+        .pillar-card:nth-child(3) .pillar-number {
+            color: var(--accent-secondary);
+        }
+
+        .pillar-card:nth-child(4) .pillar-number {
+            color: var(--accent-gold);
+        }
+
+        .pillar-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pillar-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .pillar-card:nth-child(1) .pillar-icon svg {
+            stroke: var(--accent-primary);
+        }
+
+        .pillar-card:nth-child(2) .pillar-icon svg {
+            stroke: var(--accent-tertiary);
+        }
+
+        .pillar-card:nth-child(3) .pillar-icon svg {
+            stroke: var(--accent-secondary);
+        }
+
+        .pillar-card:nth-child(4) .pillar-icon svg {
+            stroke: var(--accent-gold);
+        }
+
+        .pillar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .pillar-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .pillar-example {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .pillar-example strong {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pillar-example code {
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        /* Methodology Section */
+        .methodology {
+            padding: 8rem 4rem;
+            background: var(--bg-deep);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 6rem;
+        }
+
+        .section-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .approach-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .approach-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .approach-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 40px 80px -20px rgba(0, 255, 200, 0.15);
+        }
+
+        .approach-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .approach-card.top-down::before {
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+        }
+
+        .approach-card.bottom-up::before {
+            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-tertiary));
+        }
+
+        .approach-icon {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .approach-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .top-down .approach-icon svg {
+            stroke: var(--accent-primary);
+        }
+
+        .bottom-up .approach-icon svg {
+            stroke: var(--accent-secondary);
+        }
+
+        .approach-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .approach-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .approach-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .approach-features {
+            list-style: none;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+        }
+
+        .approach-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .approach-features li::before {
+            content: '→';
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        .bottom-up .approach-features li::before {
+            color: var(--accent-secondary);
+        }
+
+        /* Page Navigation */
+        .page-nav {
+            position: fixed;
+            bottom: 3rem;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4rem;
+        }
+
+        .btn-nav {
+            padding: 1.25rem 3rem;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-nav:hover {
+            background: var(--accent-primary);
+            color: var(--bg-deep);
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 255, 200, 0.3);
+        }
+
+        .btn-nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .mini-hero {
+                padding: 6rem 2rem 4rem;
+            }
+
+            .pillars-section {
+                padding: 4rem 2rem;
+            }
+
+            .pillars-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .methodology {
+                padding: 6rem 2rem;
+            }
+
+            .approach-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-nav {
+                padding: 0 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-nav {
+                flex-direction: column;
+                gap: 1rem;
+                bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-mark"></div>
+            <span class="logo-text">NAZAR GEO</span>
+        </div>
+        <div class="page-indicator">
+            PAGE <span class="current">2</span> / 3
+        </div>
+    </nav>
+
+    <!-- Mini Hero -->
+    <section class="mini-hero">
+        <div class="section-eyebrow">// The Complete Framework</div>
+        <h1>How We Achieve AI Visibility</h1>
+        <p>A proven methodology combining macro-level psychological mapping with micro-level question resolution.</p>
+    </section>
+
+    <!-- Four Pillars Section -->
+    <section class="pillars-section">
+        <div class="pillars-grid">
+            <!-- Pillar 1 -->
+            <div class="pillar-card">
+                <div class="pillar-number">PILLAR 01</div>
+                <div class="pillar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                </div>
+                <h3 class="pillar-title">Answer Specific Questions</h3>
+                <p class="pillar-desc">
+                    AI models are "answer engines." They look for content that has the exact framing of the question
+                    being asked. Stop creating vague titles—answer what your audience actually searches.
+                </p>
+                <div class="pillar-example">
+                    <strong>Instead of:</strong>
+                    <code>"My Thoughts on Hypnosis"</code>
+                    <br><br>
+                    <strong>Create:</strong>
+                    <code>"How does hypnotherapy reprogram the subconscious?"</code>
+                </div>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="pillar-card">
+                <div class="pillar-number">PILLAR 02</div>
+                <div class="pillar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <h3 class="pillar-title">Transcripts Are Your Weapon</h3>
+                <p class="pillar-desc">
+                    AI cannot "watch" video pixels—but it reads text instantly. Your transcript is the secret weapon.
+                    Publish full scripts on your website, not just auto-captions.
+                </p>
+                <div class="pillar-example">
+                    <strong>The Fix:</strong>
+                    <code>Put full text in YouTube description + blog post embedded with video. Give AI text to read and cite.</code>
+                </div>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="pillar-card">
+                <div class="pillar-number">PILLAR 03</div>
+                <div class="pillar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                    </svg>
+                </div>
+                <h3 class="pillar-title">Coin Your Own Terms</h3>
+                <p class="pillar-desc">
+                    AI loves definitions. If you clearly define a term, the AI will use YOUR definition as the "fact."
+                    Create proprietary language and own the lexicon of your niche.
+                </p>
+                <div class="pillar-example">
+                    <strong>Format:</strong>
+                    <code>"Faulty Subconscious Code is defined as [1-sentence]. It manifests as [list of 3 symptoms]."</code>
+                </div>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div class="pillar-card">
+                <div class="pillar-number">PILLAR 04</div>
+                <div class="pillar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <line x1="8" y1="6" x2="21" y2="6" />
+                        <line x1="8" y1="12" x2="21" y2="12" />
+                        <line x1="8" y1="18" x2="21" y2="18" />
+                        <line x1="3" y1="6" x2="3.01" y2="6" />
+                        <line x1="3" y1="12" x2="3.01" y2="12" />
+                        <line x1="3" y1="18" x2="3.01" y2="18" />
+                    </svg>
+                </div>
+                <h3 class="pillar-title">Use Listicle Formatting</h3>
+                <p class="pillar-desc">
+                    Clean lists are easier for AI to scrape and present than dense paragraphs. Structure beats prose.
+                    Break down every process into clear, numbered steps.
+                </p>
+                <div class="pillar-example">
+                    <strong>Structure:</strong>
+                    <code>Step 1: Identify the Fear<br>Step 2: Map the Association<br>Step 3: Interrupt the Pattern</code>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section class="methodology">
+        <div class="section-header">
+            <div class="section-eyebrow">// The Dual-Axis Approach</div>
+            <h2 class="section-title">Top-Down + Bottom-Up</h2>
+            <p class="section-desc">
+                We combine macro-level psychological mapping with micro-level question decoding to achieve complete AI
+                visibility in your market.
+            </p>
+        </div>
+
+        <div class="approach-grid">
+            <!-- Top-Down Card -->
+            <div class="approach-card top-down">
+                <div class="approach-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                    </svg>
+                </div>
+
+                <div class="approach-subtitle">Macro-Level Strategy</div>
+                <h3 class="approach-title">Top-Down Mapping</h3>
+
+                <p class="approach-desc">
+                    We map the complete universe of psychological states your audience occupies. The 7×7 Matrix
+                    identifies 98 distinct user conditions—enabling us to anticipate every possible question before it's
+                    asked.
+                </p>
+
+                <ul class="approach-features">
+                    <li>Map all 98 psychological states in your market</li>
+                    <li>Identify question clusters per state</li>
+                    <li>Define content architecture for each layer</li>
+                    <li>Create question-formatted titles for each state</li>
+                    <li>Build transcripts that AI can cite</li>
+                </ul>
+            </div>
+
+            <!-- Bottom-Up Card -->
+            <div class="approach-card bottom-up">
+                <div class="approach-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
+                        <path d="M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+                    </svg>
+                </div>
+
+                <div class="approach-subtitle">Micro-Level Precision</div>
+                <h3 class="approach-title">Bottom-Up Resolution</h3>
+
+                <p class="approach-desc">
+                    Using the RFIP Algorithm, we decode each specific question into its constituent parts—Role,
+                    Function, Intention, Purpose—then craft content that answers at the deepest level.
+                </p>
+
+                <ul class="approach-features">
+                    <li>Decode question intent with RFIP analysis</li>
+                    <li>Coin proprietary terms with clear definitions</li>
+                    <li>Structure answers in listicle format</li>
+                    <li>Create full text transcripts for every piece</li>
+                    <li>Optimize for AI citation, not just ranking</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Navigation -->
+    <div class="page-nav">
+        <a href="geo-agencythree-page1.html" class="btn-nav">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Previous
+        </a>
+        <a href="geo-agencythree-page3.html" class="btn-nav">
+            Next: The System
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+        </a>
+    </div>
+
+</body>
+
+</html>

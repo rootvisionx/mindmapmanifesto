@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Journey Begins - MindMapManifesto.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Neural Network Canvas Background */
+        #neuralCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Particle Canvas */
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* Radial Gradient Overlay */
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center,
+                    transparent 0%,
+                    rgba(139, 92, 246, 0.1) 40%,
+                    rgba(0, 0, 0, 0.8) 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* Pulsing Waves */
+        .wave-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid;
+            border-radius: 50%;
+            opacity: 0;
+            animation: waveExpand 4s ease-out infinite;
+        }
+
+        .wave:nth-child(1) {
+            border-color: rgba(139, 92, 246, 0.6);
+            animation-delay: 0s;
+        }
+
+        .wave:nth-child(2) {
+            border-color: rgba(6, 182, 212, 0.6);
+            animation-delay: 1.3s;
+        }
+
+        .wave:nth-child(3) {
+            border-color: rgba(16, 185, 129, 0.6);
+            animation-delay: 2.6s;
+        }
+
+        @keyframes waveExpand {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+
+            100% {
+                width: 1200px;
+                height: 1200px;
+                opacity: 0;
+            }
+        }
+
+        /* Content Container */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Main Title - Transformation Complete */
+        .main-title {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            background: linear-gradient(135deg,
+                    #8b5cf6 0%,
+                    #06b6d4 50%,
+                    #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(139, 92, 246, 0.5);
+            margin-bottom: 30px;
+            letter-spacing: 5px;
+            opacity: 0;
+            animation: titleReveal 2s ease-out 0.5s forwards;
+            position: relative;
+        }
+
+        /* Glowing effect behind title */
+        .main-title::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg,
+                    #8b5cf6 0%,
+                    #06b6d4 50%,
+                    #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: blur(20px);
+            opacity: 0.6;
+            z-index: -1;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleReveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(50px);
+                filter: blur(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes titleGlow {
+
+            0%,
+            100% {
+                opacity: 0.6;
+                filter: blur(20px);
+            }
+
+            50% {
+                opacity: 0.9;
+                filter: blur(30px);
+            }
+        }
+
+        /* Subtitle */
+        .subtitle {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: #ffffff;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease-out 2s forwards;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.8),
+                0 0 40px rgba(6, 182, 212, 0.5);
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Secondary Message */
+        .message {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: #a78bfa;
+            text-align: center;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeInMessage 2s ease-out 4s forwards;
+            max-width: 90%;
+            line-height: 1.6;
+            text-shadow: 0 0 15px rgba(167, 139, 250, 0.6);
+        }
+
+        @keyframes fadeInMessage {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-symbol {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg) scale(0.5);
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg) scale(1);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-title {
+                letter-spacing: 2px;
+            }
+
+            .subtitle {
+                letter-spacing: 1px;
+            }
+
+            .message {
+                bottom: 10%;
+                font-size: 1rem;
+            }
+
+            @keyframes waveExpand {
+                100% {
+                    width: 600px;
+                    height: 600px;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Neural Network Canvas -->
+    <canvas id="neuralCanvas"></canvas>
+
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Gradient Overlay -->
+    <div class="gradient-overlay"></div>
+
+    <!-- Pulsing Waves -->
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1 class="main-title" data-text="YOUR JOURNEY BEGINS">YOUR JOURNEY BEGINS</h1>
+        <p class="subtitle">The First Step is Complete</p>
+    </div>
+
+    <!-- Bottom Message -->
+    <div class="message">
+        Thank you for completing your intake.<br>
+        Together, we'll unlock the transformation you seek.
+    </div>
+
+    <script>
+        // ===== NEURAL NETWORK VISUALIZATION =====
+        const neuralCanvas = document.getElementById('neuralCanvas');
+        const neuralCtx = neuralCanvas.getContext('2d');
+
+        neuralCanvas.width = window.innerWidth;
+        neuralCanvas.height = window.innerHeight;
+
+        class NeuralNode {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 3 + 2;
+                this.pulsePhase = Math.random() * Math.PI * 2;
+                this.color = this.getRandomColor();
+            }
+
+            getRandomColor() {
+                const colors = [
+                    { r: 139, g: 92, b: 246 },   // purple
+                    { r: 6, g: 182, b: 212 },    // cyan
+                    { r: 16, g: 185, b: 129 },   // emerald
+                    { r: 167, g: 139, b: 250 }   // light purple
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > neuralCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > neuralCanvas.height) this.vy *= -1;
+
+                this.pulsePhase += 0.05;
+            }
+
+            draw() {
+                const pulse = Math.sin(this.pulsePhase) * 0.5 + 0.5;
+                const alpha = 0.6 + pulse * 0.4;
+
+                // Glow effect
+                const gradient = neuralCtx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * 4);
+                gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha})`);
+                gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
+
+                neuralCtx.fillStyle = gradient;
+                neuralCtx.beginPath();
+                neuralCtx.arc(this.x, this.y, this.radius * 4, 0, Math.PI * 2);
+                neuralCtx.fill();
+
+                // Core node
+                neuralCtx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha})`;
+                neuralCtx.beginPath();
+                neuralCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                neuralCtx.fill();
+            }
+        }
+
+        // Create neural nodes
+        const neuralNodes = [];
+        const nodeCount = window.innerWidth < 768 ? 30 : 50;
+
+        for (let i = 0; i < nodeCount; i++) {
+            neuralNodes.push(new NeuralNode(
+                Math.random() * neuralCanvas.width,
+                Math.random() * neuralCanvas.height
+            ));
+        }
+
+        function drawConnections() {
+            const maxDistance = 150;
+
+            for (let i = 0; i < neuralNodes.length; i++) {
+                for (let j = i + 1; j < neuralNodes.length; j++) {
+                    const dx = neuralNodes[i].x - neuralNodes[j].x;
+                    const dy = neuralNodes[i].y - neuralNodes[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        const gradient = neuralCtx.createLinearGradient(
+                            neuralNodes[i].x, neuralNodes[i].y,
+                            neuralNodes[j].x, neuralNodes[j].y
+                        );
+                        gradient.addColorStop(0, `rgba(${neuralNodes[i].color.r}, ${neuralNodes[i].color.g}, ${neuralNodes[i].color.b}, ${opacity})`);
+                        gradient.addColorStop(1, `rgba(${neuralNodes[j].color.r}, ${neuralNodes[j].color.g}, ${neuralNodes[j].color.b}, ${opacity})`);
+
+                        neuralCtx.strokeStyle = gradient;
+                        neuralCtx.lineWidth = 1;
+                        neuralCtx.beginPath();
+                        neuralCtx.moveTo(neuralNodes[i].x, neuralNodes[i].y);
+                        neuralCtx.lineTo(neuralNodes[j].x, neuralNodes[j].y);
+                        neuralCtx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateNeural() {
+            neuralCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            neuralCtx.fillRect(0, 0, neuralCanvas.width, neuralCanvas.height);
+
+            drawConnections();
+
+            neuralNodes.forEach(node => {
+                node.update();
+                node.draw();
+            });
+
+            requestAnimationFrame(animateNeural);
+        }
+
+        // ===== PARTICLE SYSTEM =====
+        const particleCanvas = document.getElementById('particleCanvas');
+        const particleCtx = particleCanvas.getContext('2d');
+
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = particleCanvas.height + 10;
+                this.size = Math.random() * 2 + 1;
+                this.speedY = -(Math.random() * 1 + 0.5);
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.5;
+                this.color = this.getRandomColor();
+            }
+
+            getRandomColor() {
+                const colors = [
+                    'rgba(139, 92, 246, ',   // purple
+                    'rgba(6, 182, 212, ',    // cyan
+                    'rgba(16, 185, 129, ',   // emerald
+                    'rgba(255, 255, 255, '   // white
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+
+                if (this.y < -10) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                particleCtx.fillStyle = this.color + this.opacity + ')';
+                particleCtx.beginPath();
+                particleCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                particleCtx.fill();
+
+                // Glow
+                const gradient = particleCtx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3);
+                gradient.addColorStop(0, this.color + (this.opacity * 0.5) + ')');
+                gradient.addColorStop(1, this.color + '0)');
+
+                particleCtx.fillStyle = gradient;
+                particleCtx.beginPath();
+                particleCtx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+                particleCtx.fill();
+            }
+        }
+
+        const particles = [];
+        const particleCount = window.innerWidth < 768 ? 100 : 200;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        // ===== FLOATING SYMBOLS =====
+        const symbols = ['✨', '⚡', '🌟', '💫', '🔮', '🧠', '🌈', '💎'];
+
+        function createFloatingSymbol() {
+            const symbol = document.createElement('div');
+            symbol.className = 'floating-symbol';
+            symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            symbol.style.left = Math.random() * 100 + '%';
+            symbol.style.bottom = '0';
+
+            const duration = 8 + Math.random() * 4;
+            symbol.style.animationDuration = duration + 's';
+
+            // Gradient color
+            const hue = Math.random() * 360;
+            symbol.style.color = `hsl(${hue}, 80%, 70%)`;
+            symbol.style.textShadow = `0 0 20px hsl(${hue}, 80%, 50%)`;
+
+            document.body.appendChild(symbol);
+
+            setTimeout(() => {
+                symbol.remove();
+            }, duration * 1000);
+        }
+
+        // Start floating symbols after initial animation
+        setTimeout(() => {
+            setInterval(createFloatingSymbol, 500);
+        }, 3000);
+
+        // ===== START ANIMATIONS =====
+        window.addEventListener('load', () => {
+            animateNeural();
+            animateParticles();
+        });
+
+        // ===== RESIZE HANDLER =====
+        window.addEventListener('resize', () => {
+            neuralCanvas.width = window.innerWidth;
+            neuralCanvas.height = window.innerHeight;
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+
+</html>
