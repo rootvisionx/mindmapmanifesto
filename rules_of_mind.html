@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules of the Mind | Control Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .card-flip {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-flip:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            backface-visibility: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const {
+            Brain, Zap, ShieldAlert, Layers, ArrowRight, Activity,
+            Lock, Unlock, RefreshCw, ChevronRight, AlertTriangle,
+            Heart, Terminal, Menu, X
+        } = LucideReact;
+
+        const rules = [
+            { id: 1, title: "The Blueprint", desc: "Your mind works to make your thoughts real.", detail: "Every thought you think and every word you say form a blueprint that your mind, body and psyche work to make real." },
+            { id: 2, title: "Consistency", desc: "You must act consistent with your thinking.", detail: "The strongest force in every human being is that you must act in a way that is absolutely consistent with your thinking." },
+            { id: 3, title: "Reaction", desc: "Thoughts create physical reactions.", detail: "Every thought you think has a physical reaction and an emotional response." },
+            { id: 4, title: "Imagination", desc: "Imagination > Logic.", detail: "Imagination is more powerful than logic. Logic gets you from A to B. Imagination takes you everywhere." },
+            { id: 5, title: "Repetition", desc: "Your mind learns by repetition.", detail: "Your mind learns by repetition. Wiring neurons together requires consistent firing." },
+            { id: 6, title: "Expectation", desc: "What you expect tends to be realized.", detail: "What you expect almost always tends to be realized. Your brain scans the environment to prove you right." },
+            { id: 7, title: "Filtering", desc: "Your mind accepts what you tell it.", detail: "Your mind does not care if what you tell it is true or false - it lets it in." },
+            { id: 8, title: "Belief Loop", desc: "You make beliefs, then they make you.", detail: "You make your beliefs and then your beliefs turn right around and make you." },
+            { id: 9, title: "Familiarity", desc: "The mind loves what is familiar.", detail: "Your mind loves what is familiar and hates what is unfamiliar. To change, you must make the unfamiliar familiar." },
+            { id: 10, title: "Input", desc: "Pictures and Words.", detail: "Your mind only responds to two things: the pictures you make in your head and the words you say to yourself." },
+            { id: 11, title: "Feelings", desc: "Feelings come from words.", detail: "The way you feel about anything is down to the words you use to define it." },
+            { id: 12, title: "Conflict", desc: "No conflicting beliefs.", detail: "The mind cannot hold conflicting beliefs. The stronger/older belief usually wins." },
+            { id: 13, title: "Service", desc: "It does what it thinks you want.", detail: "Your mind does what it thinks you want it to do. If you complain about work, it might give you the flu to protect you." },
+        ];
+
+        const stressResponses = [
+            { id: 'fight', label: 'Fight', icon: Zap, desc: 'Aggression, Control, Perfectionism', detail: 'The need to be in control, expecting perfection, sudden anger.' },
+            { id: 'flight', label: 'Flight', icon: Activity, desc: 'Anxiety, Workaholism, Panic', detail: 'Inability to relax, needing to be busy, obsession.' },
+            { id: 'freeze', label: 'Freeze', icon: Lock, desc: 'Dissociation, Isolation, Brain Fog', detail: 'Difficulty deciding, hiding away, feeling unreal.' },
+            { id: 'flop', label: 'Flop', icon: Layers, desc: 'Collapse, Fainting, Immobility', detail: 'Total loss of control, muscles giving way.' },
+            { id: 'fawn', label: 'Fawn', icon: Heart, desc: 'People Pleasing, No Boundaries', detail: 'Self-censoring, fear of saying no, codependency.' },
+        ];
+
+        const Navigation = ({ section, setSection }) => (
+            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur border border-slate-700 rounded-full p-2 flex gap-2 shadow-2xl z-50">
+                {[
+                    { id: 'dashboard', icon: Brain, label: 'Dashboard' },
+                    { id: 'rules', icon: Terminal, label: 'The Rules' },
+                    { id: 'viruses', icon: ShieldAlert, label: 'Viruses' },
+                    { id: 'refactor', icon: RefreshCw, label: 'Refactor' },
+                ].map(item => (
+                    <button
+                        key={item.id}
+                        onClick={() => setSection(item.id)}
+                        className={`p-3 rounded-full transition-all ${section === item.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                        title={item.label}
+                    >
+                        <item.icon className="w-5 h-5" />
+                    </button>
+                ))}
+            </nav>
+        );
+
+        const Dashboard = ({ changeSection }) => (
+            <div className="space-y-12 animate-[fadeIn_0.5s_ease-out]">
+                <div className="text-center py-20">
+                    <div className="inline-block p-4 rounded-full bg-indigo-500/10 mb-6 animate-pulse-slow">
+                        <Brain className="w-16 h-16 text-indigo-400" />
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-6">
+                        Rules of the <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Mind</span>
+                    </h1>
+                    <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                        Understanding the operating system of your existence.
+                        Learn the protocols, identify the bugs, and reprogram the core.
+                    </p>
+                    <button
+                        onClick={() => changeSection('rules')}
+                        className="mt-10 px-8 py-4 bg-white text-slate-950 rounded-full font-bold hover:bg-indigo-50 transition-colors flex items-center gap-2 mx-auto"
+                    >
+                        Initialize Module <ArrowRight className="w-4 h-4" />
+                    </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition-all">
+                        <ShieldAlert className="w-8 h-8 text-red-400 mb-4" />
+                        <h3 className="text-xl font-bold text-white mb-2">Identify Viruses</h3>
+                        <p className="text-slate-400 text-sm">Recognize the "Not Enough" and "Not Available" logic loops running in the background.</p>
+                    </div>
+                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition-all">
+                        <Terminal className="w-8 h-8 text-emerald-400 mb-4" />
+                        <h3 className="text-xl font-bold text-white mb-2">Rewrite Code</h3>
+                        <p className="text-slate-400 text-sm">Learn to use specific language patterns (command lines) that force the mind to execute new behaviors.</p>
+                    </div>
+                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition-all">
+                        <Activity className="w-8 h-8 text-amber-400 mb-4" />
+                        <h3 className="text-xl font-bold text-white mb-2">Override Defaults</h3>
+                        <p className="text-slate-400 text-sm">Bypass the default "Flight/Freeze" stress responses and install new coping mechanisms.</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const RulesDeck = () => (
+            <div className="max-w-6xl mx-auto px-4 py-12 animate-[fadeIn_0.5s_ease-out]">
+                <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+                    <Terminal className="w-8 h-8 text-indigo-400" /> The 13 Protocols
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {rules.map(rule => (
+                        <div key={rule.id} className="group h-64 cursor-pointer card-flip">
+                            <div className="card-inner relative w-full h-full">
+                                {/* Front */}
+                                <div className="card-front absolute w-full h-full bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between group-hover:border-indigo-500/50 transition-all shadow-xl">
+                                    <div>
+                                        <div className="text-indigo-500 font-mono text-xs mb-2">RULE #{rule.id.toString().padStart(2, '0')}</div>
+                                        <h3 className="text-2xl font-bold text-white mb-2">{rule.title}</h3>
+                                        <p className="text-slate-400 text-sm">{rule.desc}</p>
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <div className="p-2 rounded-full bg-slate-800 text-slate-500 group-hover:text-indigo-400">
+                                            <RefreshCw className="w-4 h-4" />
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Back */}
+                                <div className="card-back absolute w-full h-full bg-indigo-900 border border-indigo-700 rounded-xl p-6 flex flex-col justify-center items-center text-center shadow-xl">
+                                    <p className="text-white font-medium leading-relaxed">{rule.detail}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const Viruses = () => {
+            const [activeResponse, setActiveResponse] = useState(null);
+
+            return (
+                <div className="max-w-4xl mx-auto px-4 py-12 animate-[fadeIn_0.5s_ease-out]">
+                    <div className="mb-16">
+                        <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                            <ShieldAlert className="w-8 h-8 text-red-400" /> The 3 Core Beliefs
+                        </h2>
+                        <div className="space-y-4">
+                            {[
+                                { title: "I'm Not Enough", desc: "The craving for external validation (money, status, love) to fill internal emptiness." },
+                                { title: "It's Not Available to Me", desc: "The belief that happiness/health is for 'others', often inherited from family." },
+                                { title: "I'm Different", desc: "The fear of rejection. The belief that you don't fit in, leading to isolation." }
+                            ].map((belief, idx) => (
+                                <div key={idx} className="bg-red-500/10 border border-red-500/20 p-6 rounded-xl flex items-start gap-4">
+                                    <AlertTriangle className="w-6 h-6 text-red-400 shrink-0 mt-1" />
+                                    <div>
+                                        <h3 className="text-xl font-bold text-white mb-1">"{belief.title}"</h3>
+                                        <p className="text-red-200/70">{belief.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                            <Activity className="w-8 h-8 text-amber-400" /> Stress Responses
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                            {stressResponses.map(r => (
+                                <button
+                                    key={r.id}
+                                    onClick={() => setActiveResponse(r.id)}
+                                    className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all ${activeResponse === r.id ? 'bg-amber-500 text-white border-amber-400' : 'bg-slate-900 border-slate-800 text-slate-500 hover:text-white hover:border-slate-600'}`}
+                                >
+                                    <r.icon className="w-5 h-5" />
+                                    <span className="text-xs font-bold uppercase">{r.label}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 min-h-[200px] flex items-center justify-center text-center">
+                            {activeResponse ? (
+                                <div className="animate-[fadeIn_0.3s_ease-out]">
+                                    <h3 className="text-2xl font-bold text-white mb-2">
+                                        {stressResponses.find(r => r.id === activeResponse).label} Mode
+                                    </h3>
+                                    <p className="text-amber-400 font-mono text-sm mb-4 uppercase tracking-wider">
+                                        {stressResponses.find(r => r.id === activeResponse).desc}
+                                    </p>
+                                    <p className="text-slate-300 max-w-lg mx-auto">
+                                        {stressResponses.find(r => r.id === activeResponse).detail}
+                                    </p>
+                                </div>
+                            ) : (
+                                <p className="text-slate-600 italic">Select a stress response protocol to inspect its parameters.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const RefactorTool = () => {
+            const [step, setStep] = useState(0);
+            const [inputs, setInputs] = useState({ thought: '', feeling: '', action: '', flip: '' });
+
+            const update = (f, v) => setInputs(p => ({ ...p, [f]: v }));
+
+            return (
+                <div className="max-w-2xl mx-auto px-4 py-12 animate-[fadeIn_0.5s_ease-out]">
+                    <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                        <RefreshCw className="w-8 h-8 text-emerald-400" /> Loop Refactoring
+                    </h2>
+                    <p className="text-slate-400 mb-8">Debug your thought loops by rewriting the source code.</p>
+
+                    <div className="space-y-8">
+                        {/* Step 1: Thought */}
+                        <div className={`transition-all duration-500 ${step >= 0 ? 'opacity-100 translate-x-0' : 'opacity-30'}`}>
+                            <label className="flex items-center gap-2 text-sm font-bold text-red-400 mb-2 uppercase tracking-wider">
+                                <Terminal className="w-4 h-4" /> 1. The Glitch (Thought)
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="e.g., I'm not good enough for this job..."
+                                className="w-full bg-slate-900 border border-slate-700 rounded-lg p-4 text-white focus:border-red-500 outline-none"
+                                value={inputs.thought}
+                                onChange={e => {
+                                    update('thought', e.target.value);
+                                    if (e.target.value.length > 5 && step === 0) setStep(1);
+                                }}
+                            />
+                        </div>
+
+                        {/* Step 2: Feeling */}
+                        {step >= 1 && (
+                            <div className="animate-[fadeIn_0.5s_ease-out]">
+                                <div className="h-8 border-l-2 border-slate-800 ml-6 border-dashed"></div>
+                                <label className="flex items-center gap-2 text-sm font-bold text-amber-400 mb-2 uppercase tracking-wider">
+                                    <Activity className="w-4 h-4" /> 2. System Error (Feeling)
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="How does that thought make you feel?"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-4 text-white focus:border-amber-500 outline-none"
+                                    value={inputs.feeling}
+                                    onChange={e => {
+                                        update('feeling', e.target.value);
+                                        if (e.target.value.length > 3 && step === 1) setStep(2);
+                                    }}
+                                />
+                            </div>
+                        )}
+
+                        {/* Step 3: Action */}
+                        {step >= 2 && (
+                            <div className="animate-[fadeIn_0.5s_ease-out]">
+                                <div className="h-8 border-l-2 border-slate-800 ml-6 border-dashed"></div>
+                                <label className="flex items-center gap-2 text-sm font-bold text-slate-400 mb-2 uppercase tracking-wider">
+                                    <Zap className="w-4 h-4" /> 3. Output (Action)
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="What do you do when you feel that way?"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-4 text-white focus:border-slate-500 outline-none"
+                                    value={inputs.action}
+                                    onChange={e => {
+                                        update('action', e.target.value);
+                                        if (e.target.value.length > 3 && step === 2) setStep(3);
+                                    }}
+                                />
+                            </div>
+                        )}
+
+                        {/* Step 4: The Patch */}
+                        {step >= 3 && (
+                            <div className="animate-[fadeIn_0.5s_ease-out]">
+                                <div className="h-12 flex items-center justify-center my-4">
+                                    <div className="px-4 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase">
+                                        Running Refactor...
+                                    </div>
+                                </div>
+                                <div className="bg-emerald-900/10 border border-emerald-500/30 p-8 rounded-2xl relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-3 opacity-20">
+                                        <Lock className="w-24 h-24 text-emerald-500" />
+                                    </div>
+                                    <label className="flex items-center gap-2 text-sm font-bold text-emerald-400 mb-2 uppercase tracking-wider relative z-10">
+                                        <Unlock className="w-4 h-4" /> 4. New Code (The Flip)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="What is the absolute opposite truth?"
+                                        className="w-full bg-slate-950 border border-emerald-500/50 rounded-lg p-4 text-emerald-100 placeholder:text-emerald-500/50 focus:ring-1 focus:ring-emerald-500 outline-none relative z-10 font-bold"
+                                        value={inputs.flip}
+                                        onChange={e => update('flip', e.target.value)}
+                                    />
+                                    {inputs.flip.length > 5 && (
+                                        <div className="mt-4 text-emerald-400/80 text-sm animate-pulse">
+                                            Creating new neural pathway...
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [section, setSection] = useState('dashboard');
+
+            return (
+                <div className="pb-24">
+                    {section === 'dashboard' && <Dashboard changeSection={setSection} />}
+                    {section === 'rules' && <RulesDeck />}
+                    {section === 'viruses' && <Viruses />}
+                    {section === 'refactor' && <RefactorTool />}
+
+                    <Navigation section={section} setSection={setSection} />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

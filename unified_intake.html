@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformation Journey | Intake Form</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-black text-slate-200 min-h-screen overscroll-none">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const {
+            Wand2, ArrowRight, ArrowLeft, CheckCircle2, History,
+            User, Calendar, Clock, MessageSquare, ShieldCheck, Heart
+        } = LucideReact;
+
+        // Initialize EmailJS
+        (function () {
+            emailjs.init('G56MGzauq9Ld23k-K');
+        })();
+
+        const App = () => {
+            const [step, setStep] = useState(1);
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error'
+
+            const [formData, setFormData] = useState({
+                // Magic Wand
+                magic_q1: '',
+                magic_q2: '',
+                magic_q3: '',
+                priority: '',
+
+                // Background
+                issue_description: '',
+                duration_number: '',
+                duration_unit: '',
+                duration_life_stage: '',
+                additional_context: '',
+
+                // Contact & Prefs
+                full_name: '',
+                email: '',
+                phone: '',
+                location: '',
+                session_type: '',
+                preferred_days: [],
+                preferred_times: [],
+                previous_therapy: '',
+                therapy_details: '',
+                additional_notes: ''
+            });
+
+            // Load draft on mount
+            useEffect(() => {
+                const saved = localStorage.getItem('unifiedIntakeDraft');
+                if (saved) {
+                    try {
+                        setFormData(prev => ({ ...prev, ...JSON.parse(saved) }));
+                    } catch (e) { console.error("Error loading draft", e); }
+                }
+            }, []);
+
+            // Save draft on change
+            useEffect(() => {
+                localStorage.setItem('unifiedIntakeDraft', JSON.stringify(formData));
+            }, [formData]);
+
+            const updateField = (field, value) => {
+                setFormData(prev => ({ ...prev, [field]: value }));
+            };
+
+            const toggleCheckbox = (field, value) => {
+                setFormData(prev => {
+                    const current = prev[field] || [];
+                    if (current.includes(value)) {
+                        return { ...prev, [field]: current.filter(i => i !== value) };
+                    } else {
+                        return { ...prev, [field]: [...current, value] };
+                    }
+                });
+            };
+
+            const validateStep = (currentStep) => {
+                if (currentStep === 1) {
+                    const hasAnswer = formData.magic_q1 || formData.magic_q2 || formData.magic_q3;
+                    if (!hasAnswer) return "Please answer at least one of the Magic Wand questions.";
+                }
+                if (currentStep === 2) {
+                    if (!formData.issue_description) return "Please describe your issue.";
+                    const hasDuration = (formData.duration_number && formData.duration_unit) || formData.duration_life_stage;
+                    if (!hasDuration) return "Please tell us how long you've had this issue.";
+                }
+                if (currentStep === 3) {
+                    if (!formData.full_name) return "Name is required.";
+                    if (!formData.email) return "Email is required.";
+                    if (!formData.phone) return "Phone number is required.";
+                    if (!formData.session_type) return "Please select a session type.";
+                }
+                return null;
+            };
+
+            const handleNext = () => {
+                const error = validateStep(step);
+                if (error) {
+                    alert(error);
+                    return;
+                }
+                setStep(prev => prev + 1);
+                window.scrollTo(0, 0);
+            };
+
+            const handleBack = () => {
+                setStep(prev => prev - 1);
+                window.scrollTo(0, 0);
+            };
+
+            const handleSubmit = async () => {
+                const error = validateStep(3);
+                if (error) {
+                    alert(error);
+                    return;
+                }
+
+                setIsSubmitting(true);
+
+                // Format Data
+                const emailContent = `
+MAGIC WAND:
+Q1: ${formData.magic_q1}
+Q2: ${formData.magic_q2}
+Q3: ${formData.magic_q3}
+Priority: ${formData.priority}
+
+BACKGROUND:
+Issue: ${formData.issue_description}
+Duration: ${formData.duration_number ? `${formData.duration_number} ${formData.duration_unit}` : formData.duration_life_stage}
+Context: ${formData.additional_context}
+
+CONTACT:
+Name: ${formData.full_name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Location: ${formData.location}
+
+PREFERENCES:
+Type: ${formData.session_type}
+Days: ${formData.preferred_days.join(', ')}
+Times: ${formData.preferred_times.join(', ')}
+Previous Therapy: ${formData.previous_therapy}
+Details: ${formData.therapy_details}
+Notes: ${formData.additional_notes}
+                `;
+
+                try {
+                    await emailjs.send('service_hycm9y6', 'template_lr9pufm', {
+                        to_email: 'nazkorch@gmail.com',
+                        client_name: formData.full_name,
+                        client_email: formData.email,
+                        client_phone: formData.phone,
+                        form_content: emailContent,
+                        submission_date: new Date().toLocaleString()
+                    });
+
+                    setSubmitStatus('success');
+                    localStorage.removeItem('unifiedIntakeDraft');
+                } catch (err) {
+                    console.error("Submission Error:", err);
+                    setSubmitStatus('error');
+                    alert("There was an error submitting the form. Please try again.");
+                } finally {
+                    setIsSubmitting(false);
+                }
+            };
+
+            if (submitStatus === 'success') {
+                return (
+                    <div className="min-h-screen flex items-center justify-center p-4">
+                        <div className="max-w-xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center fade-in">
+                            <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+                            </div>
+                            <h2 className="text-3xl font-bold text-white mb-4">You're All Set!</h2>
+                            <p className="text-slate-400 text-lg mb-8 leading-relaxed">
+                                Thank you for sharing your journey. We have received your intake form and will be reviewing it shortly to prepare for your transformation session.
+                            </p>
+                            <button onClick={() => window.location.reload()} className="text-slate-500 hover:text-white transition-colors text-sm font-medium">
+                                Return to Form
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="max-w-3xl mx-auto px-4 py-12 md:py-20">
+
+                    {/* Header */}
+                    <header className="mb-12 text-center">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 text-xs font-mono uppercase tracking-widest mb-6">
+                            MindMapManifesto.com
+                        </div>
+                        <h1 className="text-3xl md:text-5xl font-serif text-white mb-4">
+                            {step === 1 && "Your Magic Wand"}
+                            {step === 2 && "The Background"}
+                            {step === 3 && "Session Details"}
+                        </h1>
+                        <p className="text-slate-400 text-lg max-w-xl mx-auto leading-relaxed">
+                            {step === 1 && "Tell us exactly what you want. Be specific, be bold. This is your design phase."}
+                            {step === 2 && "Help us understand where you are now so we can chart the path to where you want to be."}
+                            {step === 3 && "Let's get the logistics sorted so we can focus purely on your transformation."}
+                        </p>
+                    </header>
+
+                    {/* Progress Steps */}
+                    <div className="flex items-center justify-center gap-3 mb-12">
+                        {[1, 2, 3].map((s) => (
+                            <div key={s} className={`h-1.5 rounded-full transition-all duration-500 ${s <= step ? 'w-12 bg-indigo-500' : 'w-4 bg-slate-800'}`} />
+                        ))}
+                    </div>
+
+                    {/* Form Container */}
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl fade-in">
+
+                        {/* STEP 1: MAGIC WAND */}
+                        {step === 1 && (
+                            <div className="space-y-10">
+                                <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-6 flex gap-4">
+                                    <Wand2 className="w-6 h-6 text-indigo-400 shrink-0" />
+                                    <div>
+                                        <h3 className="text-indigo-200 font-bold mb-1">The Golden Rule</h3>
+                                        <p className="text-indigo-200/70 text-sm leading-relaxed">
+                                            "My job is to give you what you really, really want. Your job is to tell me what that is so clearly that I can only get it right."
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <div className="space-y-3">
+                                        <label className="block text-lg font-medium text-white">
+                                            <span className="text-indigo-500 mr-2">1.</span>
+                                            If I had a magic wand and could give you anything, what would you like from this session?
+                                        </label>
+                                        <textarea
+                                            value={formData.magic_q1}
+                                            onChange={e => updateField('magic_q1', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-600 h-32"
+                                            placeholder="Describe your ideal result..."
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label className="block text-lg font-medium text-white">
+                                            <span className="text-indigo-500 mr-2">2.</span>
+                                            If you could leave today with the absolute best outcome possible, what would that look and feel like?
+                                        </label>
+                                        <textarea
+                                            value={formData.magic_q2}
+                                            onChange={e => updateField('magic_q2', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-600 h-32"
+                                            placeholder="Paint the picture of success..."
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label className="block text-lg font-medium text-white">
+                                            <span className="text-indigo-500 mr-2">3.</span>
+                                            If you had just one wish and I could grant it, what would be most important?
+                                        </label>
+                                        <textarea
+                                            value={formData.magic_q3}
+                                            onChange={e => updateField('magic_q3', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-600 h-32"
+                                            placeholder="The one thing that changes everything..."
+                                        />
+                                    </div>
+
+                                    <div className="pt-6 border-t border-slate-800">
+                                        <label className="block text-sm font-medium text-slate-400 mb-3 uppercase tracking-wider">Top Priority</label>
+                                        <select
+                                            value={formData.priority}
+                                            onChange={e => updateField('priority', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 outline-none"
+                                        >
+                                            <option value="">Select your #1 priority...</option>
+                                            <option value="question1">My Answer to Question 1</option>
+                                            <option value="question2">My Answer to Question 2</option>
+                                            <option value="question3">My Answer to Question 3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 2: BACKGROUND */}
+                        {step === 2 && (
+                            <div className="space-y-10">
+                                <div className="space-y-6">
+                                    <div className="space-y-3">
+                                        <label className="block text-lg font-medium text-white">
+                                            Describe your issue. What does it mean to you?
+                                        </label>
+                                        <textarea
+                                            value={formData.issue_description}
+                                            onChange={e => updateField('issue_description', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 outline-none h-32"
+                                            placeholder="What does it feel like? How does it affect your life?"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label className="block text-lg font-medium text-white">
+                                            How long have you had this problem?
+                                        </label>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="number"
+                                                    value={formData.duration_number}
+                                                    onChange={e => updateField('duration_number', e.target.value)}
+                                                    placeholder="0"
+                                                    className="w-24 bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 outline-none"
+                                                />
+                                                <select
+                                                    value={formData.duration_unit}
+                                                    onChange={e => updateField('duration_unit', e.target.value)}
+                                                    className="flex-1 bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 outline-none"
+                                                >
+                                                    <option value="">Unit...</option>
+                                                    <option value="days">Days</option>
+                                                    <option value="weeks">Weeks</option>
+                                                    <option value="months">Months</option>
+                                                    <option value="years">Years</option>
+                                                </select>
+                                            </div>
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                    <span className="text-slate-500 text-xs uppercase">OR</span>
+                                                </div>
+                                                <select
+                                                    value={formData.duration_life_stage}
+                                                    onChange={e => {
+                                                        updateField('duration_life_stage', e.target.value);
+                                                        updateField('duration_number', '');
+                                                        updateField('duration_unit', '');
+                                                    }}
+                                                    className="w-full bg-black border border-slate-700 rounded-xl p-4 pl-10 text-slate-200 focus:border-indigo-500 outline-none"
+                                                >
+                                                    <option value="">Select specific period...</option>
+                                                    <option value="Since Childhood">Since Childhood</option>
+                                                    <option value="Since Teens">Since Teens</option>
+                                                    <option value="Always">As long as I can remember</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label className="block text-lg font-medium text-white">
+                                            Any additional context?
+                                        </label>
+                                        <textarea
+                                            value={formData.additional_context}
+                                            onChange={e => updateField('additional_context', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 outline-none h-24"
+                                            placeholder="Triggers, patterns, or history..."
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 3: CONTACT & PREFS */}
+                        {step === 3 && (
+                            <div className="space-y-10">
+
+                                {/* Contact Info */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-slate-400 uppercase tracking-wider">Full Name</label>
+                                        <div className="relative">
+                                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                            <input
+                                                type="text"
+                                                value={formData.full_name}
+                                                onChange={e => updateField('full_name', e.target.value)}
+                                                className="w-full bg-black border border-slate-700 rounded-xl p-4 pl-12 text-slate-200 focus:border-indigo-500 outline-none"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-slate-400 uppercase tracking-wider">Email</label>
+                                        <div className="relative">
+                                            <MessageSquare className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                            <input
+                                                type="email"
+                                                value={formData.email}
+                                                onChange={e => updateField('email', e.target.value)}
+                                                className="w-full bg-black border border-slate-700 rounded-xl p-4 pl-12 text-slate-200 focus:border-indigo-500 outline-none"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-slate-400 uppercase tracking-wider">Phone</label>
+                                        <input
+                                            type="tel"
+                                            value={formData.phone}
+                                            onChange={e => updateField('phone', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 outline-none"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-slate-400 uppercase tracking-wider">Location (Timezone)</label>
+                                        <input
+                                            type="text"
+                                            value={formData.location}
+                                            onChange={e => updateField('location', e.target.value)}
+                                            className="w-full bg-black border border-slate-700 rounded-xl p-4 text-slate-200 focus:border-indigo-500 outline-none"
+                                            placeholder="e.g. London UK (BST)"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Call Preference */}
+                                <div className="space-y-3">
+                                    <label className="block text-lg font-medium text-white">Preferred Call Type</label>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <button
+                                            onClick={() => updateField('session_type', 'phone')}
+                                            className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${formData.session_type === 'phone' ? 'bg-indigo-500/20 border-indigo-500 text-white' : 'bg-black border-slate-700 text-slate-400 hover:border-slate-500'}`}
+                                        >
+                                            <span className="font-bold">Phone Call</span>
+                                            <span className="text-xs opacity-70">Audio Only</span>
+                                        </button>
+                                        <button
+                                            onClick={() => updateField('session_type', 'video')}
+                                            className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${formData.session_type === 'video' ? 'bg-indigo-500/20 border-indigo-500 text-white' : 'bg-black border-slate-700 text-slate-400 hover:border-slate-500'}`}
+                                        >
+                                            <span className="font-bold">Video Call</span>
+                                            <span className="text-xs opacity-70">Zoom / Meet</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Previous Therapy */}
+                                <div className="space-y-3">
+                                    <label className="block text-lg font-medium text-white">Have you worked with a therapist before?</label>
+                                    <div className="space-y-2">
+                                        {[
+                                            { id: 'no', label: 'No, this is my first time' },
+                                            { id: 'therapy', label: 'Yes, traditional therapy' },
+                                            { id: 'hypnotherapy', label: 'Yes, hypnotherapy' },
+                                            { id: 'both', label: 'Yes, both' }
+                                        ].map(opt => (
+                                            <button
+                                                key={opt.id}
+                                                onClick={() => updateField('previous_therapy', opt.id)}
+                                                className={`w-full text-left p-4 rounded-xl border transition-all ${formData.previous_therapy === opt.id ? 'bg-slate-800 border-slate-600' : 'bg-black border-slate-800 hover:border-slate-700'}`}
+                                            >
+                                                {opt.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                            </div>
+                        )}
+
+                        {/* NAV ACTIONS */}
+                        <div className="pt-10 mt-10 border-t border-slate-800 flex justify-between items-center">
+                            {step > 1 ? (
+                                <button onClick={handleBack} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                                    <ArrowLeft className="w-4 h-4" /> Previous Step
+                                </button>
+                            ) : (
+                                <div></div>
+                            )}
+
+                            {step < 3 ? (
+                                <button onClick={handleNext} className="bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-slate-200 transition-colors flex items-center gap-2">
+                                    Next Step <ArrowRight className="w-4 h-4" />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={isSubmitting}
+                                    className={`px-8 py-3 rounded-full font-bold flex items-center gap-2 transition-colors ${isSubmitting ? 'bg-slate-700 text-slate-400 cursor-wait' : 'bg-indigo-500 text-white hover:bg-indigo-400'}`}
+                                >
+                                    {isSubmitting ? 'Submitting...' : 'Complete Intake'}
+                                    {!isSubmitting && <CheckCircle2 className="w-4 h-4" />}
+                                </button>
+                            )}
+                        </div>
+
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
