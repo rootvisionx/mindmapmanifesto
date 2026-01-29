@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 10: The Install Stage | Nazar Codex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                        }
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.slate.300'),
+                                h1: { color: theme('colors.white'), fontFamily: theme('fontFamily.sans') },
+                                h2: { color: theme('colors.amber.500'), fontFamily: theme('fontFamily.sans') },
+                                h3: { color: theme('colors.slate.200'), fontFamily: theme('fontFamily.sans') },
+                                strong: { color: theme('colors.white') },
+                                blockquote: {
+                                    borderLeftColor: theme('colors.amber.500'),
+                                    color: theme('colors.slate.400'),
+                                    fontStyle: 'italic'
+                                },
+                            },
+                        },
+                    }),
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-out',
+                        'flipIn': 'flipIn 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        flipIn: {
+                            '0%': { opacity: '0', transform: 'rotateX(-90deg)' },
+                            '100%': { opacity: '1', transform: 'rotateX(0)' },
+                        }
+                    }
+                }
+            },
+            plugins: [
+                function ({ addUtilities }) {
+                    const newUtilities = {
+                        '.prose': { maxWidth: '65ch' },
+                        '.prose-invert': { color: '#cbd5e1' },
+                        '.scrollbar-hide': {
+                            '-ms-overflow-style': 'none',
+                            'scrollbar-width': 'none'
+                        },
+                        '.scrollbar-hide::-webkit-scrollbar': {
+                            'display': 'none'
+                        }
+                    }
+                    addUtilities(newUtilities)
+                }
+            ]
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-front,
+        .flip-back {
+            backface-visibility: hidden;
+        }
+
+        .flip-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Markdown Styles */
+        .markdown-content h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            font-family: 'Merriweather', serif;
+            color: #cbd5e1;
+        }
+
+        .markdown-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            font-family: 'Merriweather', serif;
+        }
+
+        .markdown-content strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #f59e0b;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: #94a3b8;
+            font-style: italic;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        /* Example/Script Box */
+        .script-box {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .script-header {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 min-h-screen selection:bg-amber-500/30 overflow-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const {
+            BookOpen, Search, Menu, X, ChevronRight,
+            ArrowLeft, ArrowRight, Star, Zap, Heart,
+            Repeat, CheckCircle, Mic, RefreshCw, LayoutGrid
+        } = LucideReact;
+
+        // --- Content ---
+        const MARKDOWN_CONTENT = `
+# Chapter I: The Transformation
+
+## Rewriting the Code
+The **Install** stage is where the "habit of thought" is finally changed to match the desired "habit of action". Use the keywords gathered in the Intake and Session (the "Gold") to build the new reality.
+
+> "When you're changing a person's habit of action, without changing the habit of thought, it's going to keep coming back." - Marisa Peer
+
+### The 3 Ways We Change
+Change happens differently for everyone.
+
+1.  **Immediate**: The "I left your office and felt different straight away" change.
+2.  **Cumulative**: The "I notice little things getting better day by day" change.
+3.  **Retroactive**: The "I didn't realize I changed until I looked back" change.
+
+### Flipping Trigger Words
+Clients often state what they *don't* want. Your job is to flip this into what they *do* want.
+
+<FlipTool />
+
+---
+
+# Chapter II: Command Cell Therapy
+
+## Directing the Biology
+**Command Cell Therapy (CCT)** uses the mind to instruct the body. It is direct, authoritative, and powerful.
+
+### When to Use
+*   Physical health issues.
+*   Healing injuries.
+*   Immune boosting.
+*   Pain management.
+
+<ScriptBox title="CCT Script: The Command">
+"I command, direct, and instruct every cell in your body to return to its perfect coding. I act as the commander-in-chief of your biology, and I instruct your immune system to identify, locate, and eliminate anything that does not belong."
+    </ScriptBox>
+
+<ScriptBox title="CCT Script: The Blueprint">
+"Your body proceeds now to its original blueprint of perfect health. Like a master builder repairing a house, your cells are repairing, restoring, and regenerating right now."
+</ScriptBox>
+
+---
+
+# Chapter III: Healing Vortex
+
+## The Emotional Salve
+The **Healing Vortex (HV)** is for emotional wounds, inner child work, and receiving the love that was missing.
+
+### When to Use
+*   Childhood neglect or lack of love.
+*   Self-worth issues.
+*   Abandonment wounds.
+
+<ScriptBox title="HV Script: The Vortex">
+"Imagine a beautiful vortex of healing light swirling above you. It is the color of pure love. Let it pour down into your crown, filling your mind, your heart, your entire being with the feeling of being wanted, cherished, and adored."
+</ScriptBox>
+
+<ScriptBox title="HV Script: The Reclamation">
+"You are reclaiming the love that was always yours. You are soaking it up like a dry sponge soaks up water. You are enough. You have always been enough."
+</ScriptBox>
+
+---
+
+# Chapter IV: The Cheerleader
+
+## Your Inner Coach
+Most people have an inner critic. We install the **Cheerleader** to replace it. A cheerleader has no agenda other than to root for you.
+
+### Gathering Intel
+Ask questions to find the voice:
+*   "What would your best friend say?"
+*   "What would a loving grandmother say?"
+*   "What would the best boss in the world say?"
+
+<ScriptBox title="Cheerleader Script">
+"We are firing the critic today. In its place, we are installing a permanent Cheerleader. Hear that voice now. It says: 'You are doing great. You've got this. I believe in you.' That is your new inner voice."
+</ScriptBox>
+`;
+
+        // --- Custom Widgets ---
+
+        const FlipTool = () => {
+            const examples = [
+                { neg: "I don't want to feel anxious.", pos: "You remain completely calm, totally relaxed, and absolutely at ease." },
+                { neg: "I can't stop eating sweets.", pos: "You find it easy to make healthy choices that nourish your body." },
+                { neg: "I am unable to take action.", pos: "Your powerful mind compels and motivates you to take massive action." },
+            ];
+
+            return (
+                <div className="my-8 space-y-4">
+                    <h3 className="text-amber-500 font-bold uppercase text-xs tracking-widest mb-4">Interactive: Flip The Script</h3>
+                    {examples.map((ex, idx) => (
+                        <div key={idx} className="group relative h-24 cursor-pointer perspective-1000" onClick={(e) => e.currentTarget.classList.toggle('flipped')}>
+                            <div className="relative w-full h-full transition-all duration-500 transform-style-3d group-hover:rotate-x-180">
+                                {/* Front */}
+                                <div className="absolute inset-0 bg-slate-900 border border-slate-700 rounded-lg p-4 flex items-center justify-between backface-hidden">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-red-500/20 text-red-500 p-2 rounded-full"><X size={16} /></div>
+                                        <span className="text-slate-400 italic">"{ex.neg}"</span>
+                                    </div>
+                                    <div className="text-xs text-slate-500 font-bold uppercase">Click to Flip</div>
+                                </div>
+                                {/* Back - we simulate flip logic with state or CSS classes usually, but for simple hover/active we use a simpler approach here or React state */}
+                            </div>
+                            {/* Simplified React Version since CSS hover 3d is tricky inline without complex classes. let's use standard State switch */}
+                        </div>
+                    ))}
+                     {/* Let's redo FlipTool properly with React State for clicking */}
+                   <div className="grid gap-4">
+                        {examples.map((ex, idx) => (
+                            <FlipCard key={idx} negative={ex.neg} positive={ex.pos} />
+                        ))}
+                   </div>
+                </div>
+            );
+        };
+
+        const FlipCard = ({ negative, positive }) => {
+            const [flipped, setFlipped] = useState(false);
+            
+            return (
+                <div 
+                    onClick={() => setFlipped(!flipped)}
+                    className={`nav-item relative h-24 w-full cursor-pointer transition-all duration-500`}
+                    style={{ perspective: '1000px' }}
+                >
+                    <div className={`relative w-full h-full transition-transform duration-700`} style={{ transformStyle: 'preserve-3d', transform: flipped ? 'rotateX(180deg)' : 'rotateX(0)' }}>
+                        {/* Front */}
+                        <div className="absolute inset-0 backface-hidden bg-slate-900 border border-slate-700 hover:border-slate-600 rounded-lg p-4 flex items-center justify-between" style={{ backfaceVisibility: 'hidden' }}>
+                            <div className="flex items-center gap-3">
+                                <div className="bg-red-500/20 text-red-500 p-2 rounded-full"><X size={18} /></div>
+                                <span className="text-slate-400 font-serif italic">"{negative}"</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-slate-500 font-bold uppercase tracking-wider">
+                                <RefreshCw size={14} /> Flip
+                            </div>
+                        </div>
+                        
+                        {/* Back */}
+                        <div className="absolute inset-0 backface-hidden bg-amber-500/10 border border-amber-500/50 rounded-lg p-4 flex items-center justify-between" style={{ backfaceVisibility: 'hidden', transform: 'rotateX(180deg)' }}>
+                            <div className="flex items-center gap-3">
+                                <div className="bg-amber-500/20 text-amber-500 p-2 rounded-full"><CheckCircle size={18} /></div>
+                                <span className="text-slate-200 font-serif font-medium">"{positive}"</span>
+                            </div>
+                            <div className="text-xs text-amber-500 font-bold uppercase tracking-wider">
+                                Reframed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        };
+
+        const ScriptBox = ({ title, children }) => (
+            <div className="script-box animate-fadeIn">
+                <div className="script-header flex items-center gap-2">
+                    <Mic className="w-3 h-3" /> {title}
+                </div>
+                <p className="font-serif italic text-lg text-slate-200 leading-relaxed">
+                    "{children}"
+                </p>
+            </div>
+        );
+
+        // --- Parser ---
+        const parseChapters = (md) => {
+            const lines = md.split('\n');
+            const chapters = [];
+            let currentChapter = null;
+
+            lines.forEach(line => {
+                if (line.startsWith('# Chapter')) {
+                    if (currentChapter) chapters.push(currentChapter);
+                    currentChapter = { 
+                        title: line.replace('# ', '').trim(),
+                        content: []
+                    };
+                } else if (currentChapter) {
+                    currentChapter.content.push(line);
+                }
+            });
+            if (currentChapter) chapters.push(currentChapter);
+            return chapters;
+        };
+
+        const renderMarkdown = (text) => {
+            const elements = [];
+            
+            for (let i = 0; i < text.length; i++) {
+                const line = text[i];
+                
+                if (line.startsWith('## ')) {
+                    elements.push(<h2 key={i}>{line.replace('## ', '')}</h2>);
+                } else if (line.startsWith('### ')) {
+                    elements.push(<h3 key={i}>{line.replace('### ', '')}</h3>);
+                } else if (line.startsWith('1. ')) {
+                    elements.push(<li key={i} className="ml-4 list-decimal">{line.replace('1. ', '')}</li>);
+                } else if (line.startsWith('* ')) {
+                    elements.push(<li key={i} className="ml-4 list-disc">{line.replace('* ', '')}</li>);
+                } else if (line.startsWith('> ')) {
+                    elements.push(<blockquote key={i}>{line.replace('> ', '')}</blockquote>);
+                } else if (line.includes('<FlipTool />')) {
+                    elements.push(<FlipTool key={i} />);
+                } else if (line.startsWith('<ScriptBox')) {
+                    const titleMatch = line.match(/title="([^"]+)"/);
+                    const title = titleMatch ? titleMatch[1] : 'Script';
+                    let content = [];
+                    let j = i + 1;
+                    while (j < text.length && !text[j].includes('</ScriptBox>')) {
+                        content.push(text[j].replace(/"/g, '')); // Simple clean
+                        j++;
+                    }
+                    i = j;
+                    elements.push(<ScriptBox key={i} title={title}>{content.join(' ')}</ScriptBox>);
+                } else if (line.trim() !== '' && !line.includes('</ScriptBox>')) {
+                    // Bold text support
+                     const boldRegex = /\*\*(.*?)\*\*/g;
+                    const parts = line.split(boldRegex);
+                    if (parts.length > 1) {
+                        elements.push(
+                            <p key={i}>
+                                {parts.map((part, k) => 
+                                    k % 2 === 1 ? <strong key={k}>{part}</strong> : part
+                                )}
+                            </p>
+                        );
+                    } else {
+                        elements.push(<p key={i}>{line}</p>);
+                    }
+                }
+            }
+            return elements;
+        };
+
+        // --- Components ---
+
+        const Sidebar = ({ chapters, activeIndex, setIndex, isOpen, toggle }) => (
+            <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-slate-900 border-r border-slate-800 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+                <div className="p-6 border-b border-slate-800">
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500">
+                            Nazar Codex
+                        </h1>
+                        <button onClick={toggle} className="md:hidden text-slate-400">
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div className="flex gap-2">
+                         <button onClick={() => window.history.back()} className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <ArrowLeft className="w-3 h-3" /> Back
+                        </button>
+                        <a href="nazar_hub.html" className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <LayoutGrid className="w-3 h-3" /> Hub
+                        </a>
+                    </div>
+                </div>
+                <div className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)]">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest px-4 py-2">Module 10: Install</div>
+                    {chapters.map((chap, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => { setIndex(idx); if(window.innerWidth < 768) toggle(); }}
+                            className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex items-center justify-between group ${
+                                activeIndex === idx 
+                                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' 
+                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                            }`}
+                        >
+                            <span>{chap.title}</span>
+                            {activeIndex === idx && <ChevronRight className="w-4 h-4 ml-2" />}
+                        </button>
+                    ))}
+                     <div className="mt-8 pt-8 border-t border-slate-800 px-4">
+                        <a href="nazar_hub.html" className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
+                            <ArrowLeft className="w-4 h-4" /> Back to Hub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const Reader = ({ chapter, next, prev }) => (
+            <div className="flex-1 h-screen overflow-y-auto bg-slate-950 p-6 md:p-12 lg:p-16 scroll-smooth">
+                <div className="max-w-3xl mx-auto pb-24 animate-fadeIn">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-12 border-b border-slate-800 pb-8">
+                        {chapter.title}
+                    </h1>
+                    
+                    <div className="markdown-content">
+                        {renderMarkdown(chapter.content)}
+                    </div>
+
+                    <div className="flex justify-between mt-24 border-t border-slate-800 pt-8">
+                        {prev ? (
+                            <button onClick={prev} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                                <ArrowLeft className="w-5 h-5" /> Previous Chapter
+                            </button>
+                        ) : <div></div>}
+                        
+                        {next ? (
+                            <button onClick={next} className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors font-bold">
+                                Next Chapter <ArrowRight className="w-5 h-5" />
+                            </button>
+                        ) : (
+                            <div className="text-emerald-500 flex items-center gap-2 font-bold">
+                                Module Complete <CheckCircle className="w-5 h-5" />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [currentChapter, setCurrentChapter] = useState(0);
+            
+            const chapters = parseChapters(MARKDOWN_CONTENT);
+
+            return (
+                <div className="flex h-screen overflow-hidden">
+                    <Sidebar 
+                        chapters={chapters} 
+                        activeIndex={currentChapter} 
+                        setIndex={setCurrentChapter}
+                        isOpen={sidebarOpen}
+                        toggle={() => setSidebarOpen(!sidebarOpen)}
+                    />
+                    
+                    <div className="flex-1 flex flex-col md:pl-80 transition-all duration-300">
+                        {/* Mobile Header */}
+                        <div className="md:hidden p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                            <h1 className="font-bold text-amber-400">Module 10</h1>
+                            <button onClick={() => setSidebarOpen(true)} className="text-white">
+                                <Menu className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        <Reader 
+                            chapter={chapters[currentChapter]} 
+                            next={currentChapter < chapters.length - 1 ? () => setCurrentChapter(c => c + 1) : null}
+                            prev={currentChapter > 0 ? () => setCurrentChapter(c => c - 1) : null}
+                        />
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

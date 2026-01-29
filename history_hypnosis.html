@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History of Hypnosis | Module 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        },
+                        violet: {
+                            450: '#8b5cf6', // Custom violet
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fadeIn': 'fadeIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        .card-flip {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-flip:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            backface-visibility: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 min-h-screen selection:bg-violet-500/30">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const {
+            BookOpen, History, Brain, PenTool, CheckCircle,
+            Copy, ArrowLeft, ArrowRight, Activity, Users, Quote, Lightbulb,
+            Award, ChevronDown, ChevronUp, Beaker, MessageSquare
+        } = LucideReact;
+
+        // --- Data ---
+        const DEFINITIONS = [
+            { id: 1, author: "Spiegel (1972)", title: "Altered Awareness", text: "Hypnosis is an altered state of awareness in which the individual withdraws peripheral awareness and concentrates all attention on a focal goal." },
+            { id: 2, author: "Erickson & Rossi (1980)", title: "Communication of Ideas", text: "Hypnosis is a communication of ideas... such that the patient is most receptive and motivated to explore their own potentials." },
+            { id: 3, author: "NCH", title: "Natural State", text: "Hypnosis is a natural state of mind... similar to daydreaming or driving a familiar route. Brain waves move from Beta to Alpha/Theta." },
+            { id: 4, author: "Paul F. Dell (2017)", title: "Neural Functioning", text: "A motivated mode of neural functioning... spontaneous self-activation of trance is the characteristic behavior." }
+        ];
+
+        const CONTRIBUTORS = [
+            { id: 'erickson', name: "Milton Erickson", years: "1901-1980", role: "The Indirect Pioneer", desc: "Founder of 'indirect hypnosis'. Used subtle language patterns and metaphors. Believed therapy must be meaningful to the individual's world view." },
+            { id: 'elman', name: "Dave Elman", years: "1900-1967", role: "The Rapid Inductor", desc: "Moved away from lengthy visualizations to short, sharp inductions. His techniques are prized for speed and reliability." },
+            { id: 'viscott', name: "David Viscott", years: "1938-1996", role: "The Diagnostic Provocateur", desc: "Unorthodox and direct. Believed in swift diagnosis to isolate emotional problems and express true feelings. Influenced RFPI in RTT®." },
+            { id: 'boyne', name: "Gil Boyne", years: "1924-2010", role: "The Regression Master", desc: "Pioneered Client-Centered Regression. Taught that the inner creative mind holds both the questions and the answers." }
+        ];
+
+        // --- Components ---
+
+        const Nav = ({ activeTab, setTab }) => (
+            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 glass-panel rounded-full p-2 flex gap-1 shadow-2xl z-50">
+                {[
+                    { id: 'history', icon: History, label: 'Timeline' },
+                    { id: 'definitions', icon: BookOpen, label: 'Definitions' },
+                    { id: 'lab', icon: Beaker, label: 'The Lab' },
+                    { id: 'activity', icon: PenTool, label: 'Activity' },
+                ].map(item => (
+                    <button
+                        key={item.id}
+                        onClick={() => setTab(item.id)}
+                        className={`px-4 py-2 rounded-full flex items-center gap-2 transition-all ${activeTab === item.id
+                            ? 'bg-violet-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
+                            : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                            }`}
+                    >
+                        <item.icon className="w-4 h-4" />
+                        <span className="text-sm font-medium">{item.label}</span>
+                    </button>
+                ))}
+            </nav>
+        );
+
+        const Hero = () => (
+            <div className="text-center py-16 px-4 animate-fadeIn">
+                <div className="inline-block p-3 rounded-full bg-violet-500/10 mb-6">
+                    <History className="w-12 h-12 text-violet-400" />
+                </div>
+                <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400 mb-6">
+                    History & Science of Hypnosis
+                </h1>
+                <p className="text-slate-400 text-xl max-w-2xl mx-auto leading-relaxed">
+                    From ancient healing temples to modern neural science.
+                    Understanding the lineage of the trance state.
+                </p>
+                <div className="mt-8 flex justify-center gap-8 text-sm text-slate-500">
+                    <span className="flex items-center gap-2"><Quote className="w-4 h-4" /> Trance is Natural</span>
+                    <span className="flex items-center gap-2"><Brain className="w-4 h-4" /> Hypnosis is Intentional</span>
+                </div>
+            </div>
+        );
+
+        const Timeline = () => {
+            const [activeId, setActiveId] = useState(null);
+
+            return (
+                <div className="max-w-4xl mx-auto px-6 pb-32 animate-fadeIn">
+                    <h2 className="text-3xl font-bold text-white mb-12 flex items-center gap-3">
+                        <Users className="w-8 h-8 text-violet-400" /> Key Contributors
+                    </h2>
+                    <div className="space-y-6">
+                        {CONTRIBUTORS.map((c, idx) => (
+                            <div
+                                key={c.id}
+                                onClick={() => setActiveId(activeId === c.id ? null : c.id)}
+                                className={`group relative pl-8 border-l-2 ${activeId === c.id ? 'border-violet-500' : 'border-slate-800'} transition-all cursor-pointer`}
+                            >
+                                <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-4 ${activeId === c.id ? 'border-violet-500 bg-slate-950' : 'border-slate-800 bg-slate-950 group-hover:border-violet-500/50'} transition-colors`}></div>
+
+                                <div className={`glass-panel p-6 rounded-xl transition-all ${activeId === c.id ? 'bg-violet-900/10 border-violet-500/30' : 'hover:bg-slate-900/50'}`}>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-white group-hover:text-violet-200 transition-colors">{c.name}</h3>
+                                            <span className="text-violet-400 font-mono text-sm">{c.years}</span>
+                                        </div>
+                                        {activeId === c.id ? <ChevronUp className="text-violet-500" /> : <ChevronDown className="text-slate-600" />}
+                                    </div>
+                                    <div className="text-gold-500 font-bold text-sm tracking-wider uppercase mb-3">{c.role}</div>
+
+                                    {activeId === c.id && (
+                                        <p className="text-slate-300 leading-relaxed animate-fadeIn">
+                                            {c.desc}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const Definitions = () => (
+            <div className="max-w-6xl mx-auto px-6 pb-32 animate-fadeIn">
+                <Hero />
+                <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+                    <BookOpen className="w-8 h-8 text-fuchsia-400" /> Four Perspectives
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {DEFINITIONS.map(d => (
+                        <div key={d.id} className="group h-80 cursor-pointer card-flip">
+                            <div className="card-inner relative w-full h-full">
+                                {/* Front */}
+                                <div className="card-front absolute w-full h-full bg-slate-900 border border-slate-800 rounded-xl p-8 flex flex-col justify-between group-hover:border-fuchsia-500/50 transition-all shadow-xl">
+                                    <div>
+                                        <div className="text-fuchsia-500 font-mono text-xs mb-4">DEFINITION 0{d.id}</div>
+                                        <h3 className="text-2xl font-bold text-white">{d.author}</h3>
+                                    </div>
+                                    <div className="flex justify-between items-end">
+                                        <span className="text-slate-500 text-sm font-medium">{d.title}</span>
+                                        <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-fuchsia-400 transition-colors" />
+                                    </div>
+                                </div>
+                                {/* Back */}
+                                <div className="card-back absolute w-full h-full bg-fuchsia-950 border border-fuchsia-800 rounded-xl p-8 flex flex-col justify-center text-center shadow-xl">
+                                    <Quote className="w-8 h-8 text-fuchsia-500 mx-auto mb-4 opacity-50" />
+                                    <p className="text-fuchsia-100 font-serif leading-relaxed italic">"{d.text}"</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const Lab = () => (
+            <div className="max-w-5xl mx-auto px-6 pb-32 animate-fadeIn">
+                <div className="text-center py-12">
+                    <h2 className="text-4xl font-bold text-white mb-4">Suggestion Laboratory</h2>
+                    <p className="text-slate-400">Comparing the two primary modes of influence.</p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8 mb-16">
+                    <div className="glass-panel p-8 rounded-2xl border-t-4 border-t-amber-500">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-amber-500/10 rounded-lg">
+                                <Award className="w-6 h-6 text-amber-500" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white">Direct</h3>
+                        </div>
+                        <ul className="space-y-4 text-slate-300">
+                            <li className="flex gap-3">
+                                <CheckCircle className="w-5 h-5 text-amber-500 shrink-0" />
+                                <span>Explicit commands ("You are now calm.")</span>
+                            </li>
+                            <li className="flex gap-3">
+                                <CheckCircle className="w-5 h-5 text-amber-500 shrink-0" />
+                                <span>Clear and straightforward.</span>
+                            </li>
+                            <li className="flex gap-3">
+                                <CheckCircle className="w-5 h-5 text-amber-500 shrink-0" />
+                                <span>Best for rapid induction logic.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className="glass-panel p-8 rounded-2xl border-t-4 border-t-violet-500">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-violet-500/10 rounded-lg">
+                                <MessageSquare className="w-6 h-6 text-violet-500" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white">Indirect</h3>
+                        </div>
+                        <ul className="space-y-4 text-slate-300">
+                            <li className="flex gap-3">
+                                <CheckCircle className="w-5 h-5 text-violet-500 shrink-0" />
+                                <span>Subtle language patterns & stories.</span>
+                            </li>
+                            <li className="flex gap-3">
+                                <CheckCircle className="w-5 h-5 text-violet-500 shrink-0" />
+                                <span>Allows subconscious interpretation.</span>
+                            </li>
+                            <li className="flex gap-3">
+                                <CheckCircle className="w-5 h-5 text-violet-500 shrink-0" />
+                                <span>"I wonder how quickly you'll notice..."</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="glass-panel p-8 rounded-2xl text-center">
+                    <h3 className="text-xl font-bold text-white mb-6">The Formula</h3>
+                    <div className="flex flex-wrap justify-center items-center gap-4 text-sm md:text-base font-mono">
+                        <span className="px-4 py-2 bg-slate-800 rounded-lg">Induction</span>
+                        <ArrowRight className="text-slate-600" />
+                        <span className="px-4 py-2 bg-slate-800 rounded-lg">Deepener</span>
+                        <ArrowRight className="text-slate-600" />
+                        <span className="px-4 py-2 bg-violet-600 text-white rounded-lg shadow-lg shadow-violet-500/20">Suggestion</span>
+                        <ArrowRight className="text-slate-600" />
+                        <span className="px-4 py-2 bg-slate-800 rounded-lg">Awakening</span>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ActivityCenter = () => {
+            const [copied, setCopied] = useState(false);
+            const [inputs, setInputs] = useState(Array(6).fill(''));
+
+            const copyToClipboard = () => {
+                const text = inputs.map((val, i) => `${i < 3 ? 'Direct' : 'Indirect'} ${i % 3 + 1}: ${val}`).join('\n');
+                navigator.clipboard.writeText(text);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            const updateInput = (idx, val) => {
+                const newInputs = [...inputs];
+                newInputs[idx] = val;
+                setInputs(newInputs);
+            };
+
+            return (
+                <div className="max-w-4xl mx-auto px-6 pb-32 animate-fadeIn">
+                    <div className="text-center py-12">
+                        <div className="inline-block p-3 rounded-full bg-emerald-500/10 mb-6">
+                            <PenTool className="w-12 h-12 text-emerald-400" />
+                        </div>
+                        <h2 className="text-4xl font-bold text-white mb-4">Practice Field</h2>
+                        <p className="text-slate-400">Draft your own suggestions. Scenario: A client afraid of birds.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {/* Direct Column */}
+                        <div className="space-y-4">
+                            <h3 className="text-xl font-bold text-amber-400 flex items-center gap-2">
+                                <Award className="w-5 h-5" /> Direct Commands
+                            </h3>
+                            {[0, 1, 2].map(i => (
+                                <input
+                                    key={i}
+                                    type="text"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-4 text-white placeholder-slate-600 focus:border-amber-500 outline-none transition-colors"
+                                    placeholder={`Command #${i + 1} (e.g., You feel safe...)`}
+                                    value={inputs[i]}
+                                    onChange={e => updateInput(i, e.target.value)}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Indirect Column */}
+                        <div className="space-y-4">
+                            <h3 className="text-xl font-bold text-violet-400 flex items-center gap-2">
+                                <MessageSquare className="w-5 h-5" /> Indirect Suggestions
+                            </h3>
+                            {[3, 4, 5].map(i => (
+                                <input
+                                    key={i}
+                                    type="text"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-4 text-white placeholder-slate-600 focus:border-violet-500 outline-none transition-colors"
+                                    placeholder={`Suggestion #${i - 2} (e.g., I wonder if...)`}
+                                    value={inputs[i]}
+                                    onChange={e => updateInput(i, e.target.value)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="mt-12 flex justify-center">
+                        <button
+                            onClick={copyToClipboard}
+                            className={`px-8 py-4 rounded-full font-bold text-lg flex items-center gap-3 transition-all transform active:scale-95 ${copied ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-white hover:bg-slate-700'}`}
+                        >
+                            {copied ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                            {copied ? "Copied to Clipboard!" : "Copy Work to Clipboard"}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const Navigation = () => (
+            <div className="fixed top-6 left-6 z-50 flex gap-2">
+                <button onClick={() => window.history.back()} className="p-2 rounded-full bg-slate-900 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all" title="Go Back">
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+                <a href="nazar_hub.html" className="p-2 rounded-full bg-slate-900 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all" title="Back to Hub">
+                    <History className="w-5 h-5" />
+                </a>
+            </div>
+        );
+
+        const App = () => {
+            const [activeTab, setTab] = useState('history');
+
+            return (
+                <div className="min-h-screen relative">
+                    <Navigation />
+                    {activeTab === 'definitions' && <Definitions />}
+                    {activeTab === 'history' && (
+                        <>
+                            <Hero />
+                            <Timeline />
+                        </>
+                    )}
+                    {activeTab === 'lab' && <Lab />}
+                    {activeTab === 'activity' && <ActivityCenter />}
+
+                    <Nav activeTab={activeTab} setTab={setTab} />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 8: The Interpret Stage | Nazar Codex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        },
+                        violet: {
+                            450: '#8b5cf6', // Interpret Violet
+                            550: '#7c3aed',
+                        },
+                        purple: {
+                            450: '#c084fc',
+                        }
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.slate.300'),
+                                h1: { color: theme('colors.white'), fontFamily: theme('fontFamily.sans') },
+                                h2: { color: theme('colors.violet.450'), fontFamily: theme('fontFamily.sans') },
+                                h3: { color: theme('colors.slate.200'), fontFamily: theme('fontFamily.sans') },
+                                strong: { color: theme('colors.white') },
+                                blockquote: {
+                                    borderLeftColor: theme('colors.violet.550'),
+                                    color: theme('colors.slate.400'),
+                                    fontStyle: 'italic'
+                                },
+                            },
+                        },
+                    }),
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            },
+            plugins: [
+                function ({ addUtilities }) {
+                    const newUtilities = {
+                        '.prose': { maxWidth: '65ch' },
+                        '.prose-invert': { color: '#cbd5e1' },
+                    }
+                    addUtilities(newUtilities)
+                }
+            ]
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        /* Markdown Styles */
+        .markdown-content h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #8b5cf6;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            font-family: 'Merriweather', serif;
+            color: #cbd5e1;
+        }
+
+        .markdown-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            font-family: 'Merriweather', serif;
+        }
+
+        .markdown-content strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #8b5cf6;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: #94a3b8;
+            font-style: italic;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        /* Interactive Widgets */
+        .rfpi-widget {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .rfpi-card {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            transition: transform 0.2s;
+            cursor: default;
+        }
+
+        .rfpi-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(139, 92, 246, 0.6);
+        }
+
+        .rfpi-title {
+            color: #c084fc;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .rfpi-desc {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .dialogue-box {
+            background: rgba(15, 23, 42, 0.8);
+            border-left: 4px solid #c084fc;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+            font-family: 'Merriweather', serif;
+        }
+
+        .speaker {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .speaker.therapist {
+            color: #c084fc;
+        }
+
+        .speaker.client {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 min-h-screen selection:bg-violet-500/30 overflow-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const {
+            BookOpen, Search, Menu, X, ChevronRight,
+            ArrowLeft, ArrowRight, User, Brain, Fingerprint,
+            Lightbulb, Hand, MessageSquare, LayoutGrid
+        } = LucideReact;
+
+        // --- Content ---
+        const MARKDOWN_CONTENT = `
+# Chapter I: Introduction & Significance
+
+## Why Interpret?
+Interpretation is the bridge between the past and the present. It helps your client see how the **meaning** they attached to events from their past has led to what they feel, think, and believe about themselves today.
+
+> "Scenes do not affect you. The meaning you attach to a scene is what affects you." - Marisa Peer
+
+### Goals of Interpretation
+1.  **Connect Scenes**: Link the past events (Detective Work) to the current issue.
+2.  **Reveal Meanings**: Uncover the conclusions the client made (e.g., "I am not safe").
+3.  **Upgrade Beliefs**: Show that these childhood reactions are no longer relevant to the adult.
+4.  **Find Function**: Discover *why* the issue exists using RFPI.
+
+---
+
+# Chapter II: Left Hand / Right Hand
+
+## The Concept
+**Left Hand / Right Hand (LH/RH)** is a visualization tool to link the past to the present.
+
+- **Left Hand**: Holds the 3 scenes from the past (Roots).
+- **Right Hand**: Holds the presenting issue today (Fruit).
+
+The goal is to answer: *How did the scenes in the Left Hand cause the issue in the Right Hand?*
+
+## Key Steps
+1.  Ask client to imagine holding the 3 scenes in their **Left Hand**.
+2.  Ask them to imagine their current issue in their **Right Hand**.
+3.  Review the scenes briefly.
+4.  Ask them to make the connection.
+
+## 3 Ways to Make the Connection
+
+### 1. The Essay Prompt
+**Therapist**: "Imagine you have to write an essay titled: 'How Did Those Scenes in Childhood Lead Me Today to This Feeling That I Am Not Enough?'"
+
+### 2. The Google Search
+**Therapist**: "Imagine typing into Google: 'Why did those 3 scenes leave me believing I am unlovable?' Hit Search. What answer comes up on the screen?"
+
+### 3. The Tape
+**Therapist**: "Imagine a piece of tape running between your left and right hand. What words are written on that tape connecting them?"
+
+---
+
+# Chapter III: RFPI (Role, Function, Purpose, Intention)
+
+## What is RFPI?
+RFPI gives a voice to the issue. It assumes that every symptom or behavior has a job to do.
+
+**The 3 P's Framework:**
+1.  **Punisher**: The part punishes the client (guilt, shame).
+2.  **Protector**: The part keeps them safe (fear, fat as armor).
+3.  **Perpetuator**: The part repeats familiar patterns.
+
+## The Script
+**Therapist**: "I want you to speak as if you are the Anxiety. Say: 'I am the Anxiety and my role is to...'"
+
+**Follow-up Questions**:
+- "When did you start doing this?"
+- "What are you afraid will happen if you leave?"
+- "How old was [Client Name] when you arrived?"
+
+**Dialogue Example**:
+**Therapist**: "Anxiety, what is your job?"
+**Client (as Anxiety)**: "To keep her alert. To make sure she doesn't get hurt again."
+**Therapist**: "Thank you. But does she need that much alertness now that she is an adult?"
+
+## Working with the Part
+Once you understand the part, you have 3 options:
+1.  **Dismiss**: "Thank you, but you can go now."
+2.  **New Role**: "Can you become a Cheerleader instead of a Critic?"
+3.  **Secondary Gain**: Negotiate a new way to get the benefit (safety) without the cost (panic).
+
+---
+
+# Chapter IV: Competency Levels
+
+## Developing
+- Follows the script but may be hesitant.
+- Understands the basic concept of connecting past to present.
+- Struggles to negotiate with the "Part" in RFPI.
+
+## Attaining
+- Facilitates LH/RH effectively.
+- Can help the client find the "Link" between scenes.
+- Understands the 3 P's (Punisher, Protector, Perpetuator).
+- Can successfully dismiss a part or give it a new job.
+
+## Excelling
+- **Seamless Linking**: Effortlessly uses the "Essay" or "Google" metaphors to create lightbulb moments.
+- **Masterful RFPI**: Negotiates with resistance. "I know you're trying to protect her, but are you hurting her too?"
+- **Intuitive**: Switches between tools based on what the client needs in the moment.
+`;
+
+        // --- Parser ---
+        const parseChapters = (md) => {
+            const lines = md.split('\n');
+            const chapters = [];
+            let currentChapter = null;
+
+            lines.forEach(line => {
+                if (line.startsWith('# Chapter')) {
+                    if (currentChapter) chapters.push(currentChapter);
+                    currentChapter = {
+                        title: line.replace('# ', '').trim(),
+                        content: []
+                    };
+                } else if (currentChapter) {
+                    currentChapter.content.push(line);
+                }
+            });
+            if (currentChapter) chapters.push(currentChapter);
+            return chapters;
+        };
+
+        const renderMarkdown = (text) => {
+            return text.map((line, idx) => {
+                if (line.startsWith('## ')) {
+                    return <h2 key={idx}>{line.replace('## ', '')}</h2>;
+                }
+                if (line.startsWith('### ')) {
+                    return <h3 key={idx}>{line.replace('### ', '')}</h3>;
+                }
+                if (line.startsWith('- ')) {
+                    return <li key={idx} className="ml-4">{line.replace('- ', '')}</li>;
+                }
+                if (line.startsWith('1. ')) {
+                    return <li key={idx} className="ml-4 list-decimal">{line.replace('1. ', '')}</li>;
+                }
+                if (line.startsWith('> ')) {
+                    return <blockquote key={idx}>{line.replace('> ', '')}</blockquote>;
+                }
+                if (line.startsWith('---')) {
+                    return <hr key={idx} className="border-slate-800 my-8" />;
+                }
+                if (line.trim() === '') return <br key={idx} />;
+
+                // Dialogue Blocks
+                if (line.includes('**Therapist**:') || line.includes('**Client**:') || line.includes('**Client (as Anxiety)**:')) {
+                    const speaker = line.includes('**Therapist**') ? 'Therapist' : 'Client';
+                    const content = line.split(': "')[1]?.replace('"', '') || line.split(':')[1];
+                    return (
+                        <div key={idx} className="dialogue-box">
+                            <span className={'speaker ' + speaker.toLowerCase()}>{line.split(':')[0].replace(/\*\*/g, '')}</span>
+                            <p>{content}</p>
+                        </div>
+                    );
+                }
+
+                // Bold text
+                const boldRegex = /\*\*(.*?)\*\*/g;
+                const parts = line.split(boldRegex);
+                if (parts.length > 1) {
+                    return (
+                        <p key={idx}>
+                            {parts.map((part, i) =>
+                                i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+                            )}
+                        </p>
+                    );
+                }
+
+                return <p key={idx}>{line}</p>;
+            });
+        };
+
+        // --- Components ---
+
+        const Sidebar = ({ chapters, activeIndex, setIndex, isOpen, toggle }) => (
+            <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-slate-900 border-r border-slate-800 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+                <div className="p-6 border-b border-slate-800">
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-purple-400">
+                            Nazar Codex
+                        </h1>
+                        <button onClick={toggle} className="md:hidden text-slate-400">
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => window.history.back()} className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <ArrowLeft className="w-3 h-3" /> Back
+                        </button>
+                        <a href="nazar_hub.html" className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <LayoutGrid className="w-3 h-3" /> Hub
+                        </a>
+                    </div>
+                </div>
+                <div className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)]">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest px-4 py-2">Module 8: Interpret</div>
+                    {chapters.map((chap, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => { setIndex(idx); if (window.innerWidth < 768) toggle(); }}
+                            className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex items-center justify-between group ${activeIndex === idx
+                                ? 'bg-violet-500/10 text-violet-400 border border-violet-500/20'
+                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                }`}
+                        >
+                            <span>{chap.title}</span>
+                            {activeIndex === idx && <ChevronRight className="w-4 h-4 ml-2" />}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const Reader = ({ chapter, next, prev }) => (
+            <div className="flex-1 h-screen overflow-y-auto bg-slate-950 p-6 md:p-12 lg:p-16 scroll-smooth">
+                <div className="max-w-3xl mx-auto pb-24 animate-fadeIn">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-12 border-b border-slate-800 pb-8">
+                        {chapter.title}
+                    </h1>
+
+                    <div className="markdown-content">
+                        {renderMarkdown(chapter.content)}
+                    </div>
+
+                    {/* Custom Widget for Chapter 3 */}
+                    {chapter.title.includes('RFPI') && (
+                        <div className="mt-12">
+                            <h3 className="text-xl font-bold text-white mb-6">Interactive RFPI Grid</h3>
+                            <div className="rfpi-widget">
+                                <div className="rfpi-card">
+                                    <h4 className="rfpi-title">Role</h4>
+                                    <p className="rfpi-desc">What is this part's identity? (e.g. The Protector)</p>
+                                </div>
+                                <div className="rfpi-card">
+                                    <h4 className="rfpi-title">Function</h4>
+                                    <p className="rfpi-desc">What does it actually do? (e.g. Make you anxious)</p>
+                                </div>
+                                <div className="rfpi-card">
+                                    <h4 className="rfpi-title">Purpose</h4>
+                                    <p className="rfpi-desc">Why does it do that? (e.g. To keep you safe)</p>
+                                </div>
+                                <div className="rfpi-card">
+                                    <h4 className="rfpi-title">Intention</h4>
+                                    <p className="rfpi-desc">What is the ultimate goal? (e.g. Survival)</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex justify-between mt-24 border-t border-slate-800 pt-8">
+                        {prev ? (
+                            <button onClick={prev} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                                <ArrowLeft className="w-5 h-5" /> Previous Chapter
+                            </button>
+                        ) : <div></div>}
+
+                        {next ? (
+                            <button onClick={next} className="flex items-center gap-2 text-violet-400 hover:text-violet-300 transition-colors font-bold">
+                                Next Chapter <ArrowRight className="w-5 h-5" />
+                            </button>
+                        ) : (
+                            <div className="text-emerald-500 flex items-center gap-2 font-bold">
+                                Module Complete <Fingerprint className="w-5 h-5" />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [currentChapter, setCurrentChapter] = useState(0);
+
+            const chapters = parseChapters(MARKDOWN_CONTENT);
+
+            return (
+                <div className="flex h-screen overflow-hidden">
+                    <Sidebar
+                        chapters={chapters}
+                        activeIndex={currentChapter}
+                        setIndex={setCurrentChapter}
+                        isOpen={sidebarOpen}
+                        toggle={() => setSidebarOpen(!sidebarOpen)}
+                    />
+
+                    <div className="flex-1 flex flex-col md:pl-80 transition-all duration-300">
+                        {/* Mobile Header */}
+                        <div className="md:hidden p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                            <h1 className="font-bold text-violet-400">Module 8</h1>
+                            <button onClick={() => setSidebarOpen(true)} className="text-white">
+                                <Menu className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        <Reader
+                            chapter={chapters[currentChapter]}
+                            next={currentChapter < chapters.length - 1 ? () => setCurrentChapter(c => c + 1) : null}
+                            prev={currentChapter > 0 ? () => setCurrentChapter(c => c - 1) : null}
+                        />
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

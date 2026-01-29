@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 7: The Detective Work | Nazar Codex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        },
+                        sky: {
+                            450: '#38bdf8', // Investigate Blue
+                        },
+                        cyan: {
+                            450: '#22d3ee',
+                        }
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.slate.300'),
+                                h1: { color: theme('colors.white'), fontFamily: theme('fontFamily.sans') },
+                                h2: { color: theme('colors.sky.400'), fontFamily: theme('fontFamily.sans') },
+                                h3: { color: theme('colors.slate.200'), fontFamily: theme('fontFamily.sans') },
+                                strong: { color: theme('colors.white') },
+                                blockquote: {
+                                    borderLeftColor: theme('colors.sky.500'),
+                                    color: theme('colors.slate.400'),
+                                    fontStyle: 'italic'
+                                },
+                            },
+                        },
+                    }),
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            },
+            plugins: [
+                function ({ addUtilities }) {
+                    const newUtilities = {
+                        '.prose': { maxWidth: '65ch' },
+                        '.prose-invert': { color: '#cbd5e1' },
+                    }
+                    addUtilities(newUtilities)
+                }
+            ]
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        /* Markdown Styles */
+        .markdown-content h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            font-family: 'Merriweather', serif;
+            color: #cbd5e1;
+        }
+
+        .markdown-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            font-family: 'Merriweather', serif;
+        }
+
+        .markdown-content strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #38bdf8;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: #94a3b8;
+            font-style: italic;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .example-block {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 1rem;
+            border-left: 4px solid #fbbf24;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+            font-family: 'Merriweather', serif;
+        }
+
+        .example-title {
+            color: #fbbf24;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 min-h-screen selection:bg-sky-500/30 overflow-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const {
+            BookOpen, Search, Menu, X, ChevronRight,
+            ArrowLeft, ArrowRight, User, Brain, Fingerprint, LayoutGrid
+        } = LucideReact;
+
+        // --- Content ---
+        const MARKDOWN_CONTENT = `
+# Chapter I: Introduction & Purpose
+
+## Why Investigate?
+Investigating is the foundation of RTT®. It is about helping the client understand the **root cause** of their issue and identifying the meaning they have attached to the events from their past which have caused limiting beliefs. Investigation begins during the Intake by finding out what the client wants (Magic Wand) and what prevents them from having that.
+
+### Learning Outcomes
+- **Understand the Intake**: Know the key role of the consultation.
+- **Investigate the Problem**: Use a range of questioning techniques.
+- **Induce Hypnosis**: Master rapid induction, suggestibility tests, and deepeners.
+- **The Detective Work**: Find the Root Cause effectively.
+- **Child in the Room**: Use this powerful tool to explore feelings when scenes are unclear.
+
+### Core Objectives
+1.  Understand the presenting problem: *When and where does it show up?*
+2.  Discover the desired outcome: *What does life look like without the problem?*
+3.  Uncover the root cause: *Why did this issue start?*
+
+---
+
+# Chapter II: Setting Up for Success
+
+> "Everything I'm teaching today, I didn't learn from a book... I learned everything from my clients." - Marisa Peer
+
+## The Setup
+Your role is to put the client at ease. Many clients arrive anxious or misinformed about hypnosis. You must address their fears and set expectations. This is the **most critical time** to create success.
+
+### Convincers & Suggestibility
+You must demonstrate to the client that they are suggestible. If they can believe something as insignificant as magnets pulling their hands together, they will be receptive to life-changing suggestions.
+
+**Specific Examples of Setup:**
+- **Expectations**: catch discrepancies between what they want and what is possible.
+- **Cultural Competence**: Be aware of background and avoid assumptions.
+- **Rapport**: A lack of connection causes unconscious resistance.
+- **Empathy**: Defensive clients will not open up.
+
+## Key Questions to Ask
+When the client first arrives, narrow down the issue within the first 10 minutes.
+
+**Example Questions:**
+- "What do you want to get from this session?"
+- "The Magic Wand Question: If I could grant you one wish, what would it be?"
+- "When you leave here, what is the outcome you want?"
+
+**Note:** Clients are experts at listing what they *don't* want. Guide them to the positive.
+
+### Addressing Client Fears
+- **Hypnotic State**: "Don't expect to feel 'hypnotized'. It feels like a natural state of relaxation. You don't go anywhere."
+- **Control**: "If I told you to rob a bank, you wouldn't do it. You are always in control."
+
+---
+
+# Chapter III: Intake & Induction
+
+## The Intake (Consultation)
+This is where you collect medical history and confirm eligibility. **Crucial:** Check for contraindications.
+
+### Contraindications (Do Not Treat)
+- Auditory/visual hallucinations
+- Epilepsy
+- Dissociative disorders
+- Personality disorders
+- Psychosis / Schizophrenia
+
+### Questioning Techniques
+How you ask matters. Avoid closed "Yes/No" questions. Use open questions to let the client paint a picture.
+
+**Examples of Question Types:**
+- **Open**: "And how does that make you feel?"
+- **Probing**: "Is there a particular time of day when [X] happens?"
+- **Clarifying**: "How would it feel to explore that a little more deeply?"
+- **Encouraging**: "When you think about [X], what happens?"
+- **Trigger Words**: Listen for recurring metaphors like "It weighs me down" or "Black cloud".
+
+## The Induction
+A single rapid induction involving:
+1.  **Inward Focus**
+2.  **Relaxation**
+3.  **Rapid Eye Movement (REM)**
+
+**Process:**
+- Look up (eye strain).
+- Eyes flutter (REM).
+- 10 Steps Down (Deepener).
+
+### Deepeners
+Deepeners are used to bypass the critical factor of the conscious mind.
+
+**Specific Deepener Examples:**
+- **Clicking Fingers**: Snap fingers and say "Go deeper."
+- **Arm Drop**: Lift client's arm and drop it. "Loose, limp, relaxed."
+- **Eye Lock**: "Your eyes are glued shut, sealed shut, locked tight."
+- **Head Rock**: Gently rock head for <10 seconds. "Neck muscles are the last to relax."
+
+---
+
+# Chapter IV: The Detective Work
+
+## Purpose
+To find the **Root Cause**. We take the client back to scenes where the belief was formed.
+- Go to at least **3 scenes**.
+- Understand *how, when, and where* the issue started.
+- Daisy-chain the scenes together ("And as you look at that scene, you notice another scene...").
+
+The last scene is usually the most significant or emotionally intense.
+
+## Establishing the Scene
+When taking the client to a scene, ask specific grounding questions:
+
+**Example Questions:**
+- "Is it daytime or nighttime?"
+- "Are you inside or outside?"
+- "Are you alone or with others?"
+- "How old are you?" (If they don't know: "More than 5 or less than 5?")
+
+## Dealing with "No Scenes"
+If a client says they see nothing, **never** say "You're resistant." Instead, follow these steps:
+
+**Step 1: Ask for Feeling/Sound**
+"What are you feeling? You can remember it like it was yesterday. What do you hear?"
+
+**Step 2: "That was just a rehearsal"**
+"In a moment I'm going to count back from 5... and your brilliant mind will take you back to a vivid scene."
+
+**Step 3: Child in the Room**
+"That's okay. That's so common. We're going to do something called 'Child in the Room' which you will love."
+
+**Step 4: RFPI**
+Use role, function, purpose, intention questions as a bridge.
+
+---
+
+# Chapter V: Child in the Room
+
+## When to Use
+- When scenes are unclear.
+- When the client says "I don't see anything."
+- To act as Scene 1 if needed.
+
+## The 9-Step Process
+1.  Drift back to childhood home (age 2-10).
+2.  Float to the room you grew up in.
+3.  Enter the room and greet the younger version of yourself.
+4.  Tell the client they have affinity with this child.
+5.  Ask the child: "Are you happy or sad?"
+6.  Explore the feelings.
+7.  Get specific: "What does Mommy/Daddy do that makes you unhappy?"
+8.  Explore beliefs that emerge.
+9.  Proceed to Detective Work for Scenes 2 & 3.
+
+### Key Dialogue Examples
+
+**Therapist**: "Ask the child, 'What is it that Mommy does or doesn't do that makes you feel unhappy?'"
+
+**Client Responses**:
+- "She shouts at me."
+- "She prefers my brother."
+- "She's always working."
+
+**Therapist**: "And you feel [feeling] because..."
+
+**Client Responses**:
+- "Because I am not enough."
+- "I'm insignificant."
+- "It must be my fault."
+
+This connects the client to the *feeling* even without a specific visual scene.
+
+---
+
+# Chapter VI: Competency Levels
+
+## Developing Competency
+- Needs to narrow down to one Presenting Problem (PP).
+- Questions should be specific to the PP.
+- Lead into scenes with PP.
+- Use scripts to support delivery.
+
+## Attaining Competency
+- Identifies PP clearly.
+- Evidence of leading into scenes.
+- Checks in with client and responds.
+- Uses Child in the Room appropriately to unlock subconscious.
+- Smooth transitions between tools.
+
+## Excelling Competency
+- **Intuitive Questioning**: Picks up on keywords and metaphors instantly.
+- **Deep Exploration**: Facilitates a safe space for deep emotional work.
+- **Seamless Flow**: Connection between child and adult is created effortlessly.
+- **Masterful Management**: Handles abreactions (crying/shaking) with calm authority ("You are safe, let it out, letting go is good").
+`;
+
+        // --- Parser ---
+        const parseChapters = (md) => {
+            const lines = md.split('\n');
+            const chapters = [];
+            let currentChapter = null;
+
+            lines.forEach(line => {
+                if (line.startsWith('# Chapter')) {
+                    if (currentChapter) chapters.push(currentChapter);
+                    currentChapter = {
+                        title: line.replace('# ', '').trim(),
+                        content: []
+                    };
+                } else if (currentChapter) {
+                    currentChapter.content.push(line);
+                }
+            });
+            if (currentChapter) chapters.push(currentChapter);
+            return chapters;
+        };
+
+        const renderMarkdown = (text) => {
+            return text.map((line, idx) => {
+                if (line.startsWith('## ')) {
+                    return <h2 key={idx}>{line.replace('## ', '')}</h2>;
+                }
+                if (line.startsWith('### ')) {
+                    return <h3 key={idx}>{line.replace('### ', '')}</h3>;
+                }
+                if (line.startsWith('- ')) {
+                    return <li key={idx} className="ml-4">{line.replace('- ', '')}</li>;
+                }
+                if (line.startsWith('1. ')) {
+                    return <li key={idx} className="ml-4 list-decimal">{line.replace('1. ', '')}</li>;
+                }
+                if (line.startsWith('> ')) {
+                    return <blockquote key={idx}>{line.replace('> ', '')}</blockquote>;
+                }
+                if (line.startsWith('---')) {
+                    return <hr key={idx} className="border-slate-800 my-8" />;
+                }
+                if (line.trim() === '') return <br key={idx} />;
+
+                // Example blocks (lines starting with **Example)
+                if (line.includes('**Example') || line.includes('**Specific Example')) {
+                    const content = line.replace(/\*\*(.*?)\*\*/, '').trim();
+                    return (
+                        <div key={idx} className="example-block">
+                            <span className="example-title">Example</span>
+                            {content && <p>{content}</p>}
+                            {!content && <p>{line.replace(/\*\*(.*?)\*\*/, '$1')}</p>}
+                        </div>
+                    );
+                }
+
+                // Bold text
+                const boldRegex = /\*\*(.*?)\*\*/g;
+                const parts = line.split(boldRegex);
+                if (parts.length > 1) {
+                    return (
+                        <p key={idx}>
+                            {parts.map((part, i) =>
+                                i % 2 === 1 ? <strong key={i}>{part}</strong> : part
+                            )}
+                        </p>
+                    );
+                }
+
+                return <p key={idx}>{line}</p>;
+            });
+        };
+
+        // --- Components ---
+
+        const Sidebar = ({ chapters, activeIndex, setIndex, isOpen, toggle }) => (
+            <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-slate-900 border-r border-slate-800 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+                <div className="p-6 border-b border-slate-800">
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-cyan-400">
+                            Nazar Codex
+                        </h1>
+                        <button onClick={toggle} className="md:hidden text-slate-400">
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => window.history.back()} className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <ArrowLeft className="w-3 h-3" /> Back
+                        </button>
+                        <a href="nazar_hub.html" className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <LayoutGrid className="w-3 h-3" /> Hub
+                        </a>
+                    </div>
+                </div>
+                <div className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)]">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest px-4 py-2">Module 7: Investigate</div>
+                    {chapters.map((chap, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => { setIndex(idx); if (window.innerWidth < 768) toggle(); }}
+                            className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex items-center justify-between group ${activeIndex === idx
+                                ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20'
+                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                }`}
+                        >
+                            <span>{chap.title}</span>
+                            {activeIndex === idx && <ChevronRight className="w-4 h-4 ml-2" />}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const Reader = ({ chapter, next, prev }) => (
+            <div className="flex-1 h-screen overflow-y-auto bg-slate-950 p-6 md:p-12 lg:p-16 scroll-smooth">
+                <div className="max-w-3xl mx-auto pb-24 animate-fadeIn">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-12 border-b border-slate-800 pb-8">
+                        {chapter.title}
+                    </h1>
+
+                    <div className="markdown-content">
+                        {renderMarkdown(chapter.content)}
+                    </div>
+
+                    <div className="flex justify-between mt-24 border-t border-slate-800 pt-8">
+                        {prev ? (
+                            <button onClick={prev} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                                <ArrowLeft className="w-5 h-5" /> Previous Chapter
+                            </button>
+                        ) : <div></div>}
+
+                        {next ? (
+                            <button onClick={next} className="flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors font-bold">
+                                Next Chapter <ArrowRight className="w-5 h-5" />
+                            </button>
+                        ) : (
+                            <div className="text-emerald-500 flex items-center gap-2 font-bold">
+                                Module Complete <Fingerprint className="w-5 h-5" />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [currentChapter, setCurrentChapter] = useState(0);
+
+            const chapters = parseChapters(MARKDOWN_CONTENT);
+
+            return (
+                <div className="flex h-screen overflow-hidden">
+                    <Sidebar
+                        chapters={chapters}
+                        activeIndex={currentChapter}
+                        setIndex={setCurrentChapter}
+                        isOpen={sidebarOpen}
+                        toggle={() => setSidebarOpen(!sidebarOpen)}
+                    />
+
+                    <div className="flex-1 flex flex-col md:pl-80 transition-all duration-300">
+                        {/* Mobile Header */}
+                        <div className="md:hidden p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                            <h1 className="font-bold text-sky-400">Module 7</h1>
+                            <button onClick={() => setSidebarOpen(true)} className="text-white">
+                                <Menu className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        <Reader
+                            chapter={chapters[currentChapter]}
+                            next={currentChapter < chapters.length - 1 ? () => setCurrentChapter(c => c + 1) : null}
+                            prev={currentChapter > 0 ? () => setCurrentChapter(c => c - 1) : null}
+                        />
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

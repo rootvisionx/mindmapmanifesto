@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 11: Common Issues | Nazar Codex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        },
+                        teal: {
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                        }
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-out',
+                        'slideUp': 'slideUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #e2e8f0;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        .issue-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(45, 212, 191, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .issue-card:hover {
+            background: rgba(45, 212, 191, 0.1);
+            border-color: rgba(45, 212, 191, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .issue-card.active {
+            background: rgba(45, 212, 191, 0.15);
+            border-color: #2dd4bf;
+        }
+
+        .content-area h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2dd4bf;
+            margin-bottom: 1rem;
+        }
+
+        .content-area p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            font-family: 'Merriweather', serif;
+            color: #cbd5e1;
+        }
+
+        .content-area ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+            font-family: 'Merriweather', serif;
+        }
+
+        .content-area strong {
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen selection:bg-teal-500/30">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const {
+            Shield, Users, DollarSign, Heart, Activity,
+            Scale, ArrowLeft, Brain, Sparkles, ChevronRight,
+            Lock, Unlock, Zap, LayoutGrid
+        } = LucideReact;
+
+        const ISSUES = [
+            {
+                id: 'confidence',
+                title: 'Confidence & Self-Esteem',
+                icon: Shield,
+                desc: 'The foundation of all success. Overcoming "I am not enough".',
+                content: `
+### The Core Wound
+Confidence issues usually stem from a childhood belief that you are not enough, not smart enough, or not interesting enough.
+
+**Key Approaches:**
+*   Identify where the "Not Enough" belief started.
+*   Use the **Cheerleader technique** (Module 10) to replace the inner critic.
+*   Install: "I have always been enough, and I will always be enough." (The most powerful phrase in RTT).
+                `
+            },
+            {
+                id: 'phobias',
+                title: 'Transforming Phobias',
+                icon: Zap,
+                desc: 'Understanding the protective role of fear.',
+                content: `
+### Phobias are Protection
+A phobia is never random. It is your mind trying to protect you from something it perceives as a threat, often based on a misunderstood past event.
+
+**RFPI Strategy:**
+1.  **Role**: "To keep me safe/alive."
+2.  **Function**: "To stop me going near [spider/heights/planes]."
+3.  **Purpose**: "To prevent me from feeling that fear again."
+
+**The Cure**: Show the mind that the threat is old and no longer relevant.
+                `
+            },
+            {
+                id: 'money',
+                title: 'Money Blocks',
+                icon: DollarSign,
+                desc: 'Uncovering the guilt or fear attached to wealth.',
+                content: `
+### Hidden Beliefs
+Money blocks are rarely about money. They are about **worth** or **safety**.
+*   "Rich people are bad."
+*   "If I have money, people will use me."
+*   "I don't deserve more than my parents had."
+
+**Reframing:**
+Money is simply energy. It is a tool for good. "The more I have, the more I can give."
+                `
+            },
+            {
+                id: 'weight',
+                title: 'Weight Loss',
+                icon: Scale,
+                desc: 'Why diets fail and the emotional role of food.',
+                content: `
+### The Emotional Shield
+Diets fail because they address the body, not the mind. Weight is often:
+*   **Protection**: Armor against the world.
+*   **Insulation**: Keeping people away.
+*   **Reward**: "Food is my only friend."
+
+**Key Question**: "What does this weight do *for* you?"
+**The Shift**: Move from "I can't eat that" to "I choose to nourish my body."
+                `
+            },
+            {
+                id: 'relationships',
+                title: 'Relationships',
+                icon: Heart,
+                desc: 'Breaking patterns of rejection and finding connection.',
+                content: `
+### The Mirror
+We attract what we believe we deserve. If we believe "Love hurts" or "Everyone leaves", we will subconsciously seek partners who prove us right.
+
+**The Fix**:
+You must first have a relationship with yourself. You cannot give what you do not have.
+*   "I am lovable."
+*   "I am worthy of love."
+                `
+            },
+            {
+                id: 'health',
+                title: 'Health Issues',
+                icon: Activity,
+                desc: 'Using the mind to influence physical healing.',
+                content: `
+### The Body Speaks
+The mind and body are connected. Pain often has a message.
+*   **Pain**: "Stop!" "Review!" "Notice me!"
+*   **Illness as Solution**: Sometimes illness solves a conflict (e.g., "If I'm sick, I don't have to go to that stressful job").
+
+**Language Rule**: Never say "My migraine" or "My arthritis". Say "The migraine". Don't take ownership of it.
+                `
+            }
+        ];
+
+        const BeliefBreaker = () => (
+            <div className="bg-slate-900 border border-slate-700 rounded-xl p-6 mb-12 animate-fadeIn">
+                <div className="flex items-start gap-4">
+                    <div className="bg-teal-500/20 p-3 rounded-lg text-teal-400">
+                        <Brain className="w-8 h-8" />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold text-white mb-2">The Common Denominator: Limiting Beliefs</h2>
+                        <p className="text-slate-400 mb-4">
+                            Beneath every issue—whether it's weight, money, or anxiety—lies a **Limiting Belief**.
+                            This is a conviction you formed (usually before age 5) about how the world works.
+                        </p>
+                        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <h4 className="text-teal-400 font-bold uppercase text-xs tracking-widest mb-2">The Formula</h4>
+                            <div className="font-mono text-slate-300">
+                                Interpretation of Environment + Interaction with Others = <span className="text-white font-bold">The Belief</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const Navigation = () => (
+            <div className="fixed top-6 left-6 z-50 flex gap-2">
+                <button onClick={() => window.history.back()} className="p-2 rounded-full bg-slate-900 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all" title="Go Back">
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+                <a href="nazar_hub.html" className="p-2 rounded-full bg-slate-900 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 transition-all" title="Back to Hub">
+                    <LayoutGrid className="w-5 h-5" />
+                </a>
+            </div>
+        );
+
+        const App = () => {
+            const [selectedIssue, setSelectedIssue] = useState(ISSUES[0]);
+
+            return (
+                <div className="max-w-6xl mx-auto px-6 py-12 relative">
+                    <Navigation />
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-8 pl-12 md:pl-0">
+                        <div>
+                            <h1 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-teal-500 mb-2">
+                                Module 11: Common Issues
+                            </h1>
+                            <p className="text-slate-400">Applying the tools to specific struggles.</p>
+                        </div>
+                    </div>
+
+                    <BeliefBreaker />
+
+                    {/* Dashboard Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        {/* Sidebar Menu */}
+                        <div className="lg:col-span-4 space-y-4">
+                            <h3 className="text-slate-500 font-bold uppercase text-xs tracking-widest mb-4 px-2">Select Issue</h3>
+                            {ISSUES.map(issue => (
+                                <button
+                                    key={issue.id}
+                                    onClick={() => setSelectedIssue(issue)}
+                                    className={`w-full text-left p-4 rounded-xl flex items-center gap-4 issue-card group ${selectedIssue.id === issue.id ? 'active' : ''}`}
+                                >
+                                    <div className={`p-2 rounded-lg ${selectedIssue.id === issue.id ? 'bg-teal-500 text-white' : 'bg-slate-800 text-slate-400 group-hover:text-teal-400'}`}>
+                                        <issue.icon className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <div className={`font-bold ${selectedIssue.id === issue.id ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
+                                            {issue.title}
+                                        </div>
+                                    </div>
+                                    <ChevronRight className={`w-4 h-4 ml-auto transition-transform ${selectedIssue.id === issue.id ? 'text-teal-500 translate-x-1' : 'text-slate-600 opacity-0 group-hover:opacity-100'}`} />
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Content Area */}
+                        <div className="lg:col-span-8">
+                            <div className="glass-panel p-8 rounded-2xl min-h-[500px] animate-slideUp">
+                                <div className="flex items-center gap-4 mb-6 pb-6 border-b border-slate-800">
+                                    <div className="bg-teal-500 p-3 rounded-xl text-white shadow-lg shadow-teal-500/20">
+                                        <selectedIssue.icon className="w-8 h-8" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-3xl font-bold text-white">{selectedIssue.title}</h2>
+                                        <p className="text-teal-400 text-lg">{selectedIssue.desc}</p>
+                                    </div>
+                                </div>
+                                <div className="content-area">
+                                    {/* Using dangerouslySetInnerHTML for the markdown-like content simplicity here as we don't have the full parser in this file */}
+                                    <div dangerouslySetInnerHTML={{
+                                        __html: selectedIssue.content
+                                            .replace(/### (.*)/g, '<h3>$1</h3>')
+                                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                            .replace(/\* (.*)/g, '<ul><li>$1</li></ul>') // Simple list hack
+                                            .replace(/<\/ul><ul>/g, '') // Merge lists
+                                            .replace(/\n\n/g, '<br/><br/>')
+                                    }} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

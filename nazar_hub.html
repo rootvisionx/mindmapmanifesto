@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nazar: Dimensional Intelligence Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-out',
+                        'slideUp': 'slideUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #e2e8f0;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen selection:bg-indigo-500/30">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const {
+            BookOpen, Brain, Activity, Search, Sparkles,
+            History, Shield, Heart, Zap, Play, FileText,
+            Layers, ArrowRight
+        } = LucideReact;
+
+        const ModuleCard = ({ title, desc, icon: Icon, color, href, delay }) => (
+            <a
+                href={href}
+                className="glass-card p-6 rounded-xl flex flex-col h-full group opacity-0 animate-slideUp"
+                style={{ animationDelay: `${delay}ms` }}
+            >
+                <div className={`p-3 rounded-lg w-fit mb-4 ${color} bg-opacity-20`}>
+                    <Icon className={`w-6 h-6 ${color.replace('bg-', 'text-')}`} />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gold-400 transition-colors">{title}</h3>
+                <p className="text-slate-400 text-sm mb-6 flex-grow">{desc}</p>
+                <div className="flex items-center text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-white transition-colors">
+                    Open Module <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </div>
+            </a>
+        );
+
+        const SectionHeader = ({ title, icon: Icon }) => (
+            <div className="flex items-center gap-3 mb-8 mt-12 border-b border-slate-800 pb-4">
+                <Icon className="w-6 h-6 text-slate-500" />
+                <h2 className="text-2xl font-bold text-white tracking-tight">{title}</h2>
+            </div>
+        );
+
+        const App = () => {
+            const [showJourneyWelcome, setShowJourneyWelcome] = useState(false);
+
+            React.useEffect(() => {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('journey') === 'started') {
+                    setShowJourneyWelcome(true);
+                }
+            }, []);
+
+            return (
+                <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+                    {/* Journey Welcome Banner */}
+                    {showJourneyWelcome && (
+                        <div className="mb-16 p-8 rounded-2xl bg-gradient-to-r from-indigo-900/50 to-purple-900/50 border border-indigo-500/30 animate-fadeIn">
+                            <div className="flex items-start gap-6">
+                                <div className="p-4 bg-indigo-500/20 rounded-full text-indigo-400">
+                                    <Sparkles className="w-8 h-8" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-white mb-2">The Journey Has Begun</h2>
+                                    <p className="text-slate-300 leading-relaxed text-lg">
+                                        Your intake is complete. The system has calibrated to your intent.
+                                        Below is the full architecture of your transformation.
+                                        You may now navigate freely between the **Active Tools** (for daily use) and the **Deep Work Modules** (The 4 I's).
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Header */}
+                    <div className="text-center mb-20 animate-fadeIn">
+                        <div className="inline-flex items-center justify-center p-2 mb-6 rounded-full bg-slate-900 border border-slate-800">
+                            <span className="px-3 py-1 text-xs font-bold text-slate-400 uppercase tracking-widest">System Online</span>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-200 via-white to-slate-200 mb-6 tracking-tight">
+                            Nazar Hub
+                        </h1>
+                        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">
+                            The complete Dimensional Intelligence toolkit. Investigate, Interpret, Interrupt, and Install new realities.
+                        </p>
+                    </div>
+
+                    {/* The 4 I's */}
+                    <SectionHeader title="The 4 I's Framework" icon={Layers} />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <ModuleCard
+                            title="Module 6: The Map"
+                            desc="Overview of the RTT® framework and core tools."
+                            icon={BookOpen}
+                            color="bg-indigo-500"
+                            href="module_6_guide.html"
+                            delay={100}
+                        />
+                        <ModuleCard
+                            title="Module 7: Investigate"
+                            desc="Detective work: Finding the root cause and scenes."
+                            icon={Search}
+                            color="bg-sky-500"
+                            href="module_7_investigate.html"
+                            delay={200}
+                        />
+                        <ModuleCard
+                            title="Module 8: Interpret"
+                            desc="Finding meaning: RFPI and linking past to present."
+                            icon={Sparkles}
+                            color="bg-violet-500"
+                            href="module_8_interpret.html"
+                            delay={300}
+                        />
+                        <ModuleCard
+                            title="Module 9: Interrupt"
+                            desc="Breaking the pattern: Role of the 'Hurter' and dissociation."
+                            icon={Heart}
+                            color="bg-rose-500"
+                            href="module_9_interrupt.html"
+                            delay={400}
+                        />
+                        <ModuleCard
+                            title="Module 10: Install"
+                            desc="The new reality: Transformation, Cell Command, and Healing Vortex."
+                            icon={Zap}
+                            color="bg-amber-500"
+                            href="module_10_install.html"
+                            delay={450}
+                        />
+                    </div>
+
+                    {/* Foundation */}
+                    <SectionHeader title="Foundation & Theory" icon={Brain} />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <ModuleCard
+                            title="History of Hypnosis"
+                            desc="The lineage of trance: From Mesmer to Erickson."
+                            icon={History}
+                            color="bg-amber-500"
+                            href="history_hypnosis.html"
+                            delay={500}
+                        />
+                        <ModuleCard
+                            title="13 Rules of Mind"
+                            desc="The operating system of human consciousness."
+                            icon={Shield}
+                            color="bg-emerald-500"
+                            href="rules_of_mind.html"
+                            delay={600}
+                        />
+                        <ModuleCard
+                            title="Nazar Codex"
+                            desc="The core philosophical text and archive."
+                            icon={FileText}
+                            color="bg-slate-500"
+                            href="nazar_codex.html"
+                            delay={700}
+                        />
+                    </div>
+
+                    {/* Tools */}
+                    <SectionHeader title="Active Tools" icon={Zap} />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <ModuleCard
+                            title="Unified Intake"
+                            desc="Client intake form with 'Magic Wand' analysis."
+                            icon={Activity}
+                            color="bg-cyan-500"
+                            href="unified_intake.html"
+                            delay={800}
+                        />
+                        <ModuleCard
+                            title="Self-Hypnosis"
+                            desc="Guided session for personal reprogramming."
+                            icon={Play}
+                            color="bg-fuchsia-500"
+                            href="self_hypnosis.html"
+                            delay={900}
+                        />
+                        <ModuleCard
+                            title="Module 11: Common Issues"
+                            desc="Applied RTT: Confidence, Money, Phobias, and Health."
+                            icon={Shield}
+                            color="bg-teal-500"
+                            href="module_11.html"
+                            delay={950}
+                        />
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-24 pt-8 border-t border-slate-900 text-center text-slate-600 text-sm">
+                        <p>Nazar Codex System v1.0 • Local Environment</p>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

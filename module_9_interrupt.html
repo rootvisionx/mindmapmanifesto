@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 9: The Interrupt Stage | Nazar Codex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151F32',
+                            950: '#020617',
+                        },
+                        rose: {
+                            450: '#f43f5e',
+                            550: '#e11d48',
+                        },
+                        red: {
+                            450: '#ef4444',
+                        }
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.slate.300'),
+                                h1: { color: theme('colors.white'), fontFamily: theme('fontFamily.sans') },
+                                h2: { color: theme('colors.rose.450'), fontFamily: theme('fontFamily.sans') },
+                                h3: { color: theme('colors.slate.200'), fontFamily: theme('fontFamily.sans') },
+                                strong: { color: theme('colors.white') },
+                                blockquote: {
+                                    borderLeftColor: theme('colors.rose.550'),
+                                    color: theme('colors.slate.400'),
+                                    fontStyle: 'italic'
+                                },
+                            },
+                        },
+                    }),
+                    animation: {
+                        'fadeIn': 'fadeIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            },
+            plugins: [
+                function ({ addUtilities }) {
+                    const newUtilities = {
+                        '.prose': { maxWidth: '65ch' },
+                        '.prose-invert': { color: '#cbd5e1' },
+                    }
+                    addUtilities(newUtilities)
+                }
+            ]
+        }
+    </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>window.react = window.React;</script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        /* Markdown Styles */
+        .markdown-content h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #fb7185;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            font-family: 'Merriweather', serif;
+            color: #cbd5e1;
+        }
+
+        .markdown-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            font-family: 'Merriweather', serif;
+        }
+
+        .markdown-content strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid #f43f5e;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: #94a3b8;
+            font-style: italic;
+            background: rgba(244, 63, 94, 0.1);
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        /* Interactive Widgets */
+        .example-card {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid #f43f5e;
+            margin: 1.5rem 0;
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: #fb7185;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .example-content {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: #f43f5e;
+            color: white;
+        }
+
+        .tab-btn.inactive {
+            background: rgba(30, 41, 59, 0.5);
+            color: #94a3b8;
+            hover: bg-slate-800;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 min-h-screen selection:bg-rose-500/30 overflow-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const {
+            BookOpen, Search, Menu, X, ChevronRight,
+            ArrowLeft, ArrowRight, User, Brain, Fingerprint,
+            Heart, Sparkles, MessageCircle, Shield, LayoutGrid
+        } = LucideReact;
+
+        // --- Content ---
+        const MARKDOWN_CONTENT = `
+# Chapter I: It's Not Me
+
+## Uncoupling from the Past
+The core of the Interrupt stage is breaking the client's identification with their past trauma or beliefs. "It's Not Me" helps the client realize that the events of childhood define the *past*, not their *character* or *future*.
+
+> "We come through our parents, we don't come from them. The universe created you." - Marisa Peer
+
+### The 3 Steps to "It's Not Me"
+
+1.  **Scene Revisit**: Go back to the scene briefly.
+2.  **The Repetition**: Say "It's Not Me" at least 9 times.
+3.  **The Dissociation**: Confirm "I was that child, but I am not that child anymore."
+
+<Example title="Script: Repetition">
+"I want you to look at that scene and say out loud: 'It's not me. It's not me because I was just a child. It's not me because I didn't know any better. It's not me because their behavior is not my behavior.' Say it until you feel it."
+</Example>
+
+<Example title="Script: Dissociation">
+"Yes, that happened to you at age 5. But look at you now. You drive a car, you have a job, you pay bills. That helpless child is a memory, but the capable adult is the reality."
+</Example>
+
+---
+
+# Chapter II: Upgrading The Child
+
+## Reclaiming Power
+Upgrading The Child is about meeting the unmet needs from the past. It has three powerful components.
+
+<TabbedSection>
+    <Tab title="Merge The Child">
+        ### Merge The Child
+        **Purpose**: To reintegrate the fragmented "inner child" into the adult self.
+        
+        <Example title="Script: Merging">
+        "I want you to pick that little girl/boy up. Hold them close. Tell them: 'I've got you. You are safe with me now.' And imagine shrinking them down so small they fit right into your heart. Put them in your heart so they are with you always, safe and loved."
+        </Example>
+    </Tab>
+    <Tab title="The Praise">
+        ### The Praise You've Always Wanted
+        **Purpose**: To give the validation they missed.
+        
+        <Example title="Script: The Praise">
+        "What did you needed to hear? Did you need to hear 'You are brilliant'? 'You are beautiful'? 'I am so proud of you'? Imagine telling that little child those exact words right now. Say it: 'You are so smart. You are so good enough.'"
+        </Example>
+    </Tab>
+    <Tab title="Loving Parent">
+        ### Becoming The Loving Parent
+        **Purpose**: To replace the critical parent voice with a nurturing one.
+        
+        <Example title="Script: Loving Parent">
+        "I want you to be the parent to yourself that you never had. Look at that child and promise: 'I will never leave you. I will never critique you harshly. I am your parent now, and I think you are wonderful.'"
+        </Example>
+    </Tab>
+</TabbedSection>
+
+---
+
+# Chapter III: Dialogue With The Hurter
+
+## Confrontation & Closure
+This tool allows the client to say what they couldn't say when they were powerless. It is **not** about forgiveness (unless the client wants that); it is about **release**.
+
+### When to Use
+- When there is unexpressed anger.
+- When the client felt silenced.
+- To set boundaries.
+
+<Example title="Script: Setting the Scene">
+"Imagine [The Hurter] is sitting in that chair right there. They can't speak, they can't move, they can only listen. And for the first time, you can tell them exactly how they made you feel."
+</Example>
+
+<Example title="Script: Taking Power Back">
+"Tell them: 'You hurt me. You made me feel small. But you cannot hurt me anymore. I am bigger than you now. I am taking my power back. You have no control over me.'"
+</Example>
+
+---
+
+# Chapter IV: The Reframe
+
+## Clearing the Slate
+The Reframe is the final "clearing out" before the Transformation. It acknowledges the pain one last time and then firmly places it in the past.
+
+### The Metaphors
+Metaphors are powerful for the subconscious mind.
+
+<Example title="Metaphor: The Heavy Coat">
+"Imagine this problem is like a heavy, water-logged coat you've been wearing for years. It's so heavy. But now, you are taking it off. Let it drop to the floor. Step out of it. Walk away and leave it there. You never have to wear it again."
+</Example>
+
+<Example title="Metaphor: The Garden">
+"It's like weeding a garden. We have pulled out all those weeds - the fear, the doubt, the hurt. They are gone. And now the soil is fresh and ready for us to plant new seeds of confidence."
+</Example>
+
+<Example title="Script: The Final Release">
+"Everything that had you feeling ____ is shrinking, fading, disappearing. Going, gone. Out of your life. Into the past. Erased forever."
+</Example>
+`;
+
+        // --- Parser ---
+        const parseChapters = (md) => {
+            const lines = md.split('\n');
+            const chapters = [];
+            let currentChapter = null;
+            let insideTabbedSection = false;
+            let currentTabGroup = null;
+
+            lines.forEach(line => {
+                if (line.startsWith('# Chapter')) {
+                    if (currentChapter) chapters.push(currentChapter);
+                    currentChapter = {
+                        title: line.replace('# ', '').trim(),
+                        content: []
+                    };
+                } else if (currentChapter) {
+                    currentChapter.content.push(line);
+                }
+            });
+            if (currentChapter) chapters.push(currentChapter);
+            return chapters;
+        };
+
+        const renderMarkdown = (text) => {
+            const elements = [];
+            let tabGroup = null;
+
+            for (let i = 0; i < text.length; i++) {
+                const line = text[i];
+
+                if (line.startsWith('## ')) {
+                    elements.push(<h2 key={i}>{line.replace('## ', '')}</h2>);
+                } else if (line.startsWith('### ')) {
+                    elements.push(<h3 key={i}>{line.replace('### ', '')}</h3>);
+                } else if (line.startsWith('1. ')) {
+                    elements.push(<li key={i} className="ml-4 list-decimal">{line.replace('1. ', '')}</li>);
+                } else if (line.startsWith('> ')) {
+                    elements.push(<blockquote key={i}>{line.replace('> ', '')}</blockquote>);
+                } else if (line.startsWith('<Example')) {
+                    // Extract title
+                    const titleMatch = line.match(/title="([^"]+)"/);
+                    const title = titleMatch ? titleMatch[1] : 'Example';
+
+                    // Collect content until </Example>
+                    let exampleContent = [];
+                    let j = i + 1;
+                    while (j < text.length && !text[j].includes('</Example>')) {
+                        exampleContent.push(text[j]);
+                        j++;
+                    }
+                    i = j; // Advance main loop
+
+                    elements.push(
+                        <div key={i} className="example-card animate-fadeIn">
+                            <div className="example-header"><Sparkles className="w-4 h-4" /> {title}</div>
+                            <div className="example-content">"{exampleContent.join(' ')}"</div>
+                        </div>
+                    );
+                } else if (line.includes('<TabbedSection>')) {
+                    // Start collecting tabs
+                    let tabs = [];
+                    let j = i + 1;
+                    while (j < text.length && !text[j].includes('</TabbedSection>')) {
+                        if (text[j].includes('<Tab')) {
+                            const titleMatch = text[j].match(/title="([^"]+)"/);
+                            const title = titleMatch ? titleMatch[1] : 'Tab';
+                            let tabContent = [];
+                            j++; // content starts next line
+                            while (j < text.length && !text[j].includes('</Tab>') && !text[j].includes('<Tab ')) {
+                                // Recursively process tab content lines? For simplicity, we'll simple-parse
+                                // Actually better to just collect lines and render them
+                                if (!text[j].includes('</Tab>')) tabContent.push(text[j]);
+                                if (text[j].includes('</Tab>')) break;
+                                j++;
+                            }
+                            tabs.push({ title, content: tabContent });
+                        } else {
+                            j++;
+                        }
+                    }
+                    i = j;
+                    elements.push(<TabbedView key={i} tabs={tabs} />);
+                } else if (line.trim() !== '' && !line.includes('<Tab') && !line.includes('</Tab>')) {
+                    // Bold text support
+                    const boldRegex = /\*\*(.*?)\*\*/g;
+                    const parts = line.split(boldRegex);
+                    if (parts.length > 1) {
+                        elements.push(
+                            <p key={i}>
+                                {parts.map((part, k) =>
+                                    k % 2 === 1 ? <strong key={k}>{part}</strong> : part
+                                )}
+                            </p>
+                        );
+                    } else {
+                        elements.push(<p key={i}>{line}</p>);
+                    }
+                }
+            }
+            return elements;
+        };
+
+        const TabbedView = ({ tabs }) => {
+            const [activeTab, setActiveTab] = useState(0);
+
+            return (
+                <div className="my-8">
+                    <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+                        {tabs.map((tab, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setActiveTab(idx)}
+                                className={`tab-btn ${activeTab === idx ? 'active' : 'inactive'}`}
+                            >
+                                {tab.title}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="bg-slate-900/50 p-6 rounded-xl border border-rose-500/20 animate-fadeIn">
+                        {tabs[activeTab] && (
+                            <div>
+                                {renderMarkdown(tabs[activeTab].content)}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Components ---
+
+        const Sidebar = ({ chapters, activeIndex, setIndex, isOpen, toggle }) => (
+            <div className={`fixed inset-y-0 left-0 z-50 w-80 bg-slate-900 border-r border-slate-800 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+                <div className="p-6 border-b border-slate-800">
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-rose-400 to-red-400">
+                            Nazar Codex
+                        </h1>
+                        <button onClick={toggle} className="md:hidden text-slate-400">
+                            <X className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div className="flex gap-2">
+                        <button onClick={() => window.history.back()} className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <ArrowLeft className="w-3 h-3" /> Back
+                        </button>
+                        <a href="nazar_hub.html" className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+                            <LayoutGrid className="w-3 h-3" /> Hub
+                        </a>
+                    </div>
+                </div>
+                <div className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)]">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest px-4 py-2">Module 9: Interrupt</div>
+                    {chapters.map((chap, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => { setIndex(idx); if (window.innerWidth < 768) toggle(); }}
+                            className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex items-center justify-between group ${activeIndex === idx
+                                ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                }`}
+                        >
+                            <span>{chap.title}</span>
+                            {activeIndex === idx && <ChevronRight className="w-4 h-4 ml-2" />}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const Reader = ({ chapter, next, prev }) => (
+            <div className="flex-1 h-screen overflow-y-auto bg-slate-950 p-6 md:p-12 lg:p-16 scroll-smooth">
+                <div className="max-w-3xl mx-auto pb-24 animate-fadeIn">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-12 border-b border-slate-800 pb-8">
+                        {chapter.title}
+                    </h1>
+
+                    <div className="markdown-content">
+                        {renderMarkdown(chapter.content)}
+                    </div>
+
+                    <div className="flex justify-between mt-24 border-t border-slate-800 pt-8">
+                        {prev ? (
+                            <button onClick={prev} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                                <ArrowLeft className="w-5 h-5" /> Previous Chapter
+                            </button>
+                        ) : <div></div>}
+
+                        {next ? (
+                            <button onClick={next} className="flex items-center gap-2 text-rose-400 hover:text-rose-300 transition-colors font-bold">
+                                Next Chapter <ArrowRight className="w-5 h-5" />
+                            </button>
+                        ) : (
+                            <div className="text-emerald-500 flex items-center gap-2 font-bold">
+                                Module Complete <Fingerprint className="w-5 h-5" />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [currentChapter, setCurrentChapter] = useState(0);
+
+            const chapters = parseChapters(MARKDOWN_CONTENT);
+
+            return (
+                <div className="flex h-screen overflow-hidden">
+                    <Sidebar
+                        chapters={chapters}
+                        activeIndex={currentChapter}
+                        setIndex={setCurrentChapter}
+                        isOpen={sidebarOpen}
+                        toggle={() => setSidebarOpen(!sidebarOpen)}
+                    />
+
+                    <div className="flex-1 flex flex-col md:pl-80 transition-all duration-300">
+                        {/* Mobile Header */}
+                        <div className="md:hidden p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                            <h1 className="font-bold text-rose-400">Module 9</h1>
+                            <button onClick={() => setSidebarOpen(true)} className="text-white">
+                                <Menu className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        <Reader
+                            chapter={chapters[currentChapter]}
+                            next={currentChapter < chapters.length - 1 ? () => setCurrentChapter(c => c + 1) : null}
+                            prev={currentChapter > 0 ? () => setCurrentChapter(c => c - 1) : null}
+                        />
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
