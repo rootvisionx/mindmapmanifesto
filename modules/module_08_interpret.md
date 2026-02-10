@@ -6,9 +6,9 @@ By the end of this module you will:
 
 - Understand the purpose of LH/RH (Left Hand/Right Hand) and when it is used in the session
 - Facilitate LH/RH so that the client can find and state their beliefs
-- Understand the purpose of the RFPI tool and the function of the 3 P's
-- Know the different uses of RFPI in a session
-- Demonstrate effective use of RFPI to enable the client to let go or change the role of the part
+- Understand the purpose of the RFIP tool and the function of the 3 P's
+- Know the different uses of RFIP in a session
+- Demonstrate effective use of RFIP to enable the client to let go or change the role of the part
 
 ## The Interpret Stage
 
@@ -16,12 +16,12 @@ By the end of this module you will:
 
 Interpreting is about helping your clients see how the meaning they attached to events from their past have led to what they feel, think, and believe about themselves today.
 
-When using RFPI, it's about helping your client understand how a physical or emotional issue is showing up in their body. As Marisa says, "If you are unable to speak, your body will speak for you."
+When using RFIP, it's about helping your client understand how a physical or emotional issue is showing up in their body. As Marisa says, "If you are unable to speak, your body will speak for you."
 
 ### Tools Used in This Stage
 
 - Left Hand/Right Hand (LH/RH)
-- RFPI (Role, Function, Purpose, Intention)
+- RFIP (Role, Function, Purpose, Intention)
 
 ### Goals of the Interpret Stage
 
@@ -81,15 +81,15 @@ Here are three examples Marisa uses to help clients make the connection during L
 
 ---
 
-## RFPI (Role, Function, Purpose, Intention)
+## RFIP (Role, Function, Purpose, Intention)
 
-### What is RFPI?
+### What is RFIP?
 
-RFPI is a powerful tool that allows clients to give voice to a physical or emotional issue/symptom, or a part of themselves. By asking the part what its Role, Function, Purpose, and Intention is, the client can understand why the issue exists and what it is trying to do for them.
+RFIP is a powerful tool that allows clients to give voice to a physical or emotional issue/symptom, or a part of themselves. By asking the part what its Role, Function, Purpose, and Intention is, the client can understand why the issue exists and what it is trying to do for them.
 
-Marisa says you should do RFPI in almost every session. RFPI can be thought of as an extension of Detective Work, or a different form of Detective Work. RFPI does not require the client to 'see' anything.
+Marisa says you should do RFIP in almost every session. RFIP can be thought of as an extension of Detective Work, or a different form of Detective Work. RFIP does not require the client to 'see' anything.
 
-### Purpose of RFPI
+### Purpose of RFIP
 
 - To understand why a physical or emotional issue has come into the client's life
 - To understand what the issue is trying to do for the client
@@ -107,13 +107,13 @@ The 3 P's help you understand the deeper purpose of a part:
 
 Understanding which category a part falls into helps guide how you work with it.
 
-### The RFPI Questions
+### The RFIP Questions
 
 Asking for the Role, the Function, the Purpose, and the Intention of a part is a way of asking the same (or similar) type of question in 4 different ways. This allows the client to dig deeper and truly discover what a part has been trying to do for them all these years.
 
-**If the client gets confused:** Just change RFPI to 'Job'. "I'm the (physical/emotional issue) and I have a job, and my job is to..."
+**If the client gets confused:** Just change RFIP to 'Job'. "I'm the (physical/emotional issue) and I have a job, and my job is to..."
 
-### When to Use RFPI
+### When to Use RFIP
 
 - When the client has a physical symptom or issue
 - When the client has an emotional issue that feels like it has a "life of its own"
@@ -122,7 +122,7 @@ Asking for the Role, the Function, the Purpose, and the Intention of a part is a
 - When something isn't quite as straightforward as you think
 - When dealing with a medical problem
 
-### RFPI Script
+### RFIP Script
 
 **Ask the client:**
 "I want you to speak as if you are the (issue/symptom/part). I'm the __________ and my role is to..."
@@ -171,9 +171,9 @@ If the part isn't ready to leave:
 **Ask:**
 "If you could give this part a new role, a new function, a new purpose and intention, a job that helps you and supports you in the most beneficial way, what would that be?"
 
-**Examples:** Reframe the old RFPI of the part so that it becomes positive, supportive, and nurturing. If the part's RFPI was to punish the client, suggest the part can become a coach, a cheerleader, a best friend, or a praiser.
+**Examples:** Reframe the old RFIP of the part so that it becomes positive, supportive, and nurturing. If the part's RFIP was to punish the client, suggest the part can become a coach, a cheerleader, a best friend, or a praiser.
 
-Once the part has been assigned a new RFPI, ask your client to imagine integrating this part back into themselves with this new role/job.
+Once the part has been assigned a new RFIP, ask your client to imagine integrating this part back into themselves with this new role/job.
 
 #### Option 3: Working with Secondary Gain
 
@@ -194,13 +194,13 @@ A secondary gain is when there is a hidden benefit that the client may be gettin
 
 Allow the client to come up with a new role that benefits them while still fulfilling the secondary gain in a more resourceful manner.
 
-### RFPI for Clients Who Struggle with Scenes
+### RFIP for Clients Who Struggle with Scenes
 
-For clients who may struggle with 'seeing' scenes, RFPI can be used to reach, clarify, or confirm scenes. It offers a way for the client to uncover information by tapping into their feelings and giving voice to formerly repressed emotions.
+For clients who may struggle with 'seeing' scenes, RFIP can be used to reach, clarify, or confirm scenes. It offers a way for the client to uncover information by tapping into their feelings and giving voice to formerly repressed emotions.
 
 ---
 
-## RFPI Competency Self-Assessment
+## RFIP Competency Self-Assessment
 
 ### Three Levels of Attainment
 
@@ -215,10 +215,10 @@ For clients who may struggle with 'seeing' scenes, RFPI can be used to reach, cl
 - Understands the different functions of the part
 - Some understanding of secondary gain/3 P's demonstrated
 - Can facilitate client in letting the part go and offer some negotiation
-- Knows how to use RFPI when there are no scenes
+- Knows how to use RFIP when there are no scenes
 
 #### Excelling Competency
-- Clear understanding of the use of RFPI and delivers the tool in a creative and confident way
+- Clear understanding of the use of RFIP and delivers the tool in a creative and confident way
 - Relevant information is gathered effectively and efficiently
 - Understands and can apply knowledge of secondary gain/the 3 P's
 - Clear strategies to let the part go/negotiate
@@ -230,7 +230,7 @@ For clients who may struggle with 'seeing' scenes, RFPI can be used to reach, cl
 
 - The Interpret stage helps clients understand how past events shaped their current beliefs and issues
 - Left Hand/Right Hand connects past scenes to present-day problems through "daisy-chaining"
-- RFPI gives voice to physical and emotional issues to understand their role and purpose
+- RFIP gives voice to physical and emotional issues to understand their role and purpose
 - Both tools help clients recognize that the meaning they attached to events - not the events themselves - is what affects them today
 - Parts can be thanked and dismissed, given new roles, or transformed while maintaining their protective function
 - These tools empower clients to see they have the power to change what they created

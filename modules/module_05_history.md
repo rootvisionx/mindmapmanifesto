@@ -80,7 +80,7 @@ Elman's book *Hypnotherapy* is regarded as a classic in its field. He pioneered 
 
 ### David Viscott (1938-1996)
 
-Viscott is perhaps less well-known in the field of hypnotherapy. His unorthodox approach involved making a swift diagnosis, which ran contrary to the training he had received as a psychiatrist. His strategy was to try and isolate the source of the client's emotional problems and, once manifest, to work on them rather than employ reflection and drawn out sessions. His goal was to help his clients express their true feelings. Some considered this approach confrontational and overly directive. RTT® has embedded a similar approach in a technique called RFPI, which you will learn about later in the program.
+Viscott is perhaps less well-known in the field of hypnotherapy. His unorthodox approach involved making a swift diagnosis, which ran contrary to the training he had received as a psychiatrist. His strategy was to try and isolate the source of the client's emotional problems and, once manifest, to work on them rather than employ reflection and drawn out sessions. His goal was to help his clients express their true feelings. Some considered this approach confrontational and overly directive. RTT® has embedded a similar approach in a technique called RFIP, which you will learn about later in the program.
 
 ### Gil Boyne (1924-2010)
 

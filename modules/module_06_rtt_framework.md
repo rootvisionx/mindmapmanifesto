@@ -242,7 +242,7 @@ A single rapid induction technique involving:
 
 - Focus on the feeling: "Let's talk about the feeling. What's the feeling?"
 - Use Child in the Room tool
-- Use RFPI to get more information
+- Use RFIP to get more information
 
 #### 5. Child in the Room
 
@@ -286,7 +286,7 @@ A single rapid induction technique involving:
 
 **Key Principle:** The interpretation and meaning of an event is what hurts the client. Your job is to help them understand this without leading or making assumptions - they will make sense of the scenes themselves.
 
-#### 2. Role, Function, Purpose, Intention (RFPI)
+#### 2. Role, Function, Purpose, Intention (RFIP)
 
 **One of the most useful techniques** - uncovers root cause through probing and questioning.
 
@@ -539,7 +539,7 @@ Intuition naturally develops from competence and confidence through practice and
 
 1. **Setting Up for Success** - Address fears, build confidence, demonstrate suggestibility
 2. **INVESTIGATE** - Find the root cause through Intake, Induction, Detective Work
-3. **INTERPRET** - Connect past to present through Left Hand/Right Hand and RFPI
+3. **INTERPRET** - Connect past to present through Left Hand/Right Hand and RFIP
 4. **INTERRUPT** - Reframe beliefs through It's Not Me, Dialogue, Upgrading the Child
 5. **INSTALL** - Wire in new beliefs through The Transformation, CCT, Healing Vortex
 

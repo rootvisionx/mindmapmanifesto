@@ -335,6 +335,36 @@ This exercise demonstrates that clients can choose their thoughts and that by ch
 
 ---
 
+## Advanced: The 98-State Consciousness Matrix
+
+Beyond simple looping thoughts, the mind operates across a complex matrix of psychological states. Understanding this mapping allows for faster identification of where a client is "stuck."
+
+### The 7×7 Structure
+
+Consciousness oscillates through 7 layers of awareness applied to the Seven Sins (Shadow States) and Seven Virtues (Light States), creating a total of 98 distinct states.
+
+| Layer | Name | Description |
+| --- | --- | --- |
+| 1 | **Conscious** | Aware performance/presentation. |
+| 2 | **Con Man** | Strategic manipulation or masking. |
+| 3 | **Fear-Driven** | Primitive panic response. |
+| 4 | **Ego Defense** | Justification and intellectualization. |
+| 5 | **Saboteur** | Self-destructive expression. |
+| 6 | **Ego** | Identity-level identification ("I AM this"). |
+| 7 | **Observer** | Witnessing without attachment (The Escape). |
+
+### Shadow States (The Sins)
+
+When the mind is out of alignment, it descends through these layers. For example, **Pride** can manifest as *Status Signaling* (Layer 2), *Anxious Pride* (Layer 3), or full identity fusion as *Intellectual Superiority* (Layer 4).
+
+### Light States (The Virtues)
+
+Virtues can also be "performed" pathologically if awareness is low. **Humility** performed at Layer 1 is just *Performed Humility*; at Layer 3 it becomes *"I'm Not Worthy"*; and at Layer 5 it collapses into *Self-Erasure*.
+
+**The Goal of RTT®**: To move the client from Identification (Layer 6) or Sabotage (Layer 5) into the **Observer State** (Layer 7), where they can witness the pattern without being consumed by it.
+
+---
+
 ## Strategies for Working with Looping Thoughts
 
 ### Key Techniques

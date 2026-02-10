@@ -180,7 +180,7 @@ You may choose to combine the Healing Vortex with Command Cell Therapy. Alternat
 - To get the client's mind to act as their very own cheerleader/coach
 - To replace negative thoughts with positive self-belief
 
-Installing The Cheerleader is an add-on technique that can be used in RFPI if the part does not want to leave. If this is the case, you can assign the part a new role as a cheerleader. It can also be used in the transformation to empower the client to praise themselves, and be supportive of themselves, rather than criticize.
+Installing The Cheerleader is an add-on technique that can be used in RFIP if the part does not want to leave. If this is the case, you can assign the part a new role as a cheerleader. It can also be used in the transformation to empower the client to praise themselves, and be supportive of themselves, rather than criticize.
 
 ### Key Concepts
 
@@ -223,5 +223,5 @@ Once you have completed the online learning for Module 10, it is recommended to:
 
 - Complete the Self-reflection Workbook (4.1 Command Cell Therapy/Healing Vortex and 4.2 The Transformation)
 - Book Virtual Classroom 3: Reframe and Transformation (3-4 hours)
-- Book Virtual Classroom 4: RFPI and Command Cell Therapy (3-4 hours)
+- Book Virtual Classroom 4: RFIP and Command Cell Therapy (3-4 hours)
 - Book Tutor Group Session 3: Transformation (1 hour)
