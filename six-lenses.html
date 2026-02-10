@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Six Lenses — Explore Your Inner Landscape</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0b0d17;
+            --bg-mid: #10131f;
+            --bg-card: rgba(18, 22, 36, 0.85);
+            --text-warm: #e4dbd0;
+            --text-body: #b8b0a4;
+            --text-dim: #6e6860;
+            --gold: #c4a265;
+            --gold-soft: rgba(196, 162, 101, 0.5);
+            --gold-dim: rgba(196, 162, 101, 0.12);
+            --gold-glow: rgba(196, 162, 101, 0.06);
+            --border: rgba(196, 162, 101, 0.1);
+            --border-hover: rgba(196, 162, 101, 0.22);
+
+            --lens-1: #c4868c;
+            --lens-2: #a08860;
+            --lens-3: #c4a265;
+            --lens-4: #6a9a7a;
+            --lens-5: #6a82ad;
+            --lens-6: #c49a8a;
+
+            --font-display: 'Cormorant Garamond', 'Georgia', serif;
+            --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text-body);
+            font-family: var(--font-body);
+            font-weight: 300;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background */
+        .ambient {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 20%, rgba(196, 162, 101, 0.04) 0%, transparent 100%),
+                radial-gradient(ellipse 40% 30% at 30% 70%, rgba(100, 80, 60, 0.03) 0%, transparent 100%),
+                radial-gradient(ellipse 40% 30% at 70% 80%, rgba(80, 60, 100, 0.02) 0%, transparent 100%);
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        /* ─── Header ─── */
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .mark {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-weight: 300;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            color: var(--text-warm);
+            letter-spacing: 0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 300;
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 420px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ─── Input Section ─── */
+        .input-section {
+            max-width: 600px;
+            margin: 0 auto 3.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--text-warm);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(12, 14, 24, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-warm);
+            font-family: var(--font-body);
+            font-weight: 300;
+            font-size: 1rem;
+            line-height: 1.6;
+            padding: 1.2rem 1.4rem;
+            padding-bottom: 4rem;
+            resize: vertical;
+            min-height: 100px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        textarea::placeholder {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        textarea:focus {
+            border-color: var(--gold-soft);
+            box-shadow: 0 0 0 3px var(--gold-glow), 0 0 30px var(--gold-glow);
+        }
+
+        .btn-row {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .illuminate-btn {
+            background: var(--gold);
+            color: var(--bg-deep);
+            border: none;
+            padding: 0.65rem 1.8rem;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .illuminate-btn:hover { opacity: 0.88; }
+        .illuminate-btn:active { transform: scale(0.97); }
+        .illuminate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reset-link {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: color 0.2s;
+            display: none;
+        }
+
+        .reset-link:hover { color: var(--text-body); }
+        .reset-link.visible { display: block; }
+
+        /* ─── Breathing Dot ─── */
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.8); opacity: 0.3; }
+            50% { transform: scale(1.3); opacity: 0.9; }
+        }
+
+        .breath-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: breathe 3.5s ease-in-out infinite;
+        }
+
+        .breath-dot-gold { background: var(--gold); }
+
+        /* ─── Grid ─── */
+        .lenses-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 700px) {
+            .lenses-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ─── Lens Card ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lens-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.6rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeUp 0.5s ease-out forwards;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .lens-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        /* Top accent line */
+        .lens-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+            opacity: 0.5;
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .lens-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+            flex-shrink: 0;
+        }
+
+        .lens-number {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+        }
+
+        .lens-name {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--text-warm);
+            margin-bottom: 0.25rem;
+        }
+
+        .lens-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            letter-spacing: 0.03em;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .lens-content {
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: var(--text-body);
+            flex-grow: 1;
+            min-height: 60px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .lens-content .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem 0;
+        }
+
+        @keyframes contentFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lens-content .response-text {
+            animation: contentFadeIn 0.6s ease-out;
+        }
+
+        .lens-content .error-text {
+            color: var(--text-dim);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        /* ─── Divider ─── */
+        .divider {
+            text-align: center;
+            margin: 2.5rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border), transparent);
+        }
+
+        .divider span {
+            position: relative;
+            background: var(--bg-deep);
+            padding: 0 1.5rem;
+            color: var(--gold);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            opacity: 0.5;
+        }
+
+        /* ─── CTA Section ─── */
+        .cta-section {
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .cta-section.visible { opacity: 1; }
+
+        .cta-text {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-dim);
+            max-width: 520px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold-soft);
+            padding: 0.9rem 2.5rem;
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .cta-btn:hover {
+            background: var(--gold);
+            color: var(--bg-deep);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        /* ─── Placeholder ─── */
+        .standby {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .standby-text {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--text-dim);
+            opacity: 0.6;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<div class="page">
+    <header>
+        <div class="mark">◇ ◇ ◇</div>
+        <h1>Six Lenses</h1>
+        <p class="tagline">Every concern carries more than one truth. Let's begin to explore yours.</p>
+    </header>
+
+    <section class="input-section">
+        <label class="input-label" for="concern">What would you like to explore?</label>
+        <div class="input-wrap">
+            <textarea
+                id="concern"
+                placeholder="Describe what you're experiencing... e.g., 'I can't stop overthinking at night' or 'I keep self-sabotaging when things go well'"
+                rows="3"
+            ></textarea>
+            <div class="btn-row">
+                <button class="reset-link" id="resetBtn" onclick="resetAll()">Start over</button>
+                <button class="illuminate-btn" id="illuminateBtn" onclick="illuminate()">
+                    Illuminate
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div id="standby" class="standby">
+        <div class="standby-text">Your perspectives will appear here</div>
+    </div>
+
+    <div id="grid" class="lenses-grid hidden"></div>
+
+    <div id="cta" class="cta-section hidden">
+        <div class="divider"><span>◇</span></div>
+        <p class="cta-text">
+            These perspectives are just the surface. In a session together, we go deeper — 
+            gently accessing the subconscious patterns that keep you stuck, and helping you 
+            find a new way forward.
+        </p>
+        <a href="#book" class="cta-btn">Begin Your Journey</a>
+    </div>
+</div>
+
+<script>
+const LENSES = [
+    {
+        id: 'mirror',
+        number: 'I',
+        name: 'The Mirror',
+        subtitle: 'Reflecting your conscious experience',
+        color: 'var(--lens-1)',
+        colorHex: '#c4868c',
+        instruction: `Reflect back what this concern likely feels like in the client's daily, conscious experience. Describe the felt, lived texture of carrying this pattern — the moments it shows up, the weight of it. Help them feel truly seen and heard. Make it specific to their concern.`
+    },
+    {
+        id: 'root',
+        number: 'II',
+        name: 'The Root',
+        subtitle: 'What may lie beneath',
+        color: 'var(--lens-2)',
+        colorHex: '#a08860',
+        instruction: `Gently explore what deeper emotional need, belief, or early experience might be driving this pattern beneath conscious awareness. Be insightful but never presumptuous — use language like "often," "many people discover," or "it's not uncommon." Hint at the subconscious layer without diagnosing.`
+    },
+    {
+        id: 'shield',
+        number: 'III',
+        name: 'The Guardian',
+        subtitle: 'Understanding the pattern\'s purpose',
+        color: 'var(--lens-3)',
+        colorHex: '#c4a265',
+        instruction: `Reframe this concern as a protective mechanism of the subconscious mind. Help the client see that this pattern, however uncomfortable, may have originally developed to keep them safe, manage overwhelm, or meet an unmet need. This "parts work" perspective is central to hypnotherapy — honor the intelligence of the subconscious.`
+    },
+    {
+        id: 'thread',
+        number: 'IV',
+        name: 'The Thread',
+        subtitle: 'Tracing the story through time',
+        color: 'var(--lens-4)',
+        colorHex: '#6a9a7a',
+        instruction: `Explore the temporal dimension of this pattern. When do patterns like this typically take root — in childhood, during transitions, or in response to specific experiences? Then paint a brief, vivid picture of what it feels like when the pattern begins to soften and shift. Give them a glimpse of the future self.`
+    },
+    {
+        id: 'circuit',
+        number: 'V',
+        name: 'The Circuit',
+        subtitle: 'Mapping the points of change',
+        color: 'var(--lens-5)',
+        colorHex: '#6a82ad',
+        instruction: `Map the practical mechanics of this pattern: the trigger, the automatic subconscious response, and the reinforcement loop that keeps it going. Describe this cycle simply and without judgment. Then hint at where in this cycle a new response can be introduced — this is where hypnotherapy works.`
+    },
+    {
+        id: 'heart',
+        number: 'VI',
+        name: 'The Heart',
+        subtitle: 'Meeting yourself with kindness',
+        color: 'var(--lens-6)',
+        colorHex: '#c49a8a',
+        instruction: `Offer a deeply compassionate reframing of this struggle. Help the client see that their concern isn't evidence of brokenness — it's evidence of their sensitivity, self-awareness, or deep desire for something better. End with something quietly empowering that honors exactly where they are right now.`
+    }
+];
+
+const SYSTEM_PROMPT = `You are a deeply experienced, compassionate hypnotherapist. A potential client has shared a concern, and you are providing a brief insight through a specific therapeutic lens.
+
+Your voice is warm, grounded, and perceptive — like a trusted guide who has sat with many people through similar journeys. You speak simply but with genuine depth.
+
+Rules:
+- Write exactly 2-3 sentences (50-70 words)
+- Address them directly using "you"
+- Be specific to their stated concern — no generic platitudes
+- Use vivid, felt-sense language when possible
+- Never diagnose, prescribe medication, or make medical claims
+- Never use clinical jargon or bullet points
+- Do not start with "I" — start with "you" or a reflection
+- If the input isn't a clear concern, respond warmly about the courage of self-exploration`;
+
+function buildGrid() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+
+    LENSES.forEach((lens, i) => {
+        const card = document.createElement('div');
+        card.className = 'lens-card';
+        card.style.setProperty('--accent-color', lens.colorHex);
+        card.style.animationDelay = `${i * 0.08}s`;
+        card.innerHTML = `
+            <div class="card-head">
+                <div class="lens-indicator"></div>
+                <span class="lens-number">${lens.number}</span>
+            </div>
+            <div class="lens-name">${lens.name}</div>
+            <div class="lens-subtitle">${lens.subtitle}</div>
+            <div class="lens-content" id="content-${lens.id}">
+                <div class="loading-state">
+                    <span class="breath-dot" style="background: ${lens.colorHex};"></span>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+async function callLens(concern, lens) {
+    const userMessage = `Client's concern: "${concern}"
+
+Therapeutic lens: ${lens.name} — ${lens.subtitle}
+
+Instruction: ${lens.instruction}`;
+
+    try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 1000,
+                system: SYSTEM_PROMPT,
+                messages: [{ role: 'user', content: userMessage }]
+            })
+        });
+
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+        const data = await response.json();
+        const text = data.content
+            .filter(block => block.type === 'text')
+            .map(block => block.text)
+            .join('');
+
+        const el = document.getElementById(`content-${lens.id}`);
+        el.innerHTML = `<div class="response-text">${escapeHtml(text)}</div>`;
+    } catch (err) {
+        console.error(`Lens ${lens.name} failed:`, err);
+        const el = document.getElementById(`content-${lens.id}`);
+        el.innerHTML = `<div class="error-text">This perspective is taking a moment to form. Please try again.</div>`;
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+let isRunning = false;
+
+async function illuminate() {
+    const concern = document.getElementById('concern').value.trim();
+    if (!concern || concern.length < 3 || isRunning) return;
+
+    isRunning = true;
+    const btn = document.getElementById('illuminateBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="breath-dot breath-dot-gold"></span>';
+
+    // Show grid
+    document.getElementById('standby').classList.add('hidden');
+    const grid = document.getElementById('grid');
+    grid.classList.remove('hidden');
+    document.getElementById('cta').classList.remove('hidden');
+    document.getElementById('cta').classList.remove('visible');
+
+    // Build cards with loading states
+    buildGrid();
+
+    // Fire all 6 API calls in parallel
+    const promises = LENSES.map(lens => callLens(concern, lens));
+    await Promise.allSettled(promises);
+
+    // Done — show CTA and restore button
+    btn.innerHTML = 'Illuminate';
+    btn.disabled = false;
+    resetBtn.classList.add('visible');
+    isRunning = false;
+
+    // Fade in CTA
+    setTimeout(() => {
+        document.getElementById('cta').classList.add('visible');
+    }, 300);
+}
+
+function resetAll() {
+    document.getElementById('concern').value = '';
+    document.getElementById('grid').classList.add('hidden');
+    document.getElementById('grid').innerHTML = '';
+    document.getElementById('cta').classList.add('hidden');
+    document.getElementById('cta').classList.remove('visible');
+    document.getElementById('standby').classList.remove('hidden');
+    document.getElementById('resetBtn').classList.remove('visible');
+}
+
+// Enter key to submit
+document.getElementById('concern').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        illuminate();
+    }
+});
+</script>
+
+</body>
+</html>

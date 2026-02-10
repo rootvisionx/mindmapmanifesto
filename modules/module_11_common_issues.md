@@ -1,4 +1,4 @@
-# Module 11: Working with Common Issues
+# Module 11: Common Issues
 
 ## Module Learning Outcomes
 
@@ -90,21 +90,15 @@ As you can see, limiting beliefs come from the places that are most personal to 
 
 ### Working with Confidence and Self-Esteem
 
-*[Video content - see module for demonstration]*
-
 ### Transforming Phobias
 
 When working with a client to address phobias, one effective approach is finding out the role, function, and purpose of their phobia. This helps create understanding and opens pathways for transformation.
 
-*[Video content - see module for demonstration]*
-
 ### Working with Money Blocks
-
-*[Video content - see module for demonstration]*
 
 ### Working with Weight Loss
 
-**Activity: Working with Weight Loss**
+#### Activity: Working with Weight Loss
 
 After reviewing the content, consider the following questions:
 
@@ -113,15 +107,11 @@ After reviewing the content, consider the following questions:
 
 Make notes in your journal if you want to.
 
-*[Video content - see module for demonstration]*
-
 ### Working with Relationship Issues
-
-*[Video content - see module for demonstration]*
 
 ### Working with Health Issues
 
-**Activity: Working with Health Issues**
+#### Activity: Working with Health Issues
 
 Reflect on the following questions:
 
@@ -129,14 +119,6 @@ Reflect on the following questions:
 2. How have health issues prioritized you?
 3. Why should your clients never refer to health issues as 'my' or 'mine'?
 4. How can RFPI (Role, Function, Purpose, Intention) be used with your clients that have health issues?
-
-*[Video content - see module for demonstration]*
-
----
-
-## Q&A: Common Issues
-
-*[Video content - see module for Q&A session]*
 
 ---
 

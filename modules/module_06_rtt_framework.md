@@ -1,4 +1,4 @@
-# Module 6: Introduction to RTT® and The Tools
+# Module 6: RTT® Framework
 
 ## Module Overview
 
@@ -23,36 +23,44 @@ Rapid Transformational Therapy® is a therapeutic approach that combines element
 
 ### The Three-Part RTT® Process
 
-**Part 1: Finding the 'Why'**
+#### Part 1: Finding the 'Why'
+
 - Why are you like this?
 - How did you become the person you are?
 - What happened and when did you start feeling this way?
 
-**Part 2: Extraction and Replacement**
+#### Part 2: Extraction and Replacement
+
 Like a dentist, the RTT® professional:
+
 - Removes negative habits and beliefs
 - Replaces them with new, beneficial behaviors and beliefs
 - Integrates everything to function better than before
 
-**Part 3: Wiring In Changes**
+#### Part 3: Wiring In Changes
+
 Through the personalized Transformation recording:
+
 - Rewires beliefs about self
 - Teaches clients to dialogue with themselves constructively
 - Creates a supportive inner voice that acts as cheerleader, best friend, devoted parent, and ally
 
 ### How RTT® Differs from Other Therapies
 
-**Unlike Traditional Hypnotherapy:**
+#### Unlike Traditional Hypnotherapy
+
 - Goes beyond positive reinforcement
 - Reaches breakthroughs that wouldn't be possible through talk therapy alone
 - Accesses and fixes blocks in the subconscious mind
 
-**Unlike CBT and Talk Therapy:**
+#### Unlike CBT and Talk Therapy
+
 - Achieves outstanding results very quickly (typically 1-3 sessions)
 - Gets to the root cause rather than just addressing symptoms
 - Creates permanent, powerful change
 
-**Unlike NLP:**
+#### Unlike NLP
+
 - Directly accesses and fixes blocks that are present
 - Includes the crucial Transformation recording component
 - Provides more comprehensive transformational techniques
@@ -70,21 +78,25 @@ Through the personalized Transformation recording:
 
 RTT® is effective for a wide variety of issues:
 
-**Addictions & Compulsive Behaviors**
+### Addictions & Compulsive Behaviors
+
 - Drinking, smoking, drugs, gambling
 - Compulsive behaviors
 
-**Anxiety & Stress Related**
+### Anxiety & Stress Related
+
 - Anxiety, stress, fears, phobias
 - Panic attacks, guilt
 - Relaxation challenges
 
-**Eating & Weight**
+### Eating & Weight
+
 - Eating disorders, food/diet issues
 - Weight problems, anorexia, bulimia
 - Exercise-related issues
 
-**Confidence & Performance**
+### Confidence & Performance
+
 - Depression, confidence, self-esteem
 - Motivation, achieving goals
 - Procrastination
@@ -92,16 +104,19 @@ RTT® is effective for a wide variety of issues:
 - Public speaking, nerves
 - Concentration, exams, memory
 
-**Physical Health**
+### Physical Health
+
 - Pain control
 - Hearing, sight/vision, mobility
 - Skin problems, hair growth
 
-**Fertility & Pregnancy**
+### Fertility & Pregnancy
+
 - Fertility, IVF, conception
 - Pregnancy and birth
 
-**Other Areas**
+### Other Areas
+
 - Relationships
 - Childhood problems
 - Sleep problems
@@ -109,7 +124,8 @@ RTT® is effective for a wide variety of issues:
 
 ### Contraindications
 
-**DO NOT work with clients who have:**
+#### Restricted Conditions
+
 - Auditory/visual hallucinations
 - Epilepsy
 - Dissociative disorders
@@ -134,6 +150,7 @@ The 4 I's provide the structure for RTT® sessions:
 ### Setting the Client Up for Success
 
 Before beginning the session proper, address client concerns:
+
 - Explain what hypnosis is and dispel misconceptions
 - Reassure them that RTT® will work for them
 - Build confidence through "convincers" (demonstrating suggestibility)
@@ -147,7 +164,8 @@ This preparatory work may be the most critical time for creating session success
 
 **Purpose:** Help clients understand the root cause of their issue and identify the meaning they've attached to past events that created limiting beliefs.
 
-### Key Outcomes
+### Key Outcomes: Investigation
+
 - Understand the client's presenting problem and how it affects their life
 - Discover what the client wants and what life looks like without the problem
 - Uncover the root cause and why the issue started
@@ -156,7 +174,8 @@ This preparatory work may be the most critical time for creating session success
 
 #### 1. Intake and Consultation (20 minutes)
 
-**Key Actions:**
+##### Key Actions: Intake
+
 - Explain that clients can talk during the session and are never out of control
 - Request permission for physical contact (if in person)
 - Review the Intake and Consultation form
@@ -170,11 +189,13 @@ This preparatory work may be the most critical time for creating session success
 #### 2. Induction into Hypnosis
 
 A single rapid induction technique involving:
+
 - Inward focus
 - Relaxation
 - Rapid Eye Movement (REM)
 
-**Process:**
+##### Process: Induction
+
 - Client looks up until slight eye strain
 - Eyes close with fluttering sensation (REM)
 - Guide client down ten steps, becoming more relaxed with each
@@ -182,19 +203,22 @@ A single rapid induction technique involving:
 
 #### 3. Suggestibility Tests and Deepeners
 
-**Suggestibility Tests** (demonstrate the power of the mind):
+#### Suggestibility Tests
 
-**Bucket and Balloon**
+##### Bucket and Balloon Test
+
 - Arms extended as if holding bike handlebars
 - Right hand: huge helium balloon lifting arm up
 - Left hand: bucket of heavy wet sand dragging arm down
 
-**Attracting Magnets**
+##### Attracting Magnets Test
+
 - Arms extended with palms facing each other
 - Powerful magnet in each palm
 - Magnets draw hands together
 
-**Deepening Techniques:**
+##### Deepening Techniques
+
 - Clicking fingers while saying "Go deeper"
 - "Your eyes are heavy and sealed shut"
 - Gently lifting and shaking arm
@@ -205,7 +229,8 @@ A single rapid induction technique involving:
 
 **Purpose:** Guide clients to significant events from earlier in life that contributed to their presenting problem.
 
-**Process:**
+##### Process: Detective Work
+
 - Go to at least three scenes
 - Solidify each scene: inside/outside, who's present, age, location, what's happening
 - Focus on what they're seeing, hearing, feeling, experiencing
@@ -214,6 +239,7 @@ A single rapid induction technique involving:
 - The last scene is usually most significant/emotionally intense
 
 **If No Scenes Appear:**
+
 - Focus on the feeling: "Let's talk about the feeling. What's the feeling?"
 - Use Child in the Room tool
 - Use RFPI to get more information
@@ -224,7 +250,8 @@ A single rapid induction technique involving:
 
 **Purpose:** A guided visualization connecting clients to their emotions to trigger memories of events, ideas, and feelings from earlier in life.
 
-**Process:**
+##### Process: Child in the Room
+
 - Use feelings that emerge to return to The Detective Work
 - Attempt to get more scenes if possible
 - Not necessary if client already went back to scenes in The Detective Work
@@ -235,7 +262,8 @@ A single rapid induction technique involving:
 
 **Purpose:** Help clients see how the meaning they attached to past events has led to what they feel, think, and believe about themselves today.
 
-### Key Outcomes
+### Key Outcomes: Interpretation
+
 - Connect scenes from the past to the present issue
 - Reveal conclusions, beliefs, meanings, and interpretations attached to past events
 - Show how childhood responses made sense then but don't serve them now as adults
@@ -247,7 +275,8 @@ A single rapid induction technique involving:
 
 **Purpose:** Review scenes with the client and explore the meaning attached to each.
 
-**Process:**
+##### Process: Left Hand/Right Hand
+
 - Place all past scenes in left hand (as DVD movies or snapshots)
 - Place current issue in right hand
 - Review each scene: "In Scene 1, this is what happened..."
@@ -262,6 +291,7 @@ A single rapid induction technique involving:
 **One of the most useful techniques** - uncovers root cause through probing and questioning.
 
 **Purpose:**
+
 - Uncover why a physical/emotional issue came into the client's life
 - Understand what it's trying to do for them
 - Show that if they created the issue, they can transform it
@@ -275,7 +305,8 @@ A single rapid induction technique involving:
 
 **Purpose:** Interrupt limiting beliefs by reframing and reminding clients they are no longer dependent children - they have a voice, they are powerful, and everything is available to them.
 
-### Key Outcomes
+### Key Outcomes: Interruption
+
 - Help clients interrupt their beliefs
 - Reframe beliefs
 - Show they are no longer children
@@ -287,7 +318,8 @@ A single rapid induction technique involving:
 
 **Purpose:** Change the client's beliefs through powerful reframing.
 
-**Process:**
+##### Process: It's Not Me
+
 - Client emphasizes why they no longer identify with past experiences, feelings, and behaviors
 - Client understands the role these played and that they were age-appropriate at the time
 - Powerful way of breaking old beliefs
@@ -298,7 +330,8 @@ A single rapid induction technique involving:
 
 **Purpose:** Allow clients to gain insight and take back their power.
 
-**Process:**
+##### Process: Dialogue With the Hurter
+
 - Client talks out loud to the person who hurt them
 - Client switches places and becomes the Hurter to explain why they did what they did
 - Can be used with parents, relatives, siblings, teachers, bullies
@@ -310,7 +343,8 @@ A single rapid induction technique involving:
 
 **Purpose:** Allow clients to take back control and upgrade their younger self who may not have had a voice or felt loved/enough.
 
-**Process:**
+##### Process: Upgrading the Child
+
 - Take the child from each scene
 - Install them into the client's current world
 - Show them the upgraded life they have now
@@ -320,11 +354,13 @@ A single rapid induction technique involving:
 
 #### 4. Optional Additional Tools
 
-**Becoming the Loving Parent**
+##### Becoming the Loving Parent
+
 - Used after Upgrading the Child
 - Client gives themselves the love they never experienced as a child
 
-**The Praise You've Always Wanted**
+##### The Praise You've Always Wanted
+
 - Used after Upgrading the Child
 - Client says out loud the words they've always wanted to hear
 - Gives themselves the praise they never received
@@ -335,7 +371,8 @@ A single rapid induction technique involving:
 
 **Must be used after Upgrading the Child** - completes that work.
 
-**Process:**
+##### Process: Merge the Child
+
 - Client visualizes the child hovering above them
 - Child descends and merges into the adult they are now
 - The two become fully integrated
@@ -347,11 +384,13 @@ The last visit to negativity or challenging beliefs before moving to installatio
 **Purpose:** Use hypnotic communication and positive, powerful language to condition change.
 
 **Key Points:**
+
 - Use the client's words, phrases, and terminology
 - Revisit information from across the session to close those thoughts
 - Ensure negative thoughts and beliefs are NOT used in The Transformation recording
 
 **Use strong, commanding language:**
+
 - "This has a constant, continuous, everlasting impact..."
 - "It cannot, will not, does not influence you ever again"
 - "It is erasing, eradicating, eliminating, removing..."
@@ -362,7 +401,8 @@ The last visit to negativity or challenging beliefs before moving to installatio
 
 **Purpose:** Install new, beneficial, and supportive beliefs based on the client's "What You Want" (Magic Wand) and "Life Without the Problem."
 
-### Key Outcomes
+### Key Outcomes: Installation
+
 - Install and recode new beliefs
 - Reinforce the work done in the session
 - Direct the subconscious mind toward Life Without the Problem
@@ -377,6 +417,7 @@ The last visit to negativity or challenging beliefs before moving to installatio
 **Recording Guidelines:**
 
 **Content:**
+
 - Use the client's words and focus on what they WANT (not what they don't want)
 - Use strong, powerful wording
 - Weave in highlighted notes from intake form and session
@@ -384,6 +425,7 @@ The last visit to negativity or challenging beliefs before moving to installatio
 - Keep it positive - no negatives
 
 **Technical Specifications:**
+
 - Minimum 15 minutes, maximum 20 minutes
 - Use calm and positive tone
 - The mind learns by repetition - make it repetitive
@@ -394,16 +436,19 @@ Add: "You love to play this recording. You play it all the time because it has s
 Count client forward from 1 to 5 (except for insomnia recordings - tell them to stay sleeping until wake-up time)
 
 **Listening Protocol:**
+
 - Clients must listen for at least 21 days
 - It takes 10-21 days for new behavior patterns to be established
 - Embed this instruction into the audio itself
 
 **Recording Methods:**
+
 - Voice memo on mobile phones
 - Send via email or text
 - Record directly onto client's phone (enable Airplane mode to avoid interruptions, ensure screen doesn't lock)
 
 **Post-Recording:**
+
 - Allow 10 minutes to discuss the session, discoveries, and how they feel
 - Congratulate the client for an amazing session
 
@@ -416,6 +461,7 @@ Count client forward from 1 to 5 (except for insomnia recordings - tell them to 
 **Purpose:** Command the client's physical response in their body.
 
 **When to Use:**
+
 - Excessive sweating
 - Asthma
 - Eczema, dermatitis
@@ -425,6 +471,7 @@ Count client forward from 1 to 5 (except for insomnia recordings - tell them to 
 - Other physical ailments
 
 **Key Principles:**
+
 - The mind reacts to images
 - What your mind says yes to, your body says yes to
 - What your mind says no to, your body says no to
@@ -442,7 +489,8 @@ Count client forward from 1 to 5 (except for insomnia recordings - tell them to 
 
 **When to Use:** Effective when clients have health issues or emotional problems.
 
-**Process:**
+##### Process: Healing Vortex
+
 - Client visualizes a vortex of pure light energy like a spinning top
 - Vortex enters the body at the head
 - Travels through entire body, head to toes, left to right
@@ -460,24 +508,29 @@ As you build competence and confidence, you'll increasingly rely on intuition ra
 ### Being Fully Present
 
 When fully engaged with a client, you'll intuitively know:
+
 - What they need to hear
 - Which tool to use
 - What to say or do next
 
-### Pay Attention To:
+### Pay Attention To
+
 - What the client is representing
 - Their Presenting Problem
 - What they need
 
-### Remember:
+### Remember
+
 - Intuition is NOT about you or thinking about what you'll do next
 - It's about being fully invested in what the client needs
 - Trust yourself throughout the session
 
 ### The Inner Critic
+
 Your Inner Critic plays a huge role in downplaying intuition. When you replace the Inner Critic with a supportive friend, you become more grounded and invested in the client.
 
 ### Development Path
+
 Intuition naturally develops from competence and confidence through practice and experience.
 
 ---
@@ -494,4 +547,4 @@ Each stage builds upon the previous one to create permanent, powerful transforma
 
 ---
 
-*"I am immensely proud of the powerful transformations brought about through RTT®." - Marisa Peer*
+> *"I am immensely proud of the powerful transformations brought about through RTT®." - Marisa Peer*

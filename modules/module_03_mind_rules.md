@@ -1,4 +1,4 @@
-# Rules of the Mind - Training Module
+# Module 3: Rules of the Mind
 
 ## Module Learning Outcomes
 
@@ -19,6 +19,7 @@ In this module, you will:
 The words you use create your reality. Your mind takes your language literally and works to make it real.
 
 **Activity:** Create a two-column list:
+
 - Column 1: Dramatic, descriptive, negative words you currently use (e.g., nightmare, disaster, terrible)
 - Column 2: Replacement words that don't cause a negative physical reaction (e.g., challenging, difficult, manageable)
 
@@ -28,9 +29,10 @@ Your internal imagery and self-talk directly influence your reality. What you vi
 
 ### 3. Your mind loves what is familiar and hates what is unfamiliar
 
-**Activity - Make the Unfamiliar Familiar:**
+#### Activity - Make the Unfamiliar Familiar
 
 Create a two-column list:
+
 - Column 1: Your negative habits (e.g., overeating, procrastinating, dating the wrong type of person)
 - Column 2: Currently unfamiliar behaviors you would like to make familiar (e.g., choosing healthy food, taking action immediately)
 
@@ -58,21 +60,23 @@ Create a two-column list:
 
 When adults do not meet a child's fundamental needs, the child cannot blame the adult—they blame themselves instead. A child can never meet their own needs.
 
-### A Child's Fundamental Needs:
+### A Child's Fundamental Needs
+
 - "I need to feel significant"
 - "I need to feel loved"
 - "I need to feel I matter"
 - "I need to feel celebrated"
 - "I need to feel my parents are proud of me"
 
-### When Needs Are Not Met, Two Things Can Happen:
+### When Needs Are Not Met, Two Things Can Happen
 
 1. You believe your needs will never be met, so you give up on them
 2. You give your needs away—you find someone else in an attempt to fulfill them
 
-### The Impact on Adult Life:
+### The Impact on Adult Life
 
 These childhood feelings can last a lifetime:
+
 - Because I do not feel safe, I cannot take risks
 - Because I feel unlovable, I hold myself back
 - Because I feel unworthy, I do not aim high
@@ -88,6 +92,7 @@ All limiting beliefs tend to fall under one of these three core beliefs:
 ### Belief 1: "I'm Not Enough"
 
 This manifests as:
+
 - I'm not lovable enough
 - I'm not smart enough
 - I'm not interesting enough
@@ -103,6 +108,7 @@ The only person that can love you completely and unconditionally is you.
 ### Belief 2: "It's Not Available to Me"
 
 This manifests as:
+
 - I want love, but it's not available
 - I want to be healthy, but I come from a family of asthmatics
 - I want to be happy, but everyone in my family has the 'depression' gene
@@ -111,6 +117,7 @@ This manifests as:
 **Origins:** This belief is often passed down from adults to children. "We learn what we live, and we live what we learn." It can also come from the experience of not having many choices in childhood.
 
 **How It Presents:** People with this belief may:
+
 - Pay more attention to criticism
 - Find it challenging to accept or give themselves praise
 - Brush off compliments and rationalize why they cannot be true
@@ -121,6 +128,7 @@ This manifests as:
 ### Belief 3: "I'm Different"
 
 This manifests as:
+
 - I'm not like you
 - I don't fit in
 - I'm the only poor kid at school
@@ -157,6 +165,7 @@ Jada, 40, experiences overwhelming fear of speaking in front of groups.
 **Childhood Event:** At 7 years old, she was humiliated by her teacher while standing in front of her class.
 
 **The Pattern:**
+
 - **Thought:** Public speaking = rejection
 - **Feeling:** Terror, fear of mind going blank
 - **Action:** Avoidance, anxiety, trembling
@@ -177,6 +186,7 @@ Jada, 40, experiences overwhelming fear of speaking in front of groups.
 ### The Pain-Pleasure Principle
 
 Originally developed by Sigmund Freud, this principle suggests that we make all choices and decisions based on:
+
 - Avoiding or reducing what causes us pain
 - Gravitating toward what brings us pleasure
 
@@ -198,9 +208,11 @@ Pain versus pleasure is at the heart of who we are—it influences our perceptio
 You may be familiar with Fight/Flight/Freeze—our body's natural response to danger, triggered by fear. However, there are actually five responses:
 
 ### 1. Fight
+
 Responding with aggression as a form of protection.
 
 **Manifests in adulthood as:**
+
 - The need to be in control
 - Expecting perfection from others
 - Unpredictable temper, bursts of anger
@@ -209,9 +221,11 @@ Responding with aggression as a form of protection.
 - Being inconsiderate of others' perspectives
 
 ### 2. Flight
+
 The desire to run away or flee a situation.
 
 **Manifests in adulthood as:**
+
 - Worrying, inability to relax
 - Needing everything to be perfect
 - Working too much, needing to keep busy
@@ -219,9 +233,11 @@ The desire to run away or flee a situation.
 - Anxiety and panic
 
 ### 3. Freeze
+
 Attempting to hide or dissociate from pain.
 
 **Manifests in adulthood as:**
+
 - Difficulty making decisions
 - Desire for solitude and self-isolation
 - Dissociation, brain fog, feeling unreal
@@ -229,12 +245,15 @@ Attempting to hide or dissociate from pain.
 - Lack of motivation or achievement in life
 
 ### 4. Flop
+
 Total collapse, loss of consciousness, blacking out, and complete disorientation—a loss of control over the whole body. The muscles literally 'flop' and give way, causing immobility.
 
 ### 5. Fawn
+
 An unconscious attempt to appease or make peace with an aggressor, often occurring in cases involving abuse, sexual trauma, torture, or being held hostage.
 
 **Manifests in adulthood as:**
+
 - People-pleasing
 - Self-censoring
 - Fear of saying 'No'
@@ -257,13 +276,13 @@ When a client has experienced trauma, their nervous system can get stuck in a hi
 
 Every thought we have creates a physical reaction and an emotional response. Emotions dictate our actions and behavior, which, in turn, provoke thoughts. This pattern (thoughts-feelings-actions-thoughts) makes up the repetitive pattern of **Looping Thoughts**.
 
-### Example of a Looping Thought Pattern:
+### Example of a Looping Thought Pattern
 
 "I can't do anything right." → "This makes me feel anxious." → "I can't do anything because I'm stupid." → "I'm stupid because I can't do anything right." → And so on...
 
 **Impact:** Looping thoughts can lead to stress, anxiety, depression, and general unhappiness.
 
-### Why Looping Thoughts Are Difficult to Escape:
+### Why Looping Thoughts Are Difficult to Escape
 
 1. **Repetition Creates Blueprint:** The more the client repeats the looping pattern, the more it becomes hardwired in their thinking. They believe their thoughts are a part of them and cannot be changed.
 
@@ -271,9 +290,10 @@ Every thought we have creates a physical reaction and an emotional response. Emo
 
 3. **Emotion Wins:** The client's emotions overrule their ability to think themselves out of the looping pattern.
 
-### Real-Life Transformation Example:
+### Real-Life Transformation Example
 
 **Before:**
+
 - "I can't, I shouldn't, I should. Something is wrong with me."
 - Starting something, then regretting it three days later
 - Constant comparison, always falling short
@@ -282,6 +302,7 @@ Every thought we have creates a physical reaction and an emotional response. Emo
 - So much fear
 
 **After (Through RTT®):**
+
 - "Today I am a confident, radiant man with ease and inner joy at my core"
 - "I am in a state of bliss most of the time, with tools to assist me when I'm not"
 - "I laugh more than ever and sleep peacefully at night"
@@ -293,7 +314,7 @@ Every thought we have creates a physical reaction and an emotional response. Emo
 
 This exercise demonstrates that clients can choose their thoughts and that by choosing better thoughts, they can change how they feel and behave.
 
-### Exercise Steps:
+### Exercise Steps
 
 1. **Identify the Area:** Which areas of your life do you wish were different? What is holding you back?
    - Example: "I wish I had the confidence to apply for that job"
@@ -316,7 +337,7 @@ This exercise demonstrates that clients can choose their thoughts and that by ch
 
 ## Strategies for Working with Looping Thoughts
 
-### Key Techniques:
+### Key Techniques
 
 1. **Use Reframing:** Turn negative thoughts into positive thoughts
    - Negative: "I can't do this presentation; I'm terrible at public speaking"
@@ -326,7 +347,7 @@ This exercise demonstrates that clients can choose their thoughts and that by ch
 
 3. **Identify Language Patterns:** Use words that align with their verbal communication styles to build rapport
 
-### Key Points for Clients to Understand:
+### Key Points for Clients to Understand
 
 - **They were not born with these thoughts.** The thoughts were created from life experiences
 - **The thoughts feel permanent** because they've been repeating them so often they are now hardwired in the brain
@@ -347,12 +368,14 @@ The mind makes us survive by **remembering what hurt us** so we can avoid simila
 ### Words to Use When Telling Your Mind What You Want
 
 Use words that are:
+
 - **Vital** - Important and life-giving
 - **Relevant** - Connected to your actual goals
 - **Exciting** - Energizing and motivating
 - **Vivid** - Clear and detailed, creating strong mental images
 
 Avoid words that are:
+
 - Calming (when you need energy)
 - Aggressive (creates resistance)
 - Generic (lacks power)
