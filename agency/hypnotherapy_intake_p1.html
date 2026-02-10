@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Background Questions - MindMapManifesto.com</title>
-    <style>
+    <title>Session Intake Form - MindMapManifesto.com</title>
+    <<style>
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +14,7 @@
         body {
             font-family: 'Arial', sans-serif;
             /* Your Image Background */
-            background-image: url('695ff03d-fff5-461d-9782-678b87e6b703.png');
+            background-image: url('../assets/questions.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -282,80 +282,52 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Understanding Your Journey</h1>
-            <p>Background Questions</p>
+            <h1>Your Transformation Journey Begins</h1>
+            <p>Session Intake Form</p>
             <div class="website">mindmapmanifesto.com</div>
         </div>
 
         <div class="form-container">
             <div class="intro-section">
-                <h2>Intake & Background Questions</h2>
-                <p>Now that we know what you want to achieve, let's understand your current situation and how we can work together most effectively.</p>
+                <h2>The Magic Wand Series</h2>
+                <div class="quote">"Always start with the magic wand"</div>
+                <p>These questions help us understand exactly what you want to achieve. Take your time and be as specific as possible. Your answers will guide our entire session together.</p>
             </div>
 
-            <div class="partnership-quote">
-                <div class="quote-text">
-                    "My job is to give you what you really, really, really want. Your job is to tell me what you want so clearly that I can only get it right."
-                </div>
-            </div>
-
-            <form id="backgroundForm">
+            <form id="magicWandForm">
                 <div class="question-group">
                     <label class="question-label">
                         <span class="question-number">1</span>
-                        Tell me about your issue or condition. What does that mean to you?
+                        If I had a magic wand and could give you anything you want, what would you like to get from having a session with me?
                     </label>
-                    <textarea name="issue_description" placeholder="Describe your issue in your own words. What does it feel like? How does it affect your daily life? What does this condition mean to you personally?"></textarea>
-                    <div class="help-text">
-                        Be as specific as possible. Your words and descriptions will help guide our session to address exactly what you're experiencing.
-                    </div>
+                    <textarea name="question1" placeholder="Describe in detail what you would like to achieve from our session together..."></textarea>
                 </div>
 
                 <div class="question-group">
                     <label class="question-label">
                         <span class="question-number">2</span>
-                        How long have you had this problem?
+                        If you could leave here today with the absolute outcome that you really, really want - the best outcome I could possibly give you - what would be that very best outcome?
                     </label>
-                    <div class="duration-section">
-                        <div class="duration-input-group">
-                            <div class="duration-input">
-                                <input type="number" name="duration_number" min="0" max="100" placeholder="0">
-                                <select name="duration_unit">
-                                    <option value="">Select time unit</option>
-                                    <option value="days">Days</option>
-                                    <option value="weeks">Weeks</option>
-                                    <option value="months">Months</option>
-                                    <option value="years">Years</option>
-                                    <option value="decades">Decades</option>
-                                </select>
-                            </div>
-                            <span style="color: #666;">OR</span>
-                            <select name="duration_life_stage">
-                                <option value="">Select life stage</option>
-                                <option value="since_childhood">Since childhood</option>
-                                <option value="since_teens">Since teenage years</option>
-                                <option value="since_young_adult">Since young adulthood</option>
-                                <option value="always">As long as I can remember</option>
-                            </select>
-                        </div>
-                        
-                        <div class="duration-examples">
-                            <div class="example-text">
-                                Understanding the timeline helps set realistic expectations. Whether it's been 6 months or 30 years, positive change is absolutely possible.
-                            </div>
-                        </div>
-                    </div>
+                    <textarea name="question2" placeholder="Paint a picture of your ideal outcome - what would success look and feel like?"></textarea>
                 </div>
 
                 <div class="question-group">
                     <label class="question-label">
                         <span class="question-number">3</span>
-                        Is there anything else about your situation that would be helpful for me to know?
+                        If you had one wish and I could only make it come true, what would it be?
                     </label>
-                    <textarea name="additional_context" placeholder="Any additional context, triggers, patterns you've noticed, previous therapy experiences, or other relevant information that might help me understand your situation better..."></textarea>
-                    <div class="help-text">
-                        This could include when the issue tends to be worse/better, what you've tried before, or any other details you feel are important.
-                    </div>
+                    <textarea name="question3" placeholder="If you could only choose one thing to change or achieve, what would be most important to you?"></textarea>
+                </div>
+
+                <div class="priority-section">
+                    <h3>Most Important Priority</h3>
+                    <p>If your answers above are different, which one is the most important to you right now?</p>
+                    <select name="priority">
+                        <option value="">Please select your top priority</option>
+                        <option value="question1">Answer from Question 1</option>
+                        <option value="question2">Answer from Question 2</option>
+                        <option value="question3">Answer from Question 3</option>
+                    </select>
                 </div>
 
                 <div class="progress-bar">
@@ -363,21 +335,15 @@
                 </div>
 
                 <div class="navigation">
-                    <button type="button" class="btn btn-secondary" onclick="goBack()">← Back to Magic Wand</button>
-                    <div class="progress-text">Page 2 of 3</div>
-                    <button type="submit" class="btn btn-primary">Continue to Session Details →</button>
+                    <div class="progress-text">Page 1 of 3</div>
+                    <button type="submit" class="btn btn-primary">Continue to Background Questions →</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        function goBack() {
-            // Navigate back to page 1
-            window.location.href = 'hypnotherapy_intake_page1.html';
-        }
-
-        document.getElementById('backgroundForm').addEventListener('submit', function(e) {
+        document.getElementById('magicWandForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Get form data
@@ -388,23 +354,16 @@
                 responses[key] = value.trim();
             }
             
-            // Validate required fields
-            if (!responses.issue_description) {
-                alert('Please describe your issue or condition before continuing.');
+            // Validate that at least one question is answered
+            const hasAnswers = responses.question1 || responses.question2 || responses.question3;
+            
+            if (!hasAnswers) {
+                alert('Please answer at least one of the magic wand questions before continuing.');
                 return;
             }
             
-            // Validate duration (at least one method)
-            const hasDuration = (responses.duration_number && responses.duration_unit) || responses.duration_life_stage;
-            if (!hasDuration) {
-                alert('Please specify how long you\'ve had this problem.');
-                return;
-            }
-            
-            // Store responses
-            const existingData = JSON.parse(localStorage.getItem('intakeResponses') || '{}');
-            existingData.background = responses;
-            localStorage.setItem('intakeResponses', JSON.stringify(existingData));
+            // Store responses (in a real app, this would go to your backend)
+            localStorage.setItem('magicWandResponses', JSON.stringify(responses));
             
             // Show success animation
             const button = this.querySelector('.btn-primary');
@@ -413,55 +372,33 @@
             button.style.background = '#10b981';
             
             setTimeout(() => {
-                button.textContent = 'Proceeding to final page...';
+                button.textContent = 'Proceeding to next page...';
                 setTimeout(() => {
-                    // Redirect to page 3
-                    window.location.href = 'hypnotherapy_intake_page3.html';
+                    // Redirect to page 2
+                    window.location.href = 'hypnotherapy_intake_p2.html';
                 }, 1000);
             }, 1000);
         });
 
         // Auto-save as user types
-        const formFields = document.querySelectorAll('textarea, input, select');
-        formFields.forEach(field => {
-            field.addEventListener('input', function() {
-                const existingData = JSON.parse(localStorage.getItem('backgroundDraft') || '{}');
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                const existingData = JSON.parse(localStorage.getItem('magicWandDraft') || '{}');
                 existingData[this.name] = this.value;
-                localStorage.setItem('backgroundDraft', JSON.stringify(existingData));
+                localStorage.setItem('magicWandDraft', JSON.stringify(existingData));
             });
         });
 
         // Load draft data on page load
         window.addEventListener('load', function() {
-            const draftData = JSON.parse(localStorage.getItem('backgroundDraft') || '{}');
+            const draftData = JSON.parse(localStorage.getItem('magicWandDraft') || '{}');
             Object.keys(draftData).forEach(key => {
                 const field = document.querySelector(`[name="${key}"]`);
                 if (field && draftData[key]) {
                     field.value = draftData[key];
                 }
             });
-        });
-
-        // Dynamic duration calculation display
-        function updateDurationDisplay() {
-            const number = document.querySelector('[name="duration_number"]').value;
-            const unit = document.querySelector('[name="duration_unit"]').value;
-            
-            if (number && unit && number > 0) {
-                // Clear the life stage selector when specific duration is entered
-                document.querySelector('[name="duration_life_stage"]').value = '';
-            }
-        }
-
-        document.querySelector('[name="duration_number"]').addEventListener('input', updateDurationDisplay);
-        document.querySelector('[name="duration_unit"]').addEventListener('change', updateDurationDisplay);
-
-        // Clear specific duration when life stage is selected
-        document.querySelector('[name="duration_life_stage"]').addEventListener('change', function() {
-            if (this.value) {
-                document.querySelector('[name="duration_number"]').value = '';
-                document.querySelector('[name="duration_unit"]').value = '';
-            }
         });
     </script>
 </body>
